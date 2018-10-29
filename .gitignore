@@ -1,0 +1,13 @@
+node_modules*/
+.idea/
+build/
+sftp-config.json
+.tmp
+.temp
+temp/
+*.zip
+*.tgz
+*.cache
+*.swp
+.vscode
+src/
