@@ -9,59 +9,19 @@ new Vue({
             <h4>当前图片：{{ fileName }}</h4>
             
             <button @click="run">run</button> <button @click="stop">stop</button> <br/>
-            
-            <span style="display: inline-block;width: 30px; text-align: center; vertical-align: 3px">{{ opacity }}</span> <input type="range" v-model="opacity" max="1" min="0.1" step="0.1"/> <br/>
-            
-            <input type="file" @change="changeImg" />
         </div>
     `,
     data: {
         appState: 'stopped',
-        opacity: 1,
         fileName: '暂无'
-    },
-    watch: {
-        opacity() {
-            this.send({opacity: this.opacity, type: 'changeOpacity'})
-        }
     },
     methods: {
         run() {
-            this.send({type: 'run'}, d => {
-                if (d.done) this.appState = 'running'
-            });
+            this.send({type: 'run'});
         },
 
         stop() {
-            this.send({type: 'stop'}, d => {
-                if (d.done) this.appState = 'stopped'
-            })
-        },
-
-        changeOpacity() {
-            this.send({type: 'changeOpacity', opacty: this.opacty}, d => {
-                if (d.done) console.log('opacity changed', this.opacty)
-            })
-        },
-
-        changeImg(e) {
-            let [file] = e.target.files;
-            if (file) {
-                this.readFileAsDataUrl(file)
-                    .then(base64 =>{
-                        this.fileName = file.name;
-                        this.send({type: 'changeImg', file: base64})
-                    })
-            }
-
-        },
-
-        readFileAsDataUrl(file) {
-            return new Promise(resolve => {
-                const reader = new FileReader();
-                reader.onload = function(e) {resolve(e.target.result)};
-                reader.readAsDataURL(file);
-            })
+            this.send({type: 'stop'})
         },
 
         send(data, cb) {
@@ -87,10 +47,6 @@ new Vue({
         //     console.log('save state');
         //     chrome.storage.local.set('state', this.$data);
         // }
-    },
-    created() {
-        // window.onbeforeunload = this.saveState.bind(this);
-        // this.loadState().then(d => d && Object.assign(this.$data, d));
     }
 });
 
