@@ -8,7 +8,7 @@ new Vue({
             <h4>插件状态：{{ appState }}</h4>
             <h4>当前图片：{{ fileName }}</h4>
             
-            <button @click="run">run</button> <button @click="stop">stop</button> <br/>
+            <button @click="run">run</button> <button @click="stop">stop</button>
         </div>
     `,
     data: {
@@ -17,17 +17,19 @@ new Vue({
     },
     methods: {
         run() {
+            this.appState = 'running';
             this.send({type: 'run'});
         },
 
         stop() {
+            this.appState = 'stopped';
             this.send({type: 'stop'})
         },
 
         send(data, cb) {
             chrome.tabs.query( {active: true, currentWindow: true}, function(tabs) {
                 chrome.tabs.sendMessage( tabs[0].id, data, function(response) {
-                    cb(response);
+                    cb && cb(response);
                     console.log('response', response);
                 });
             });

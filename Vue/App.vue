@@ -1,10 +1,13 @@
 <style scoped lang="less">
     .mockup {
-        width: 300px;
-        height: 300px;
+        width: 100%;
+        height: 100%;
         z-index: 9999;
-        position: relative;
-        background: #eee url(__blank) no-repeat center 0;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        background: rgba(255, 255, 255, .5) url() no-repeat center ~"0 / 100%" auto;
     }
     .controllers {
         position: fixed;
@@ -13,33 +16,71 @@
         right: 0;
         background-color: #eee;
         z-index: 9999;
+        padding: 5px;
     }
     button{
         padding: 5px 12px;
         margin-right: 5px;
     }
-    input{
+    input[type=file]{
         margin: 5px 0;
+    }
+    input[type=radio] ,
+    input[type=checkbox] {
+        width: 20px;
+        height: 20px;
+    }
+    .opacity{
+        display: inline-block;width: 30px; text-align: center; vertical-align: 3px
     }
 </style>
 
 <template>
-    <div id="app">
-        <div class="mockUp" ref="el" :style="{opacity, backgroundImage: imgUrl ? `url(${imgUrl})` : 'none'}"></div>
+    <div class="feHelper">
+        <div class="mockup" ref="mockup" :style="mockupStyle" v-show="img.src && showMockup"></div>
 
         <div class="controllers" id="controllers">
             <h3>FeHelper</h3>
-            <h4>当前图片：{{ fileName }}</h4>
 
-            <button @click="hideMockup = true" v-if="hideMockup">hide mockup</button>
-            <button @click="hideMockup = false" v-else>show mockup</button>
-            <button @click="autoSize">autoSize</button>
-            <button @click="freeze = 0" v-if="freeze">unFreeze</button> <br/>
-            <button @click="freeze = 1" v-else>freeze</button> <br/>
+            <h4>当前图片：{{ img.name }}</h4>
+            <span>选取设计稿：</span> <input type="file" @change="changeImg" />
 
-            <span style="display: inline-block;width: 30px; text-align: center; vertical-align: 3px">{{ opacity }}</span> <input type="range" v-model="opacity" max="1" min="0.1" step="0.1"/> <br/>
+            <div v-if="img.src">
+                <span>图片大小：{{ ['原图大小', '宽度适配', '高度适配', '显示全图'][bgType] }}</span> <br/>
+                <input type="radio" v-model="bgType" value="0"> 原图大小
+                <input type="radio" v-model="bgType" value="1"> 宽度适配
+                <input type="radio" v-model="bgType" value="2"> 高度适配
+                <input type="radio" v-model="bgType" value="3"> 显示全图
+                <!--<button @click="autoSize(0)">原图大小</button>-->
+                <!--<button @click="autoSize(1)">宽度适配</button>-->
+                <!--<button @click="autoSize(2)">高度适配</button>-->
+                <!--<button @click="autoSize(3)">显示全图</button>-->
 
-            <input type="file" @change="changeImg" />
+                <span>{{showMockup ? '隐藏' : '显示'}}：</span> <input type="checkbox" v-model="showMockup" />
+                <span>冻结：</span> <input type="checkbox" v-model="freeze" />
+
+                <span class="opacity">透明度：{{ opacity }}</span> <input type="range" v-model="opacity" max="1" min="0" step="0.05"/> <br/>
+
+                <span>混合模式：</span>
+                <select v-model="blendMode">
+                    <option value="normal">正常</option>
+                    <option value="multiply">正片叠底</option>
+                    <option value="screen">滤色</option>
+                    <option value="overlay">叠加</option>
+                    <option value="darken">变暗</option>
+                    <option value="lighten">变亮</option>
+                    <option value="color-dodge">颜色减淡</option>
+                    <option value="color-burn">颜色加深</option>
+                    <option value="hard-light">强光</option>
+                    <option value="soft-light">柔光</option>
+                    <option value="difference">差值</option>
+                    <option value="exclusion">排除</option>
+                    <option value="hue">色相</option>
+                    <option value="saturation">饱和度</option>
+                    <option value="color">颜色</option>
+                    <option value="luminosity">亮度</option>
+                </select>
+            </div>
         </div>
     </div>
 </template>
@@ -52,48 +93,104 @@
         data() {
             return {
                 opacity: 1,
-                fileName: '暂无',
+                showMockup: true,
                 freeze: 0,
-                hideMockup: false,
-                imgUrl: ''
+                blendMode: 'normal',
+                bgType: 1,
+                img: {
+                    name: '暂无',
+                    width: 0,
+                    height: 0,
+                    src: ''
+                }
+            }
+        },
+        computed: {
+            mockupStyle() {
+                let style = {opacity: this.opacity, 'mix-blend-mode': this.blendMode};
+                if (this.freeze) style.pointerEvents = 'none';
+                if (this.img.src) style.backgroundImage = `url(${this.img.src})`;
+                style.backgroundSize = this.getBgSize(this.bgType);
+                return style;
             }
         },
         methods: {
+            getBgSize(type = 1) {
+                let size;
+                if (type == 0) {
+                    // 原图大小
+                    size = `${this.img.width}px ${this.img.height}px`;
+                } else if (type == 1) {
+                    // 宽度适配
+                    size = '100% auto';
+                } else if (type == 2) {
+                    // 高度适配
+                    size = 'auto 100%';
+                } else if (type == 3) {
+                    // 全图显示
+                    size = 'cover';
+                }
+                console.log('size', size);
+                return size;
+            },
             changeImg(e) {
                 let [file] = e.target.files;
-                this.imgUrl = URL.createObjectURL(file);
-                // if (file) {
-                //     this.readFileAsDataUrl(file)
-                //         .then(base64 =>{
-                //             this.fileName = file.name;
-                //             this.imgUrl = base64;
-                //             // this.$emit('changeImg', {file: base64})
-                //         })
-                // }
+                this.getImg(file).then(img => {
+                    this.img = {
+                        name: file.name,
+                        width: img.naturalWidth,
+                        height: img.naturalHeight,
+                        src: img.src
+                    }
+                }, e => console.error(e) );
             },
 
-            autoSize() {
-                this.$refs.el.cssText = 'width: 100%;height: 100%;';
-            },
-
-            dataURLtoBlob(dataUrl) {
-                let arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-                    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-                while (n--) u8arr[n] = bstr.charCodeAt(n);
-                return new Blob([u8arr], {type: mime});
-            },
-
-            readFileAsDataUrl(file) {
-                return new Promise(resolve => {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {resolve(e.target.result)};
-                    reader.readAsDataURL(file);
+            getImg(url) {
+                return new Promise((resolve, reject)=>{
+                    const img = new Image;
+                    img.src = URL.createObjectURL(url);
+                    img.onload = () => resolve(img);
+                    img.onerror = reject;
                 })
             },
 
+            // autoSize(type = 0) {
+            //     const {width, height} = this.img;
+            //     if (type === 0) {
+            //         // 原图大小 origin
+            //         this.$refs.mockup.style.backgroundSize = `${width}px ${height}px`;
+            //     } else if (type === 1) {
+            //         // 宽度适配 cover
+            //         this.$refs.mockup.style.backgroundSize = '100% auto';
+            //     } else if (type === 2) {
+            //         // 高度适配 cover
+            //         this.$refs.mockup.style.backgroundSize = 'auto 100%';
+            //     } else if (type === 3) {
+            //         // 全图显示 contain
+            //         this.$refs.mockup.style.backgroundSize = 'cover';
+            //     }
+            // },
+
+            // dataURLtoBlob(dataUrl) {
+            //     let arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            //         bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+            //     while (n--) u8arr[n] = bstr.charCodeAt(n);
+            //     return new Blob([u8arr], {type: mime});
+            // },
+            //
+            // readFileAsDataUrl(file) {
+            //     return new Promise(resolve => {
+            //         const reader = new FileReader();
+            //         reader.onload = function(e) {resolve(e.target.result)};
+            //         reader.readAsDataURL(file);
+            //     })
+            // },
+
             initMockup() {
-                interact(this.$refs.el)
+                interact(this.$refs.mockup)
                     .draggable({
+                        inertia: true,
+                        autoScroll: true,
                         onmove(event) {
                             let target = event.target,
                                 // keep the dragged position in the data-x/data-y attributes
@@ -146,34 +243,17 @@
                         // target.textContent = Math.round(event.rect.width) + '\u00D7' + Math.round(event.rect.height);
                     });
             },
-            listen() {
-                chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-                    console.log(sender.tab ? "from a content script:" + sender.tab.url : "from the extension", 'data:', request);
-                    switch (request.type) {
-                        case 'run':
-                            // this.showMockup = true;
-                            break;
-                        case 'quit':
-                            // this.showMockup = false;
-                            break;
-                        default:
-                            console.log('not handled', request);
-                    }
-                    return true;
-                });
-            },
             send(data, cb) {
                 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                     chrome.tabs.sendMessage( tabs[0].id, data, function(response) {
-                        cb(response);
+                        cb && cb(response);
                         console.log('response', response);
                     })
                 })
             }
         },
-        created() {
-            this.listen();
-            // this.loadState().then(d => d && Object.assign(this.$data, d));
+        mounted() {
+            this.initMockup();
         }
     }
 </script>
