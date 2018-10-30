@@ -1,85 +1,120 @@
 <style scoped lang="less">
-    .mockup {
-        width: 100%;
-        height: 100%;
-        z-index: 9999;
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        background: rgba(255, 255, 255, .5) url() no-repeat center ~"0 / 100%" auto;
-    }
-    .controllers {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: #eee;
-        z-index: 9999;
-        padding: 5px;
-    }
-    button{
-        padding: 5px 12px;
-        margin-right: 5px;
-    }
-    input[type=file]{
-        margin: 5px 0;
-    }
-    input[type=radio] ,
-    input[type=checkbox] {
-        width: 20px;
-        height: 20px;
-    }
-    .opacity{
-        display: inline-block;width: 30px; text-align: center; vertical-align: 3px
+
+    .feHelper{
+        user-select: none;
+        font-size: 14px;
+
+        &.closed{
+            .controllers{
+                display: none;
+            }
+        }
+
+        .toggler{
+            position: fixed;
+            right: 5px;
+            top: 5px;
+            width: 80px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 5px;
+            border-color: black;
+            background: #eee;
+            /*box-shadow: 0 0 5px dodgerblue;*/
+            z-index: 9999;
+        }
+
+        .mockup {
+            width: 100%;
+            height: 100%;
+            z-index: 9997;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            background: rgba(255, 255, 255, .5) url() no-repeat center ~"0 / 100%" auto;
+            box-shadow: 0 0 2px 2px #aaa;
+        }
+
+        .controllers {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #eee;
+            z-index: 9998;
+            padding: 5px;
+        }
+        .reset{
+            padding: 3px 10px;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+        input[type=file]{
+            margin: 5px 0;
+            -webkit-appearance: button;
+        }
+
+        .formLine{
+            padding: 5px 0;
+        }
+        /*.opacity{*/
+            /*display: inline-block;width: 50px; text-align: center; vertical-align: 3px*/
+        /*}*/
     }
 </style>
 
 <template>
-    <div class="feHelper">
+    <div class="feHelper" :class="{closed}">
+        <span ref="toggler" @click="closed = !closed" class="toggler" >{{ closed ? '打开面板' : '收起面板'}}</span>
+
         <div class="mockup" ref="mockup" :style="mockupStyle" v-show="img.src && showMockup"></div>
 
         <div class="controllers" id="controllers">
             <h3>FeHelper</h3>
 
-            <h4>当前图片：{{ img.name }}</h4>
             <span>选取设计稿：</span> <input type="file" @change="changeImg" />
 
             <div v-if="img.src">
-                <span>图片大小：{{ ['原图大小', '宽度适配', '高度适配', '显示全图'][bgType] }}</span> <br/>
-                <input type="radio" v-model="bgType" value="0"> 原图大小
-                <input type="radio" v-model="bgType" value="1"> 宽度适配
-                <input type="radio" v-model="bgType" value="2"> 高度适配
-                <input type="radio" v-model="bgType" value="3"> 显示全图
-                <!--<button @click="autoSize(0)">原图大小</button>-->
-                <!--<button @click="autoSize(1)">宽度适配</button>-->
-                <!--<button @click="autoSize(2)">高度适配</button>-->
-                <!--<button @click="autoSize(3)">显示全图</button>-->
+                <div class="formLine">
+                    <button @click="reset" class="reset">重置</button>
 
-                <span>{{showMockup ? '隐藏' : '显示'}}：</span> <input type="checkbox" v-model="showMockup" />
-                <span>冻结：</span> <input type="checkbox" v-model="freeze" />
+                    <!--<span>图片大小：{{ bgTypes[bgType] }}</span>-->
+                    <RadioGroup v-model="bgType" type="button" size="small">
+                        <Radio :label="index" :key="index" v-for="(item, index) in bgTypes">{{ item }}</Radio>
+                    </RadioGroup>
+                </div>
 
-                <span class="opacity">透明度：{{ opacity }}</span> <input type="range" v-model="opacity" max="1" min="0" step="0.05"/> <br/>
+                <!--<div>-->
+                    <!--<span class="opacity">透明度：</span>-->
+                    <!--<Slider style="width:68%;" v-model="opacity"  :step="0.05"  :min="0" :max="1" show-input></Slider>-->
+                <!--</div>-->
 
-                <span>混合模式：</span>
-                <select v-model="blendMode">
-                    <option value="normal">正常</option>
-                    <option value="multiply">正片叠底</option>
-                    <option value="screen">滤色</option>
-                    <option value="overlay">叠加</option>
-                    <option value="darken">变暗</option>
-                    <option value="lighten">变亮</option>
-                    <option value="color-dodge">颜色减淡</option>
-                    <option value="color-burn">颜色加深</option>
-                    <option value="hard-light">强光</option>
-                    <option value="soft-light">柔光</option>
-                    <option value="difference">差值</option>
-                    <option value="exclusion">排除</option>
-                    <option value="hue">色相</option>
-                    <option value="saturation">饱和度</option>
-                    <option value="color">颜色</option>
-                    <option value="luminosity">亮度</option>
-                </select>
+                <div class="formLine">
+                    <Checkbox v-model="showMockup">{{showMockup ? '显示' : '隐藏'}}</Checkbox>
+                    <Checkbox v-model="freeze">冻结</Checkbox>
+
+                    <span>混合模式：</span>
+                    <Select v-model="blendMode" style="width: 40%;" size="small" >
+                        <Option value="normal">正常</Option>
+                        <Option value="multiply">正片叠底</Option>
+                        <Option value="screen">滤色</Option>
+                        <Option value="overlay">叠加</Option>
+                        <Option value="darken">变暗</Option>
+                        <Option value="lighten">变亮</Option>
+                        <Option value="color-dodge">颜色减淡</Option>
+                        <Option value="color-burn">颜色加深</Option>
+                        <Option value="hard-light">强光</Option>
+                        <Option value="soft-light">柔光</Option>
+                        <Option value="difference">差值</Option>
+                        <Option value="exclusion">排除</Option>
+                        <Option value="hue">色相</Option>
+                        <Option value="saturation">饱和度</Option>
+                        <Option value="color">颜色</Option>
+                        <Option value="luminosity">亮度</Option>
+                    </Select>
+                </div>
             </div>
         </div>
     </div>
@@ -92,10 +127,12 @@
         name: "App",
         data() {
             return {
+                closed: false,
                 opacity: 1,
                 showMockup: true,
                 freeze: 0,
-                blendMode: 'normal',
+                blendMode: 'darken',
+                bgTypes: ['原图大小', '宽度优先', '高度优先'],
                 bgType: 1,
                 img: {
                     name: '暂无',
@@ -115,22 +152,26 @@
             }
         },
         methods: {
+            handleUpload() {
+                return false;
+            },
+            reset() {
+                const mockup = this.$refs.mockup;
+                mockup.style.webkitTransform = mockup.style.transform = 'translate(0, 0)';
+                mockup.style.width = '100%';
+                mockup.style.height = '100%';
+                mockup.setAttribute('data-x', 0);
+                mockup.setAttribute('data-y', 0);
+            },
             getBgSize(type = 1) {
                 let size;
-                if (type == 0) {
-                    // 原图大小
+                if (type == 0) { // 原图大小
                     size = `${this.img.width}px ${this.img.height}px`;
-                } else if (type == 1) {
-                    // 宽度适配
+                } else if (type == 1) { // 宽度适配
                     size = '100% auto';
-                } else if (type == 2) {
-                    // 高度适配
+                } else if (type == 2) { // 高度适配
                     size = 'auto 100%';
-                } else if (type == 3) {
-                    // 全图显示
-                    size = 'cover';
                 }
-                console.log('size', size);
                 return size;
             },
             changeImg(e) {
@@ -154,23 +195,6 @@
                 })
             },
 
-            // autoSize(type = 0) {
-            //     const {width, height} = this.img;
-            //     if (type === 0) {
-            //         // 原图大小 origin
-            //         this.$refs.mockup.style.backgroundSize = `${width}px ${height}px`;
-            //     } else if (type === 1) {
-            //         // 宽度适配 cover
-            //         this.$refs.mockup.style.backgroundSize = '100% auto';
-            //     } else if (type === 2) {
-            //         // 高度适配 cover
-            //         this.$refs.mockup.style.backgroundSize = 'auto 100%';
-            //     } else if (type === 3) {
-            //         // 全图显示 contain
-            //         this.$refs.mockup.style.backgroundSize = 'cover';
-            //     }
-            // },
-
             // dataURLtoBlob(dataUrl) {
             //     let arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1],
             //         bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
@@ -187,25 +211,34 @@
             // },
 
             initMockup() {
+                let onmove = function(event) {
+                    let target = event.target,
+                        // keep the dragged position in the data-x/data-y attributes
+                        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+                        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+                    // translate the element
+                    target.style.webkitTransform =
+                        target.style.transform =
+                            'translate(' + x + 'px, ' + y + 'px)';
+
+                    // update the posiion attributes
+                    target.setAttribute('data-x', x);
+                    target.setAttribute('data-y', y);
+                };
+
+                // interact(this.$refs.toggler)
+                //     .draggable({
+                //         inertia: true,
+                //         autoScroll: true,
+                //         onmove,
+                //     })
+
                 interact(this.$refs.mockup)
                     .draggable({
                         inertia: true,
                         autoScroll: true,
-                        onmove(event) {
-                            let target = event.target,
-                                // keep the dragged position in the data-x/data-y attributes
-                                x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-                                y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-                            // translate the element
-                            target.style.webkitTransform =
-                                target.style.transform =
-                                    'translate(' + x + 'px, ' + y + 'px)';
-
-                            // update the posiion attributes
-                            target.setAttribute('data-x', x);
-                            target.setAttribute('data-y', y);
-                        },
+                        onmove,
                         // restrict: {
                         //   restriction: 'parent',
                         //   elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
@@ -240,7 +273,6 @@
 
                         target.setAttribute('data-x', x);
                         target.setAttribute('data-y', y);
-                        // target.textContent = Math.round(event.rect.width) + '\u00D7' + Math.round(event.rect.height);
                     });
             },
             send(data, cb) {

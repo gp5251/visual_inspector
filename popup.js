@@ -5,9 +5,6 @@ new Vue({
     template: `
         <div id="app">
             <h3>FeHelper</h3>
-            <h4>插件状态：{{ appState }}</h4>
-            <h4>当前图片：{{ fileName }}</h4>
-            
             <button @click="run">run</button> <button @click="stop">stop</button>
         </div>
     `,

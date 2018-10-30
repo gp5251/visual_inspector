@@ -1,11 +1,11 @@
 const webpack               = require('webpack');
 const path                  = require('path');
-const fs                    = require('fs');
+// const fs                    = require('fs');
 const MiniCssExtractPlugin  = require('mini-css-extract-plugin');
 const VueLoaderPlugin       = require('vue-loader/lib/plugin');
 const UglifyJsPlugin        = require("uglifyjs-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const isProd = process.env.NODE_ENV == 'production';
+// const isProd = process.env.NODE_ENV == 'production';
 
 let config = {
     entry: {
