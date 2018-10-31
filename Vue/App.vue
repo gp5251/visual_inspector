@@ -21,7 +21,7 @@
             z-index: 9999;
 
             span{
-                display: inline-block;
+                display: block;
                 white-space: nowrap;
                 line-height: 30px;
                 border: 1px solid #ddd;
@@ -73,8 +73,8 @@
 <template>
     <div class="feHelper" :class="{closed}">
         <div ref="toggler" class="toggler">
-            <span @click="showMockup = !showMockup" >{{ showMockup ? '隐藏图层' : '显示图层'}}</span>
             <span @click="closed = !closed" >{{ closed ? '打开面板' : '收起面板'}}</span>
+            <span @click="showMockup = !showMockup" v-if="img.src">{{ showMockup ? '隐藏图层' : '显示图层'}}</span>
         </div>
 
         <div class="mockup" ref="mockup" :style="mockupStyle" v-show="img.src && showMockup"></div>
@@ -100,15 +100,15 @@
                     <!--<Input v-model="opacity" size="small" number placeholder="透明度" class="smallInput"/>-->
                 </div>
 
-                <div v-if="wType == 3">
-                    <Input v-model="mockup.width" size="small" number placeholder="宽度" class="smallInput"/>
-                    <Input v-model="mockup.height" size="small" number placeholder="高度" class="smallInput"/>
-                </div>
-
-                <!--<div>-->
-                    <!--<span class="opacity">透明度：</span>-->
-                    <!--<Slider style="width:68%;" v-model="opacity"  :step="0.05"  :min="0" :max="1" show-input></Slider>-->
+                <!--<div v-if="wType == 3">-->
+                    <!--<Input v-model="mockup.width" size="small" number placeholder="宽度" class="smallInput"/>-->
+                    <!--<Input v-model="mockup.height" size="small" number placeholder="高度" class="smallInput"/>-->
                 <!--</div>-->
+
+                <div>
+                    <span class="opacity">透明度：</span>
+                    <Slider style="width:68%;" v-model="opacity"  :step="0.05"  :min="0" :max="1" show-input></Slider>
+                </div>
 
                 <div class="formLine">
                     <span>图层控制: </span>
@@ -173,8 +173,8 @@
         computed: {
             mockupStyle() {
                 let style = {
-                        opacity: this.opacity,
-                        'mix-blend-mode': this.blendMode,
+                    opacity: this.opacity,
+                    'mix-blend-mode': this.blendMode,
                 };
                 if (this.freeze) style.pointerEvents = 'none';
                 if (this.img.src) style.backgroundImage = `url(${this.img.src})`;
@@ -299,7 +299,7 @@
                     target.setAttribute('data-x', x);
                     target.setAttribute('data-y', y);
                 };
-                //
+
                 // interact(this.$refs.toggler)
                 //     .on('click', event => event.stopImmediatePropagation(), { capture: true })
                 //     .draggable({

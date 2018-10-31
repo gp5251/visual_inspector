@@ -59,8 +59,6 @@ const app = function () {
 				    created() {
 				    	uiCreated = true;
 						appState = 'running';
-
-						console.log('created');
 				    }
 				});
 			}

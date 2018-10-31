@@ -6,6 +6,10 @@ new Vue({
         <div id="app">
             <h3>FeHelper</h3>
             <button @click="run">run</button> <button @click="stop">stop</button>
+            <div class="filePicker">
+                <span class="tit">插入设计稿</span>
+                <input type="file">
+            </div>
         </div>
     `,
     data: {
