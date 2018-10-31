@@ -73,7 +73,7 @@
 <template>
     <div class="feHelper" :class="{closed}">
         <div ref="toggler" class="toggler">
-            <span @click="showMockup = !showMockup" >{{ showMockup ? '显示图层' : '隐藏图层'}}</span>
+            <span @click="showMockup = !showMockup" >{{ showMockup ? '隐藏图层' : '显示图层'}}</span>
             <span @click="closed = !closed" >{{ closed ? '打开面板' : '收起面板'}}</span>
         </div>
 
@@ -89,17 +89,21 @@
                 <div class="formLine">
                     <Button @click="reset" class="reset" type="primary" size="small">重置</Button>
 
-                    <RadioGroup v-model="wType" type="button" size="small">
-                        <Radio :label="index" :key="index" v-for="(item, index) in wTypes">{{ item }}</Radio>
-                    </RadioGroup>
+                    <Button
+                            class="reset"
+                            type="primary"
+                            size="small"
+                            :key="index"
+                            v-for="(item, index) in wTypes"
+                            @click="wType = index">{{ item }}</Button>
 
                     <!--<Input v-model="opacity" size="small" number placeholder="透明度" class="smallInput"/>-->
                 </div>
 
-                <!--<div v-if="wType == 2">-->
-                    <!--<Input v-model="mockup.width" size="small" number placeholder="宽度" class="smallInput"/>-->
-                    <!--<Input v-model="mockup.height" size="small" number placeholder="高度" class="smallInput"/>-->
-                <!--</div>-->
+                <div v-if="wType == 3">
+                    <Input v-model="mockup.width" size="small" number placeholder="宽度" class="smallInput"/>
+                    <Input v-model="mockup.height" size="small" number placeholder="高度" class="smallInput"/>
+                </div>
 
                 <!--<div>-->
                     <!--<span class="opacity">透明度：</span>-->
@@ -163,7 +167,7 @@
                     height: 0,
                     src: ''
                 },
-                preventScroll: false
+                preventScroll: true
             }
         },
         computed: {
