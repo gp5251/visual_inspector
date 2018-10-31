@@ -1,7 +1,7 @@
 <style scoped lang="less">
     .feHelper{
         user-select: none;
-        font-size: 14px;
+        font-size: 12px;
 
         &.closed{
             .controllers{
@@ -13,19 +13,26 @@
             position: fixed;
             right: 5px;
             top: 5px;
-            width: 80px;
-            height: 30px;
             line-height: 30px;
             text-align: center;
             border-radius: 5px;
             border-color: black;
             background: #eee;
             z-index: 9999;
+
+            span{
+                display: inline-block;
+                white-space: nowrap;
+                line-height: 30px;
+                border: 1px solid #ddd;
+                border-radius: 3px;
+                padding: 0 5px;
+            }
         }
 
         .mockup {
-            /*width: 100%;*/
-            /*height: 100%;*/
+            width: 100%;
+            height: 100%;
             z-index: 9997;
             position: absolute;
             left: 0;
@@ -65,7 +72,10 @@
 
 <template>
     <div class="feHelper" :class="{closed}">
-        <span ref="toggler" @click="closed = !closed" class="toggler" >{{ closed ? '打开面板' : '收起面板'}}</span>
+        <div ref="toggler" class="toggler">
+            <span @click="showMockup = !showMockup" >{{ showMockup ? '显示图层' : '隐藏图层'}}</span>
+            <span @click="closed = !closed" >{{ closed ? '打开面板' : '收起面板'}}</span>
+        </div>
 
         <div class="mockup" ref="mockup" :style="mockupStyle" v-show="img.src && showMockup"></div>
 
@@ -86,10 +96,10 @@
                     <!--<Input v-model="opacity" size="small" number placeholder="透明度" class="smallInput"/>-->
                 </div>
 
-                <div v-if="wType == 2">
-                    <Input v-model="mockup.width" size="small" number placeholder="宽度" class="smallInput"/>
-                    <Input v-model="mockup.height" size="small" number placeholder="高度" class="smallInput"/>
-                </div>
+                <!--<div v-if="wType == 2">-->
+                    <!--<Input v-model="mockup.width" size="small" number placeholder="宽度" class="smallInput"/>-->
+                    <!--<Input v-model="mockup.height" size="small" number placeholder="高度" class="smallInput"/>-->
+                <!--</div>-->
 
                 <!--<div>-->
                     <!--<span class="opacity">透明度：</span>-->
@@ -97,12 +107,13 @@
                 <!--</div>-->
 
                 <div class="formLine">
+                    <span>图层控制: </span>
                     <Checkbox v-model="showMockup">显示</Checkbox>
                     <Checkbox v-model="freeze">冻结</Checkbox>
                     <Checkbox v-model="preventScroll">键盘滚动</Checkbox>
 
                     <span>混合模式：</span>
-                    <Select v-model="blendMode" style="width: 30%;" size="small" >
+                    <Select v-model="blendMode" style="width: 20%;" size="small" >
                         <Option value="normal">正常</Option>
                         <Option value="multiply">正片叠底</Option>
                         <Option value="screen">滤色</Option>
@@ -134,15 +145,15 @@
         data() {
             return {
                 closed: false,
-                opacity: 1,
                 showMockup: true,
+                opacity: 1,
                 freeze: 0,
                 blendMode: 'darken',
-                wTypes: ['原图大小', '窗口大小', '自定义'],
+                wTypes: ['原图大小', '窗口大小', '页面大小'],
                 wType: 1,
                 mockup: {
-                    width: window.innerWidth,
-                    height: window.innerHeight,
+                    // width: window.innerWidth,
+                    // height: window.innerHeight,
                     left: 0,
                     top: 0
                 },
@@ -157,74 +168,78 @@
         },
         computed: {
             mockupStyle() {
-                let {width, height, left, top} = this.mockup,
-                    style = {
+                let style = {
                         opacity: this.opacity,
                         'mix-blend-mode': this.blendMode,
-
-                        width: width + 'px',
-                        height: height + 'px',
-                        // left: left + 'px',
-                        // top: top + 'px'
-
-                        webkitTransform: 'translate(' + left + 'px, ' + top + 'px)',
-                        transform: 'translate(' + left + 'px, ' + top + 'px)'
                 };
                 if (this.freeze) style.pointerEvents = 'none';
                 if (this.img.src) style.backgroundImage = `url(${this.img.src})`;
                 // style.backgroundSize = this.getBgSize(this.wType);
                 return style;
+            },
+            mockupWapperStyle() {
+                let {left, top} = this.mockup;
+                return {
+                    webkitTransform: `translate(${left}px, ${top}px)`,
+                    transform: `translate(${left}px, ${top}px)`
+                };
             }
         },
         watch: {
             wType() {
+                let style = this.$refs.mockup.style;
                 if (this.wType == 0) { // 原图大小
-                    this.mockup.width = this.img.width;
-                    this.mockup.height = this.img.height;
+                    style.width = this.img.width + 'px';
+                    style.height = this.img.height + 'px';
                 } else if (this.wType == 1) { // 窗口大小
-                    this.mockup.width = window.innerWidth;
-                    this.mockup.height = window.innerHeight;
-                } else if (this.wType == 2) { // 自定义
-
+                    style.width = window.innerWidth + 'px';
+                    style.height = window.innerHeight + 'px';
+                } else if (this.wType == 2) { // 页面大小
+                    style.width = window.innerWidth + 'px';
+                    style.height = (document.documentElement.scrollHeight || document.body.scrollHeight)+ 'px';
                 }
             }
         },
         methods: {
             handlePreventScroll(e) {
-                console.log('handlePreventScroll', this)
-                
                 if (this.preventScroll) {
                     e.preventDefault();
 
-                    let {mockup} = this;
+                    let {mockup} = this.$refs,
+                        {x = 0, y = 0} = mockup.dataset;
+
                     switch (e.which) {
                         case 37:
-                            mockup.left = mockup.left - 1;
+                            // mockup.left = mockup.left - 1;
+                            x --;
+                            mockup.dataset.x = x;
                             break;
                         case 38:
-                            mockup.top = mockup.top - 1;
+                            // mockup.top = mockup.top - 1;
+                            y --;
+                            mockup.dataset.y = y;
                             break;
                         case 39:
-                            mockup.left = mockup.left + 1;
+                            // mockup.left = mockup.left + 1;
+                            x ++;
+                            mockup.dataset.x = x;
                             break;
                         case 40:
-                            mockup.top = mockup.top + 1;
+                            // mockup.top = mockup.top + 1;
+                            y ++;
+                            mockup.dataset.y = y;
                     }
+
+                    mockup.style.webkitTransform = mockup.style.transform = `translate(${x}px, ${y}px)`;
                 }
             },
             reset() {
                 const mockup = this.$refs.mockup;
-                // mockup.style.webkitTransform = mockup.style.transform = 'translate(0, 0)';
-                // mockup.style.width = '100%';
-                // mockup.style.height = '100%';
+                mockup.style.webkitTransform = mockup.style.transform = 'translate(0, 0)';
+                mockup.style.width = '100%';
+                mockup.style.height = '100%';
                 mockup.setAttribute('data-x', 0);
                 mockup.setAttribute('data-y', 0);
-                this.mockup = {
-                    width: window.innerWidth,
-                    height: window.innerHeight,
-                    left: 0,
-                    top: 0
-                }
             },
             changeImg(e) {
                 if (this.img.src) URL.revokeObjectURL(this.img.src);
@@ -291,30 +306,16 @@
 
                 interact(this.$refs.mockup)
                     .draggable({
-                        onmove:(event)=>{
-                            let target = event.target,
-                                // keep the dragged position in the data-x/data-y attributes
-                                x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-                                y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-                            // update the posiion attributes
-                            target.setAttribute('data-x', x);
-                            target.setAttribute('data-y', y);
-
-                            this.mockup = {
-                                left: x,
-                                top: y
-                            }
-                        }
+                        onmove
                     })
                     .resizable({
                         // resize from all edges and corners
                         edges: {left: true, right: true, bottom: true, top: true},
 
                         // minimum size
-                        // restrictSize: {
-                        //     min: {width: 100, height: 50},
-                        // },
+                        restrictSize: {
+                            min: {width: 200, height: 100},
+                        },
 
                         inertia: true,
                     })
@@ -324,22 +325,18 @@
                             y = (parseFloat(target.getAttribute('data-y')) || 0);
 
                         // update the element's style
-                        // target.style.width  = event.rect.width + 'px';
-                        // target.style.height = event.rect.height + 'px';
+                        target.style.width  = event.rect.width + 'px';
+                        target.style.height = event.rect.height + 'px';
 
                         // translate when resizing from top or left edges
                         x += event.deltaRect.left;
                         y += event.deltaRect.top;
 
+                        target.style.webkitTransform = target.style.transform =
+                            'translate(' + x + 'px,' + y + 'px)';
+
                         target.setAttribute('data-x', x);
                         target.setAttribute('data-y', y);
-
-                        this.mockup.width = event.rect.width;
-                        this.mockup.height = event.rect.height;
-                        this.mockup.left = x;
-                        this.mockup.top = y;
-
-                        console.log(event.deltaRect.left, event.deltaRect.top, event.deltaRect)
                     });
             },
             send(data, cb) {
