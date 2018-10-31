@@ -1,5 +1,4 @@
 <style scoped lang="less">
-
     .feHelper{
         user-select: none;
         font-size: 14px;
@@ -26,15 +25,14 @@
         }
 
         .mockup {
-            width: 100%;
-            height: 100%;
+            /*width: 100%;*/
+            /*height: 100%;*/
             z-index: 9997;
             position: absolute;
             left: 0;
-            right: 0;
             top: 0;
             background: rgba(255, 255, 255, .5) url() no-repeat center ~"0 / 100%" auto;
-            box-shadow: 0 0 2px 2px #aaa;
+            box-shadow: 0 0 1px 2px #aaa;
         }
 
         .controllers {
@@ -59,6 +57,10 @@
         .formLine{
             padding: 5px 0;
         }
+
+        .smallInput{
+            width: 30%;
+        }
         /*.opacity{*/
             /*display: inline-block;width: 50px; text-align: center; vertical-align: 3px*/
         /*}*/
@@ -71,19 +73,33 @@
 
         <div class="mockup" ref="mockup" :style="mockupStyle" v-show="img.src && showMockup"></div>
 
+        <VueDragResize
+                class="mockup" ref="mockup" :style="mockupStyle" v-show="img.src && showMockup"
+                :w="mockup.width" :h="mockup.height" :x="mockup.top" :y="mockup.left"
+                :isActive="!freeze" v-on:resizing="handleDragResize" v-on:dragging="handleDragResize">
+        </VueDragResize>
+
         <div class="controllers" id="controllers">
             <h3>FeHelper</h3>
 
-            <span>选取设计稿：</span> <input type="file" @change="changeImg" />
+            <span>选取设计稿：</span>
+            <input type="file" accept="image/*" @change="changeImg" />
 
             <div v-if="img.src">
                 <div class="formLine">
-                    <button @click="reset" class="reset">重置</button>
+                    <Button @click="reset" class="reset" type="primary" size="small">重置</Button>
 
-                    <!--<span>图片大小：{{ bgTypes[bgType] }}</span>-->
-                    <RadioGroup v-model="bgType" type="button" size="small">
-                        <Radio :label="index" :key="index" v-for="(item, index) in bgTypes">{{ item }}</Radio>
+                    <!--<span>图片大小：{{ wTypes[wType] }}</span>-->
+                    <RadioGroup v-model="wType" type="button" size="small">
+                        <Radio :label="index" :key="index" v-for="(item, index) in wTypes">{{ item }}</Radio>
                     </RadioGroup>
+
+                    <!--<Input v-model="opacity" size="small" number placeholder="透明度" class="smallInput"/>-->
+                </div>
+
+                <div v-if="wType == 2">
+                    <Input v-model="mockup.width" size="small" number placeholder="宽度" class="smallInput"/>
+                    <Input v-model="mockup.height" size="small" number placeholder="高度" class="smallInput"/>
                 </div>
 
                 <!--<div>-->
@@ -92,11 +108,12 @@
                 <!--</div>-->
 
                 <div class="formLine">
-                    <Checkbox v-model="showMockup">{{showMockup ? '显示' : '隐藏'}}</Checkbox>
+                    <Checkbox v-model="showMockup">显示</Checkbox>
                     <Checkbox v-model="freeze">冻结</Checkbox>
+                    <Checkbox v-model="preventScroll">键盘滚动</Checkbox>
 
                     <span>混合模式：</span>
-                    <Select v-model="blendMode" style="width: 40%;" size="small" >
+                    <Select v-model="blendMode" style="width: 30%;" size="small" >
                         <Option value="normal">正常</Option>
                         <Option value="multiply">正片叠底</Option>
                         <Option value="screen">滤色</Option>
@@ -121,8 +138,10 @@
 </template>
 
 <script>
-    import interact from 'interactjs';
-
+    // import interact from 'interactjs';
+    import VueDragResize from 'vue-drag-resize'
+    Vue.component('VueDragResize', VueDragResize);
+    
     export default {
         name: "App",
         data() {
@@ -132,49 +151,97 @@
                 showMockup: true,
                 freeze: 0,
                 blendMode: 'darken',
-                bgTypes: ['原图大小', '宽度优先', '高度优先'],
-                bgType: 1,
+                wTypes: ['原图大小', '窗口大小', '自定义'],
+                wType: 1,
+                mockup: {
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                    left: 0,
+                    top: 0
+                },
                 img: {
                     name: '暂无',
                     width: 0,
                     height: 0,
                     src: ''
-                }
+                },
+                preventScroll: false
             }
         },
         computed: {
             mockupStyle() {
-                let style = {opacity: this.opacity, 'mix-blend-mode': this.blendMode};
+                // let {width, height, left, top} = this.mockup,
+                let style = {
+                        opacity: this.opacity,
+                        'mix-blend-mode': this.blendMode,
+
+                        // width: width + 'px',
+                        // height: height + 'px',
+                        // left: left + 'px',
+                        // top: top + 'px'
+
+                        // webkitTransform: 'translate(' + left + 'px, ' + top + 'px)',
+                        // transform: 'translate(' + left + 'px, ' + top + 'px)'
+                };
                 if (this.freeze) style.pointerEvents = 'none';
                 if (this.img.src) style.backgroundImage = `url(${this.img.src})`;
-                style.backgroundSize = this.getBgSize(this.bgType);
+                // style.backgroundSize = this.getBgSize(this.wType);
                 return style;
             }
         },
+        watch: {
+            wType() {
+                if (this.wType == 0) { // 原图大小
+                    this.mockup.width = this.img.width;
+                    this.mockup.height = this.img.height;
+                } else if (this.wType == 1) { // 窗口大小
+                    this.mockup.width = window.innerWidth;
+                    this.mockup.height = window.innerHeight;
+                } else if (this.wType == 2) { // 自定义
+
+                }
+            }
+        },
         methods: {
-            handleUpload() {
-                return false;
+            handlePreventScroll(e) {
+                console.log('handlePreventScroll', this)
+                
+                if (this.preventScroll) {
+                    e.preventDefault();
+
+                    let {mockup} = this;
+                    switch (e.which) {
+                        case 37:
+                            mockup.left = mockup.left - 1;
+                            break;
+                        case 38:
+                            mockup.top = mockup.top - 1;
+                            break;
+                        case 39:
+                            mockup.left = mockup.left + 1;
+                            break;
+                        case 40:
+                            mockup.top = mockup.top + 1;
+                    }
+                }
             },
             reset() {
-                const mockup = this.$refs.mockup;
-                mockup.style.webkitTransform = mockup.style.transform = 'translate(0, 0)';
-                mockup.style.width = '100%';
-                mockup.style.height = '100%';
-                mockup.setAttribute('data-x', 0);
-                mockup.setAttribute('data-y', 0);
-            },
-            getBgSize(type = 1) {
-                let size;
-                if (type == 0) { // 原图大小
-                    size = `${this.img.width}px ${this.img.height}px`;
-                } else if (type == 1) { // 宽度适配
-                    size = '100% auto';
-                } else if (type == 2) { // 高度适配
-                    size = 'auto 100%';
+                // const mockup = this.$refs.mockup;
+                // mockup.style.webkitTransform = mockup.style.transform = 'translate(0, 0)';
+                // mockup.style.width = '100%';
+                // mockup.style.height = '100%';
+                // mockup.setAttribute('data-x', 0);
+                // mockup.setAttribute('data-y', 0);
+                this.mockup = {
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                    left: 0,
+                    top: 0
                 }
-                return size;
             },
             changeImg(e) {
+                if (this.img.src) URL.revokeObjectURL(this.img.src);
+
                 let [file] = e.target.files;
                 this.getImg(file).then(img => {
                     this.img = {
@@ -183,7 +250,7 @@
                         height: img.naturalHeight,
                         src: img.src
                     }
-                }, e => console.error(e) );
+                }, e => console.error(e));
             },
 
             getImg(url) {
@@ -210,71 +277,76 @@
             //     })
             // },
 
-            initMockup() {
-                let onmove = function(event) {
-                    let target = event.target,
-                        // keep the dragged position in the data-x/data-y attributes
-                        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-                        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-                    // translate the element
-                    target.style.webkitTransform =
-                        target.style.transform =
-                            'translate(' + x + 'px, ' + y + 'px)';
-
-                    // update the posiion attributes
-                    target.setAttribute('data-x', x);
-                    target.setAttribute('data-y', y);
-                };
-
-                // interact(this.$refs.toggler)
-                //     .draggable({
-                //         inertia: true,
-                //         autoScroll: true,
-                //         onmove,
-                //     })
-
-                interact(this.$refs.mockup)
-                    .draggable({
-                        inertia: true,
-                        autoScroll: true,
-                        onmove,
-                        // restrict: {
-                        //   restriction: 'parent',
-                        //   elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
-                        // }
-                    })
-                    .resizable({
-                        // resize from all edges and corners
-                        edges: {left: true, right: true, bottom: true, top: true},
-
-                        // minimum size
-                        restrictSize: {
-                            min: {width: 100, height: 50},
-                        },
-
-                        inertia: true,
-                    })
-                    .on('resizemove', function (event) {
-                        let target = event.target,
-                            x = (parseFloat(target.getAttribute('data-x')) || 0),
-                            y = (parseFloat(target.getAttribute('data-y')) || 0);
-
-                        // update the element's style
-                        target.style.width = event.rect.width + 'px';
-                        target.style.height = event.rect.height + 'px';
-
-                        // translate when resizing from top or left edges
-                        x += event.deltaRect.left;
-                        y += event.deltaRect.top;
-
-                        target.style.webkitTransform = target.style.transform =
-                            'translate(' + x + 'px,' + y + 'px)';
-
-                        target.setAttribute('data-x', x);
-                        target.setAttribute('data-y', y);
-                    });
+            handleDragResize(newRect) {
+                this.mockup.width = newRect.width;
+                this.mockup.height = newRect.height;
+                this.mockup.top = newRect.top;
+                this.mockup.left = newRect.left;
             },
+
+            // initMockup() {
+            //     let onmove =(event)=>{
+            //         let target = event.target,
+            //             // keep the dragged position in the data-x/data-y attributes
+            //             x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+            //             y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+            //
+            //         // translate the element
+            //         // target.style.webkitTransform =
+            //         //     target.style.transform =
+            //         //         'translate(' + x + 'px, ' + y + 'px)';
+            //         this.mockup.left = x;
+            //         this.mockup.top = y;
+            //
+            //         // update the posiion attributes
+            //         target.setAttribute('data-x', x);
+            //         target.setAttribute('data-y', y);
+            //     };
+            //     //
+            //     // interact(this.$refs.toggler)
+            //     //     .on('click', event => event.stopImmediatePropagation(), { capture: true })
+            //     //     .draggable({
+            //     //         inertia: true,
+            //     //         autoScroll: true,
+            //     //         onmove
+            //     //     });
+            //
+            //     interact(this.$refs.mockup)
+            //         .draggable({
+            //             onmove
+            //         })
+            //         .resizable({
+            //             // resize from all edges and corners
+            //             edges: {left: true, right: true, bottom: true, top: true},
+            //
+            //             // minimum size
+            //             // restrictSize: {
+            //             //     min: {width: 100, height: 50},
+            //             // },
+            //
+            //             inertia: true,
+            //         })
+            //         .on('resizemove', (event)=>{
+            //             let target = event.target,
+            //                 x = (parseFloat(target.getAttribute('data-x')) || 0),
+            //                 y = (parseFloat(target.getAttribute('data-y')) || 0);
+            //             let {mockup} = this;
+            //
+            //             // update the element's style
+            //             mockup.width = event.rect.width;
+            //             mockup.height = event.rect.height;
+            //
+            //             // translate when resizing from top or left edges
+            //             x += event.deltaRect.left;
+            //             y += event.deltaRect.top;
+            //
+            //             mockup.left = x;
+            //             mockup.top = y;
+            //
+            //             target.setAttribute('data-x', x);
+            //             target.setAttribute('data-y', y);
+            //         });
+            // },
             send(data, cb) {
                 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                     chrome.tabs.sendMessage( tabs[0].id, data, function(response) {
@@ -285,7 +357,13 @@
             }
         },
         mounted() {
-            this.initMockup();
+            // this.initMockup();
+            this._handlePreventScroll = this.handlePreventScroll.bind(this);
+
+            document.body.addEventListener('keydown', this._handlePreventScroll)
+        },
+        beforeDestroy() {
+            document.body.removeEventListener('keydown', this._handlePreventScroll)
         }
     }
 </script>

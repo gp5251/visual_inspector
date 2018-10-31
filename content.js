@@ -2,18 +2,15 @@ import Vue from 'vue';
 import App from './Vue/App';
 
 import iView from 'iview';
+// import {Button, Select, RadioGroup, Radio, Input} from 'iview';
 import 'iview/dist/styles/iview.css';
 
-Vue.use(iView);
 
-// // import iView from 'iview';
-// import 'iview/dist/styles/iview.css';
-//
-// // Vue.use(iView);
-// // iView3 bug啊 DatePicker => CalendarPicker
-// [Modal, Button, Input, DatePicker, Upload, Page].forEach(comp => {
+// [Button, Select, RadioGroup, Radio, Input].forEach(comp => {
 //     Vue.component(comp.name, comp);
 // })
+
+Vue.use(iView);
 
 
 const app = function () {
