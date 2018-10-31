@@ -20,7 +20,6 @@
             border-radius: 5px;
             border-color: black;
             background: #eee;
-            /*box-shadow: 0 0 5px dodgerblue;*/
             z-index: 9999;
         }
 
@@ -61,9 +60,6 @@
         .smallInput{
             width: 30%;
         }
-        /*.opacity{*/
-            /*display: inline-block;width: 50px; text-align: center; vertical-align: 3px*/
-        /*}*/
     }
 </style>
 
@@ -73,13 +69,7 @@
 
         <div class="mockup" ref="mockup" :style="mockupStyle" v-show="img.src && showMockup"></div>
 
-        <VueDragResize
-                class="mockup" ref="mockup" :style="mockupStyle" v-show="img.src && showMockup"
-                :w="mockup.width" :h="mockup.height" :x="mockup.top" :y="mockup.left"
-                :isActive="!freeze" v-on:resizing="handleDragResize" v-on:dragging="handleDragResize">
-        </VueDragResize>
-
-        <div class="controllers" id="controllers">
+        <div class="controllers">
             <h3>FeHelper</h3>
 
             <span>选取设计稿：</span>
@@ -89,7 +79,6 @@
                 <div class="formLine">
                     <Button @click="reset" class="reset" type="primary" size="small">重置</Button>
 
-                    <!--<span>图片大小：{{ wTypes[wType] }}</span>-->
                     <RadioGroup v-model="wType" type="button" size="small">
                         <Radio :label="index" :key="index" v-for="(item, index) in wTypes">{{ item }}</Radio>
                     </RadioGroup>
@@ -138,10 +127,8 @@
 </template>
 
 <script>
-    // import interact from 'interactjs';
-    import VueDragResize from 'vue-drag-resize'
-    Vue.component('VueDragResize', VueDragResize);
-    
+    import interact from 'interactjs';
+
     export default {
         name: "App",
         data() {
@@ -170,18 +157,18 @@
         },
         computed: {
             mockupStyle() {
-                // let {width, height, left, top} = this.mockup,
-                let style = {
+                let {width, height, left, top} = this.mockup,
+                    style = {
                         opacity: this.opacity,
                         'mix-blend-mode': this.blendMode,
 
-                        // width: width + 'px',
-                        // height: height + 'px',
+                        width: width + 'px',
+                        height: height + 'px',
                         // left: left + 'px',
                         // top: top + 'px'
 
-                        // webkitTransform: 'translate(' + left + 'px, ' + top + 'px)',
-                        // transform: 'translate(' + left + 'px, ' + top + 'px)'
+                        webkitTransform: 'translate(' + left + 'px, ' + top + 'px)',
+                        transform: 'translate(' + left + 'px, ' + top + 'px)'
                 };
                 if (this.freeze) style.pointerEvents = 'none';
                 if (this.img.src) style.backgroundImage = `url(${this.img.src})`;
@@ -226,12 +213,12 @@
                 }
             },
             reset() {
-                // const mockup = this.$refs.mockup;
+                const mockup = this.$refs.mockup;
                 // mockup.style.webkitTransform = mockup.style.transform = 'translate(0, 0)';
                 // mockup.style.width = '100%';
                 // mockup.style.height = '100%';
-                // mockup.setAttribute('data-x', 0);
-                // mockup.setAttribute('data-y', 0);
+                mockup.setAttribute('data-x', 0);
+                mockup.setAttribute('data-y', 0);
                 this.mockup = {
                     width: window.innerWidth,
                     height: window.innerHeight,
@@ -277,76 +264,84 @@
             //     })
             // },
 
-            handleDragResize(newRect) {
-                this.mockup.width = newRect.width;
-                this.mockup.height = newRect.height;
-                this.mockup.top = newRect.top;
-                this.mockup.left = newRect.left;
-            },
+            initMockup() {
+                let onmove =(event)=>{
+                    let target = event.target,
+                        // keep the dragged position in the data-x/data-y attributes
+                        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+                        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 
-            // initMockup() {
-            //     let onmove =(event)=>{
-            //         let target = event.target,
-            //             // keep the dragged position in the data-x/data-y attributes
-            //             x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-            //             y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-            //
-            //         // translate the element
-            //         // target.style.webkitTransform =
-            //         //     target.style.transform =
-            //         //         'translate(' + x + 'px, ' + y + 'px)';
-            //         this.mockup.left = x;
-            //         this.mockup.top = y;
-            //
-            //         // update the posiion attributes
-            //         target.setAttribute('data-x', x);
-            //         target.setAttribute('data-y', y);
-            //     };
-            //     //
-            //     // interact(this.$refs.toggler)
-            //     //     .on('click', event => event.stopImmediatePropagation(), { capture: true })
-            //     //     .draggable({
-            //     //         inertia: true,
-            //     //         autoScroll: true,
-            //     //         onmove
-            //     //     });
-            //
-            //     interact(this.$refs.mockup)
-            //         .draggable({
-            //             onmove
-            //         })
-            //         .resizable({
-            //             // resize from all edges and corners
-            //             edges: {left: true, right: true, bottom: true, top: true},
-            //
-            //             // minimum size
-            //             // restrictSize: {
-            //             //     min: {width: 100, height: 50},
-            //             // },
-            //
-            //             inertia: true,
-            //         })
-            //         .on('resizemove', (event)=>{
-            //             let target = event.target,
-            //                 x = (parseFloat(target.getAttribute('data-x')) || 0),
-            //                 y = (parseFloat(target.getAttribute('data-y')) || 0);
-            //             let {mockup} = this;
-            //
-            //             // update the element's style
-            //             mockup.width = event.rect.width;
-            //             mockup.height = event.rect.height;
-            //
-            //             // translate when resizing from top or left edges
-            //             x += event.deltaRect.left;
-            //             y += event.deltaRect.top;
-            //
-            //             mockup.left = x;
-            //             mockup.top = y;
-            //
-            //             target.setAttribute('data-x', x);
-            //             target.setAttribute('data-y', y);
-            //         });
-            // },
+                    // translate the element
+                    target.style.webkitTransform =
+                        target.style.transform =
+                            'translate(' + x + 'px, ' + y + 'px)';
+
+                    // update the posiion attributes
+                    target.setAttribute('data-x', x);
+                    target.setAttribute('data-y', y);
+                };
+                //
+                // interact(this.$refs.toggler)
+                //     .on('click', event => event.stopImmediatePropagation(), { capture: true })
+                //     .draggable({
+                //         inertia: true,
+                //         autoScroll: true,
+                //         onmove
+                //     });
+
+                interact(this.$refs.mockup)
+                    .draggable({
+                        onmove:(event)=>{
+                            let target = event.target,
+                                // keep the dragged position in the data-x/data-y attributes
+                                x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+                                y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+                            // update the posiion attributes
+                            target.setAttribute('data-x', x);
+                            target.setAttribute('data-y', y);
+
+                            this.mockup = {
+                                left: x,
+                                top: y
+                            }
+                        }
+                    })
+                    .resizable({
+                        // resize from all edges and corners
+                        edges: {left: true, right: true, bottom: true, top: true},
+
+                        // minimum size
+                        // restrictSize: {
+                        //     min: {width: 100, height: 50},
+                        // },
+
+                        inertia: true,
+                    })
+                    .on('resizemove',(event) => {
+                        let target = event.target,
+                            x = (parseFloat(target.getAttribute('data-x')) || 0),
+                            y = (parseFloat(target.getAttribute('data-y')) || 0);
+
+                        // update the element's style
+                        // target.style.width  = event.rect.width + 'px';
+                        // target.style.height = event.rect.height + 'px';
+
+                        // translate when resizing from top or left edges
+                        x += event.deltaRect.left;
+                        y += event.deltaRect.top;
+
+                        target.setAttribute('data-x', x);
+                        target.setAttribute('data-y', y);
+
+                        this.mockup.width = event.rect.width;
+                        this.mockup.height = event.rect.height;
+                        this.mockup.left = x;
+                        this.mockup.top = y;
+
+                        console.log(event.deltaRect.left, event.deltaRect.top, event.deltaRect)
+                    });
+            },
             send(data, cb) {
                 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                     chrome.tabs.sendMessage( tabs[0].id, data, function(response) {
@@ -357,7 +352,7 @@
             }
         },
         mounted() {
-            // this.initMockup();
+            this.initMockup();
             this._handlePreventScroll = this.handlePreventScroll.bind(this);
 
             document.body.addEventListener('keydown', this._handlePreventScroll)
