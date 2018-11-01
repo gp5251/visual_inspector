@@ -77,13 +77,16 @@
             <span @click="showMockup = !showMockup" v-if="img.src">{{ showMockup ? '隐藏图层' : '显示图层'}}</span>
         </div>
 
-        <div class="mockup" ref="mockup" :style="mockupStyle" v-show="img.src && showMockup"></div>
+        <div class="mockup"
+             ref="mockup"
+             :style="mockupStyle"
+             v-show="img.src && showMockup"></div>
 
         <div class="controllers">
             <h3>FeHelper</h3>
 
-            <span>选取设计稿：</span>
-            <input type="file" accept="image/*" @change="changeImg" />
+            <!--<span>选取设计稿：</span>-->
+            <!--<input type="file" accept="image/*" @change="changeImg" />-->
 
             <div v-if="img.src">
                 <div class="formLine">
@@ -146,6 +149,14 @@
 
     export default {
         name: "App",
+        props: {
+            src : {
+                type: String,
+                default: function () {
+                    return ''
+                }
+            }
+        },
         data() {
             return {
                 closed: false,
@@ -187,7 +198,7 @@
                     webkitTransform: `translate(${left}px, ${top}px)`,
                     transform: `translate(${left}px, ${top}px)`
                 };
-            }
+            },
         },
         watch: {
             wType() {
@@ -210,27 +221,30 @@
                     e.preventDefault();
 
                     let {mockup} = this.$refs,
-                        {x = 0, y = 0} = mockup.dataset;
+                        {x = 0, y = 0} = mockup.dataset,
+                        count = e.shiftKey ? 10 : 1;
+                    x = +x;
+                    y = +y;
 
                     switch (e.which) {
                         case 37:
                             // mockup.left = mockup.left - 1;
-                            x --;
+                            x -= count;
                             mockup.dataset.x = x;
                             break;
                         case 38:
                             // mockup.top = mockup.top - 1;
-                            y --;
+                            y -= count;
                             mockup.dataset.y = y;
                             break;
                         case 39:
                             // mockup.left = mockup.left + 1;
-                            x ++;
+                            x += count;
                             mockup.dataset.x = x;
                             break;
                         case 40:
                             // mockup.top = mockup.top + 1;
-                            y ++;
+                            y += count;
                             mockup.dataset.y = y;
                     }
 
@@ -245,24 +259,24 @@
                 mockup.setAttribute('data-x', 0);
                 mockup.setAttribute('data-y', 0);
             },
-            changeImg(e) {
-                if (this.img.src) URL.revokeObjectURL(this.img.src);
-
-                let [file] = e.target.files;
-                this.getImg(file).then(img => {
-                    this.img = {
-                        name: file.name,
-                        width: img.naturalWidth,
-                        height: img.naturalHeight,
-                        src: img.src
-                    }
-                }, e => console.error(e));
-            },
+            // changeImg(e) {
+            //     if (this.img.src) URL.revokeObjectURL(this.img.src);
+            //
+            //     let [file] = e.target.files;
+            //     this.getImg(file).then(img => {
+            //         this.img = {
+            //             name: file.name,
+            //             width: img.naturalWidth,
+            //             height: img.naturalHeight,
+            //             src: img.src
+            //         }
+            //     }, e => console.error(e));
+            // },
 
             getImg(url) {
                 return new Promise((resolve, reject)=>{
                     const img = new Image;
-                    img.src = URL.createObjectURL(url);
+                    img.src = url;
                     img.onload = () => resolve(img);
                     img.onerror = reject;
                 })
@@ -352,10 +366,18 @@
                 })
             }
         },
+        async created() {
+            let img = await this.getImg(this.src);
+            this.img = {
+                width: img.naturalWidth,
+                height: img.naturalHeight,
+                src: img.src
+            }
+        },
         mounted() {
             this.initMockup();
             this._handlePreventScroll = this.handlePreventScroll.bind(this);
-
+            //
             document.body.addEventListener('keydown', this._handlePreventScroll)
         },
         beforeDestroy() {

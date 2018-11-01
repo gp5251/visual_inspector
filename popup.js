@@ -5,10 +5,10 @@ new Vue({
     template: `
         <div id="app">
             <h3>FeHelper</h3>
-            <button @click="run">run</button> <button @click="stop">stop</button>
+            <!--<button @click="run">run</button> <button @click="stop">stop</button>-->
             <div class="filePicker">
                 <span class="tit">插入设计稿</span>
-                <input type="file">
+                <input type="file" @change="insertImg">
             </div>
         </div>
     `,
@@ -17,15 +17,43 @@ new Vue({
         fileName: '暂无'
     },
     methods: {
-        run() {
-            this.appState = 'running';
-            this.send({type: 'run'});
+        insertImg(e) {
+            let [file] = e.target.files;
+            console.log(file);
+
+            this.readFileAsDataUrl(file)
+                // .then(this.dataURLtoBlob)
+                .then(dataUrl => {
+                    this.send({type: 'insertImg', payload: {dataUrl}});
+                })
+                // .then(b => {
+                //     let src = URL.createObjectURL(b);
+                //     this.send({type: 'insertImg', payload: {src}});
+                // })
+        },
+        dataURLtoBlob(dataUrl) {
+            let arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+            while (n--) u8arr[n] = bstr.charCodeAt(n);
+            return new Blob([u8arr], {type: mime});
         },
 
-        stop() {
-            this.appState = 'stopped';
-            this.send({type: 'stop'})
+        readFileAsDataUrl(file) {
+            return new Promise(resolve => {
+                const reader = new FileReader();
+                reader.onload = function(e) {resolve(e.target.result)};
+                reader.readAsDataURL(file);
+            })
         },
+        // run() {
+        //     this.appState = 'running';
+        //     this.send({type: 'run'});
+        // },
+        //
+        // stop() {
+        //     this.appState = 'stopped';
+        //     this.send({type: 'stop'})
+        // },
 
         send(data, cb) {
             chrome.tabs.query( {active: true, currentWindow: true}, function(tabs) {

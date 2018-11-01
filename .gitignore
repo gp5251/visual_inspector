@@ -1,6 +1,5 @@
 node_modules*/
 .idea/
-build/
 sftp-config.json
 .tmp
 .temp

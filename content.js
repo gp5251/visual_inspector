@@ -21,36 +21,61 @@ const app = function () {
 		init() {
 			chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			    // console.log(sender.tab ? "from a content script:" + sender.tab.url : "from the extension", 'data:', request);
-			    switch (request.type) {
-			        case 'run':
-			        	this.run();
-			            break;
-			        case 'stop':
-				        this.stop();
-			            break;
-			        default:
-			            console.log('not handled', request);
-			    }
+			    // switch (request.type) {
+			    //     case 'run':
+			    //     	this.run();
+			    //         break;
+			    //     case 'quit':
+				//         this.quit();
+			    //         break;
+			    //     default:
+			    //         console.log('not handled', request);
+			    // }
+
+                if (request.type === 'insertImg') {
+                    this.run(request.payload);
+
+                    // let blobObj = this.dataURLtoBlob(request.payload.dataUrl);
+                    // let url = URL.createObjectURL(blobObj);
+                    // console.log(url)
+				}
 			    return true;
 		    });
 		},
 
-		run() {
-			if (appState === 'running') return;
-
-			let rootEl = document.createElement('div')
-            document.body.appendChild(rootEl);
-			this.createUI().$mount(rootEl);
+		getImgSrc(dataUrl) {
+            let blobObj = this.dataURLtoBlob(dataUrl);
+            return URL.createObjectURL(blobObj);
 		},
 
-		stop() {
+        dataURLtoBlob(dataUrl) {
+            let arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+            while (n--) u8arr[n] = bstr.charCodeAt(n);
+            return new Blob([u8arr], {type: mime});
+        },
+
+		run({dataUrl}) {
+			let src = this.getImgSrc(dataUrl);
+            if (vm) {
+                vm.src = src;
+			} else {
+                let rootEl = document.createElement('div')
+                document.body.appendChild(rootEl);
+                this.createUI(src).$mount(rootEl);
+			}
+		},
+
+		quit() {
 			if (appState === 'running') vm.$destroy();
 		},
 
-		createUI() {
+		createUI(src) {
 			if (!uiCreated) {
 				vm = new Vue({
-				    render: h => h(App),
+				    // render: h => h(App),
+					data: { src },
+					template: ` <App :src = "src" /> `,
 				    destroyed() {
 				    	uiCreated = false;
 						appState = 'stopped';
@@ -59,7 +84,8 @@ const app = function () {
 				    created() {
 				    	uiCreated = true;
 						appState = 'running';
-				    }
+				    },
+					components: {App}
 				});
 			}
 
