@@ -4,7 +4,7 @@ new Vue({
     el: '#app',
     template: `
         <div id="app">
-            <h3>FeHelper</h3>
+            <h3>Visual Inspector</h3>
             <!--<button @click="run">run</button> <button @click="stop">stop</button>-->
             <div class="filePicker">
                 <span class="tit">插入设计稿</span>

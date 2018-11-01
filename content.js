@@ -2,8 +2,8 @@ import Vue from 'vue';
 import App from './Vue/App';
 
 import iView from 'iview';
-// import {Button, Select, RadioGroup, Radio, Input} from 'iview';
 import 'iview/dist/styles/iview.css';
+// import {Button, Select, RadioGroup, Radio, Input} from 'iview';
 
 
 // [Button, Select, RadioGroup, Radio, Input].forEach(comp => {
@@ -12,7 +12,6 @@ import 'iview/dist/styles/iview.css';
 
 Vue.use(iView);
 
-
 const app = function () {
 	let vm, 
 		uiCreated = false,
@@ -20,24 +19,8 @@ const app = function () {
 	return {
 		init() {
 			chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-			    // console.log(sender.tab ? "from a content script:" + sender.tab.url : "from the extension", 'data:', request);
-			    // switch (request.type) {
-			    //     case 'run':
-			    //     	this.run();
-			    //         break;
-			    //     case 'quit':
-				//         this.quit();
-			    //         break;
-			    //     default:
-			    //         console.log('not handled', request);
-			    // }
-
                 if (request.type === 'insertImg') {
                     this.run(request.payload);
-
-                    // let blobObj = this.dataURLtoBlob(request.payload.dataUrl);
-                    // let url = URL.createObjectURL(blobObj);
-                    // console.log(url)
 				}
 			    return true;
 		    });

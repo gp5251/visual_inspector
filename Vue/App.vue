@@ -1,5 +1,5 @@
 <style scoped lang="less">
-    .feHelper{
+    .Visual_Inspector{
         user-select: none;
         font-size: 12px;
 
@@ -49,6 +49,10 @@
             background-color: #eee;
             z-index: 9998;
             padding: 5px;
+
+            h3{
+                padding-bottom: 5px;
+            }
         }
         .reset{
             padding: 3px 10px;
@@ -67,40 +71,41 @@
         .smallInput{
             width: 30%;
         }
+
+        .opacity{
+            width: 50%;
+            vertical-align: middle;
+
+            &::before{
+                content: 'opacity:';
+                display: inline-block;
+                white-space: nowrap;
+                float: left;
+            }
+        }
+        .blender{
+            width: 20%;
+        }
     }
 </style>
 
 <template>
-    <div class="feHelper" :class="{closed}">
+    <div class="Visual_Inspector" :class="{closed}" v-show="img.src">
         <div ref="toggler" class="toggler">
             <span @click="closed = !closed" >{{ closed ? '打开面板' : '收起面板'}}</span>
-            <span @click="showMockup = !showMockup" v-if="img.src">{{ showMockup ? '隐藏图层' : '显示图层'}}</span>
+            <span @click="showMockup = !showMockup" >{{ showMockup ? '隐藏图层' : '显示图层'}}</span>
         </div>
 
-        <div class="mockup"
-             ref="mockup"
-             :style="mockupStyle"
-             v-show="img.src && showMockup"></div>
+        <div class="mockup" ref="mockup" :style="mockupStyle" v-show="showMockup"></div>
 
         <div class="controllers">
-            <h3>FeHelper</h3>
+            <h3>Visual Inspector</h3>
+            <Blender @changeMode="changeBlendMode" :blendMode="blendMode" class="blender"/>
 
-            <!--<span>选取设计稿：</span>-->
-            <!--<input type="file" accept="image/*" @change="changeImg" />-->
-
-            <div v-if="img.src">
+            <div>
                 <div class="formLine">
                     <Button @click="reset" class="reset" type="primary" size="small">重置</Button>
-
-                    <Button
-                            class="reset"
-                            type="primary"
-                            size="small"
-                            :key="index"
-                            v-for="(item, index) in wTypes"
-                            @click="wType = index">{{ item }}</Button>
-
-                    <!--<Input v-model="opacity" size="small" number placeholder="透明度" class="smallInput"/>-->
+                    <Button class="reset" type="primary" size="small" :key="index" v-for="(item, index) in wTypes" @click="wType = index">{{ item }}</Button>
                 </div>
 
                 <!--<div v-if="wType == 3">-->
@@ -108,36 +113,13 @@
                     <!--<Input v-model="mockup.height" size="small" number placeholder="高度" class="smallInput"/>-->
                 <!--</div>-->
 
-                <div>
-                    <span class="opacity">透明度：</span>
-                    <Slider style="width:68%;" v-model="opacity"  :step="0.05"  :min="0" :max="1" show-input></Slider>
-                </div>
+                <Slider class="opacity" v-model="opacity"  :step="0.05"  :min="0" :max="1"></Slider>
 
                 <div class="formLine">
                     <span>图层控制: </span>
                     <Checkbox v-model="showMockup">显示</Checkbox>
                     <Checkbox v-model="freeze">冻结</Checkbox>
                     <Checkbox v-model="preventScroll">键盘滚动</Checkbox>
-
-                    <span>混合模式：</span>
-                    <Select v-model="blendMode" style="width: 20%;" size="small" >
-                        <Option value="normal">正常</Option>
-                        <Option value="multiply">正片叠底</Option>
-                        <Option value="screen">滤色</Option>
-                        <Option value="overlay">叠加</Option>
-                        <Option value="darken">变暗</Option>
-                        <Option value="lighten">变亮</Option>
-                        <Option value="color-dodge">颜色减淡</Option>
-                        <Option value="color-burn">颜色加深</Option>
-                        <Option value="hard-light">强光</Option>
-                        <Option value="soft-light">柔光</Option>
-                        <Option value="difference">差值</Option>
-                        <Option value="exclusion">排除</Option>
-                        <Option value="hue">色相</Option>
-                        <Option value="saturation">饱和度</Option>
-                        <Option value="color">颜色</Option>
-                        <Option value="luminosity">亮度</Option>
-                    </Select>
                 </div>
             </div>
         </div>
@@ -145,10 +127,12 @@
 </template>
 
 <script>
-    import interact from 'interactjs';
+    import interact from 'interactjs'
+    import Blender from './Blender'
 
     export default {
         name: "App",
+        components: {Blender},
         props: {
             src : {
                 type: String,
@@ -216,6 +200,10 @@
             }
         },
         methods: {
+            changeBlendMode(mode) {
+                console.log('changeBlendMode', mode)
+                this.blendMode = mode;
+            },
             handlePreventScroll(e) {
                 if (this.preventScroll) {
                     e.preventDefault();
