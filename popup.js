@@ -7,8 +7,8 @@ new Vue({
             <h3>Visual Inspector</h3>
             <!--<button @click="run">run</button> <button @click="stop">stop</button>-->
             <div class="filePicker">
-                <span class="tit">插入设计稿</span>
-                <input type="file" @change="insertImg">
+                <span class="tit">点击插入设计稿</span>
+                <input type="file" @change="insertImg" />
             </div>
         </div>
     `,

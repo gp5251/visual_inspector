@@ -4,13 +4,13 @@
         font-size: 12px;
         color: #17233d;
 
-        &.closed{
-            .controllers{
+        &.vi_closed{
+            .vi_controllers{
                 display: none;
             }
         }
 
-        .toggler{
+        .vi_toggler{
             position: fixed;
             right: 5px;
             top: 5px;
@@ -31,7 +31,7 @@
             }
         }
 
-        .mockup {
+        .vi_mockup {
             width: 100%;
             height: 100%;
             z-index: 9997;
@@ -42,7 +42,7 @@
             box-shadow: 0 0 1px 2px #aaa;
         }
 
-        .controllers {
+        .vi_controllers {
             position: fixed;
             bottom: 0;
             left: 0;
@@ -76,7 +76,7 @@
                 color: #2d8cf0;
             }
 
-            .quit{
+            .vi_quit{
                 position: absolute;
                 right: 5px;
                 top: 5px;
@@ -84,12 +84,12 @@
                 cursor: pointer;
             }
         }
-        .reset{
+        .vi_reset{
             padding: 3px 10px;
             margin-right: 5px;
         }
 
-        .formLine{
+        .vi_formLine{
             display: inline-block;
             vertical-align: middle;
             margin-right: 5px;
@@ -104,12 +104,12 @@
             }
         }
 
-        .blender{
+        .vi_blender{
             &::before{
                 content: '对比模式:';
             }
         }
-        .resize{
+        .vi_resize{
             &::before{
                 content: '位置大小:';
             }
@@ -128,7 +128,7 @@
                 }
             }
         }
-        .opacity{
+        .vi_opacity{
             min-width: 25%;
             padding-right: 5px;
 
@@ -138,67 +138,53 @@
                 margin-top: 8px;
             }
 
-            .sliderWraper{
+            .vi_sliderWraper{
                 // max-width: 100px;
                 min-width: 80px;
                 display: block;
                 margin-left: 30px;
             }
 
-            .slider{
+            .vi_slider{
                 width: 100%;
                 vertical-align: middle;
             }
         }
-        .others{
+        .vi_others{
             white-space: nowrap;
-
-            // &::before{
-            //     content: '其他:';
-            // }
-
-            label{
-                display: inline-block;
-                position: relative;
-
-                input{
-                    visibility: hidden;
-                }
-            }
         }
     }
 </style>
 
 <template>
-    <div class="Visual_Inspector" :class="{closed}">
-        <div ref="toggler" class="toggler">
+    <div class="Visual_Inspector" :class="{'vi_closed': closed}">
+        <div ref="toggler" class="vi_toggler">
             <span @click="closed = !closed" >{{ closed ? '打开面板' : '收起面板'}}</span>
             <span @click="showMockup = !showMockup" >{{ showMockup ? '隐藏图层' : '显示图层'}}</span>
+            <span class="vi_quit" @click="$emit('quit')">退出</span>
         </div>
 
-        <div class="mockup" ref="mockup" :style="mockupStyle" v-show="showMockup"></div>
+        <div class="vi_mockup" ref="mockup" :style="mockupStyle" v-show="showMockup"></div>
 
-        <div class="controllers">
+        <div class="vi_controllers">
             <h3>Visual Inspector</h3>
-            <Blender @changeMode="changeBlendMode" :blendMode="blendMode" class="blender formLine"/>
+            <Blender @changeMode="changeBlendMode" :blendMode="blendMode" class="vi_blender vi_formLine"/>
 
-            <div class="formLine opacity">
-                <div class="sliderWraper">
-                    <Slider class="slider" v-model="opacity"  :step="0.05"  :min="0" :max="1"></Slider>
+            <div class="vi_formLine vi_opacity">
+                <div class="vi_sliderWraper">
+                    <Slider class="vi_slider" v-model="opacity"  :step="0.05"  :min="0" :max="1"></Slider>
                 </div>
             </div>
 
-            <div class="formLine others">
+            <div class="vi_formLine vi_others">
                 <checkbox v-model="showMockup">显示</checkbox>
                 <checkbox v-model="freeze">冻结</checkbox>
             </div>
 
-            <div class="formLine resize">
-                <button @click="reset" class="reset">重置</button>
-                <button class="reset" :key="index" v-for="(item, index) in wTypes" @click="wType = index">{{ item }}</button>
+            <div class="vi_formLine vi_resize">
+                <button @click="reset" class="vi_reset">重置</button>
+                <button class="vi_reset" :key="index" v-for="(item, index) in wTypes" @click="wType = index">{{ item }}</button>
             </div>
-
-            <span class="quit" @click="$emit('quit')">退出</span>
         </div>
     </div>
 </template>

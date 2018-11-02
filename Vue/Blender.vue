@@ -1,6 +1,6 @@
 <style lang="less">
-    .blender {
-        .select{
+    .vi_blender {
+        .vi_select{
             width: 100px;
             display: inline-block;
             // box-shadow: 1px 1px 1px #aaa;
@@ -16,9 +16,9 @@
 </style>
 
 <template>
-    <div class="blender">
+    <div class="vi_blender">
         <!--<span>对比模式：</span>-->
-        <Select :value="blendMode" size="small" @on-change="changeMode" class="select">
+        <Select :value="blendMode" size="small" @on-change="changeMode" class="vi_select">
             <Option :value="value" :key="item" v-for="(item, value) in modes">{{ item }}</Option>
         </Select>
     </div>

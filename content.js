@@ -48,7 +48,7 @@ const app = function () {
 				vm = new Vue({
 				    // render: h => h(App),
 					data: { src },
-					template: ` <App :src = "src" /> `,
+					template: ` <App :src = "src" @quit="destroy" /> `,
 				    destroyed() {
 				    	uiCreated = false;
 						appState = 'stopped';
@@ -58,6 +58,12 @@ const app = function () {
 				    	uiCreated = true;
 						appState = 'running';
 				    },
+                    methods: {
+						destroy() {
+							this.$destroy();
+							vm = null;
+						}
+					},
 					components: {App}
 				});
 			}
