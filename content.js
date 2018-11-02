@@ -1,16 +1,6 @@
 import Vue from 'vue';
 import App from './Vue/App';
-
-import iView from 'iview';
-import 'iview/dist/styles/iview.css';
-// import {Button, Select, RadioGroup, Radio, Input} from 'iview';
-
-
-// [Button, Select, RadioGroup, Radio, Input].forEach(comp => {
-//     Vue.component(comp.name, comp);
-// })
-
-Vue.use(iView);
+import './iview/iview.css'
 
 const app = function () {
 	let vm, 
@@ -18,7 +8,7 @@ const app = function () {
 		appState = 'stopped';
 	return {
 		init() {
-			chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+			chrome.runtime.onMessage.addListener((request) => {
                 if (request.type === 'insertImg') {
                     this.run(request.payload);
 				}

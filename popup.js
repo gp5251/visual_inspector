@@ -12,25 +12,15 @@ new Vue({
             </div>
         </div>
     `,
-    data: {
-        appState: 'stopped',
-        fileName: '暂无'
-    },
     methods: {
         insertImg(e) {
             let [file] = e.target.files;
-            console.log(file);
-
             this.readFileAsDataUrl(file)
-                // .then(this.dataURLtoBlob)
                 .then(dataUrl => {
                     this.send({type: 'insertImg', payload: {dataUrl}});
                 })
-                // .then(b => {
-                //     let src = URL.createObjectURL(b);
-                //     this.send({type: 'insertImg', payload: {src}});
-                // })
         },
+
         dataURLtoBlob(dataUrl) {
             let arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1],
                 bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
@@ -45,15 +35,6 @@ new Vue({
                 reader.readAsDataURL(file);
             })
         },
-        // run() {
-        //     this.appState = 'running';
-        //     this.send({type: 'run'});
-        // },
-        //
-        // stop() {
-        //     this.appState = 'stopped';
-        //     this.send({type: 'stop'})
-        // },
 
         send(data, cb) {
             chrome.tabs.query( {active: true, currentWindow: true}, function(tabs) {

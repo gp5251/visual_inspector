@@ -1,8 +1,15 @@
-<style scoped lang="less">
+<style lang="less">
     .blender {
-        display: inline-block;
-
         .select{
+            width: 100px;
+            display: inline-block;
+            // box-shadow: 1px 1px 1px #aaa;
+        }
+
+        .vi-ivu-icon-ios-arrow-down:before{
+            content: 'V' !important;
+            font-weight: bold;
+            transform: scale(.8, .5);
             display: inline-block;
         }
     }
@@ -10,16 +17,20 @@
 
 <template>
     <div class="blender">
-        <span>对比模式：</span>
+        <!--<span>对比模式：</span>-->
         <Select :value="blendMode" size="small" @on-change="changeMode" class="select">
-            <Option :value="value" v-for="(item, value) in modes">{{ item }}</Option>
+            <Option :value="value" :key="item" v-for="(item, value) in modes">{{ item }}</Option>
         </Select>
     </div>
 </template>
 
 <script>
+    import Select from '../iview/components/select';
+    import Option from '../iview/components/option';
+
     export default {
         name: "Blender",
+        components:{Select, Option},
         props: {
             blendMode: {
                 type: String,

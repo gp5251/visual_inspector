@@ -5,6 +5,7 @@
   "description": "A chrome plug-in which provides a variety of ways to help front-end developers quickly discover differences between design drafts and web pages.",
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "browser_action": {
+    "default_title": "Visual Inspector",
     "default_popup": "popup.html"
   },
   "permissions": [
