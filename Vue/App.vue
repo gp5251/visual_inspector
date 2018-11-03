@@ -242,14 +242,7 @@
                 if (this.img.src) style.backgroundImage = `url(${this.img.src})`;
                 // style.backgroundSize = this.getBgSize(this.wType);
                 return style;
-            },
-            mockupWapperStyle() {
-                let {left, top} = this.mockup;
-                return {
-                    webkitTransform: `translate(${left}px, ${top}px)`,
-                    transform: `translate(${left}px, ${top}px)`
-                };
-            },
+            }
         },
         watch: {
             wType() {
@@ -264,6 +257,20 @@
                     style.width = window.innerWidth + 'px';
                     style.height = (document.documentElement.scrollHeight || document.body.scrollHeight)+ 'px';
                 }
+            },
+            src: {
+                handler(val) {
+                    this.getImg(val).then(img => {
+                        this.img = {
+                            width: img.naturalWidth,
+                            height: img.naturalHeight,
+                            src: img.src
+                        }
+                    }, err => {
+                        console.error('failed to get img', val);
+                    });
+                },
+                immediate: true
             }
         },
         methods: {
@@ -283,22 +290,18 @@
 
                     switch (e.which) {
                         case 37:
-                            // mockup.left = mockup.left - 1;
                             x -= count;
                             mockup.dataset.x = x;
                             break;
                         case 38:
-                            // mockup.top = mockup.top - 1;
                             y -= count;
                             mockup.dataset.y = y;
                             break;
                         case 39:
-                            // mockup.left = mockup.left + 1;
                             x += count;
                             mockup.dataset.x = x;
                             break;
                         case 40:
-                            // mockup.top = mockup.top + 1;
                             y += count;
                             mockup.dataset.y = y;
                     }
@@ -419,14 +422,6 @@
                         console.log('response', response);
                     })
                 })
-            }
-        },
-        async created() {
-            let img = await this.getImg(this.src);
-            this.img = {
-                width: img.naturalWidth,
-                height: img.naturalHeight,
-                src: img.src
             }
         },
         mounted() {
