@@ -40,6 +40,7 @@
             top: 0;
             background: rgba(255, 255, 255, .5) url() no-repeat center ~"0 / 100%" auto;
             box-shadow: 0 0 1px 2px #aaa;
+            touch-action: none;
         }
 
         .vi_controllers {
