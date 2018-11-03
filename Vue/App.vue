@@ -359,7 +359,7 @@
                 };
 
                 interact(this.$refs.toggler)
-                    .on('click', event => event.stopImmediatePropagation(), { capture: true })
+                    // .on('click', event => event.stopImmediatePropagation(), { capture: true })
                     .draggable({
                         inertia: true,
                         autoScroll: true,
