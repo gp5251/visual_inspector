@@ -39,8 +39,33 @@
             left: 0;
             top: 0;
             background: rgba(255, 255, 255, .5) url() no-repeat center ~"0 / 100%" auto;
-            box-shadow: 0 0 1px 2px #aaa;
+            box-shadow: 0 0 1px 0 #ccc;
             touch-action: none;
+
+            &.freeze::after{
+                display: none;
+            }
+
+            &::after{
+                content: '';
+                width: 100%;
+                height: 100%;
+                padding: 3px;
+                position: absolute;
+                left: -3px;
+                top: -3px;
+                box-sizing: content-box;
+                background: radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat left top,
+                            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat left bottom,
+                            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right top,
+                            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right bottom,
+                            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat left 50%,
+                            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat 50% top,
+                            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat 50% bottom,
+                            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right top,
+                            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right 50%;
+                background-size: 6px 6px;
+            }
         }
 
         .vi_controllers {
@@ -57,17 +82,6 @@
             // background: rgba(242,246,248,1);background: -moz-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(242,246,248,1)), color-stop(50%, rgba(216,225,231,1)), color-stop(51%, rgba(181,198,208,1)), color-stop(100%, rgba(224,239,249,1)));background: -webkit-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);background: -o-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);background: -ms-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);background: linear-gradient(to bottom, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6f8', endColorstr='#e0eff9', GradientType=0 );
             // background: rgba(183,222,237,1);background: -moz-linear-gradient(top, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(183,222,237,1)), color-stop(50%, rgba(113,206,239,1)), color-stop(51%, rgba(33,180,226,1)), color-stop(100%, rgba(183,222,237,1)));background: -webkit-linear-gradient(top, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);background: -o-linear-gradient(top, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);background: -ms-linear-gradient(top, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);background: linear-gradient(to bottom, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b7deed', endColorstr='#b7deed', GradientType=0 );
             background: rgba(255,255,255,1);background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255,255,255,1)), color-stop(47%, rgba(246,246,246,1)), color-stop(100%, rgba(237,237,237,1)));background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);background: -o-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed', GradientType=0 );
-
-            // &::after{
-            //     content: '';
-            //     height: 1px;
-            //     position: absolute;
-            //     background-color: #888;
-            //     box-shadow: 0 1px 0 white;
-            //     left: 0;
-            //     right: 0;
-            //     top: 1px;
-            // }
 
             h3{
                 padding-bottom: 5px;
@@ -165,7 +179,7 @@
             <span class="vi_quit" @click="$emit('quit')">退出</span>
         </div>
 
-        <div class="vi_mockup" ref="mockup" :style="mockupStyle" v-show="showMockup"></div>
+        <div class="vi_mockup" :class="{freeze}" ref="mockup" :style="mockupStyle" v-show="showMockup"></div>
 
         <div class="vi_controllers">
             <h3>Visual Inspector</h3>
@@ -178,8 +192,8 @@
             </div>
 
             <div class="vi_formLine vi_others">
-                <checkbox v-model="showMockup">显示</checkbox>
-                <checkbox v-model="freeze">冻结</checkbox>
+                <checkbox v-model="showMockup" title="显示隐藏图层">显示</checkbox>
+                <checkbox v-model="freeze" title="冻结后图层将不可拖动和拉伸">冻结</checkbox>
             </div>
 
             <div class="vi_formLine vi_resize">
@@ -214,9 +228,9 @@
                 showMockup: true,
                 opacity: 1,
                 freeze: 0,
-                blendMode: 'darken',
+                blendMode: 'normal',
                 wTypes: ['原图', '窗口', '页面'],
-                wType: 1,
+                wType: -1,
                 mockup: {
                     // width: window.innerWidth,
                     // height: window.innerHeight,
@@ -245,18 +259,18 @@
             }
         },
         watch: {
-            wType() {
-                let style = this.$refs.mockup.style;
-                if (this.wType == 0) { // 原图大小
-                    style.width = this.img.width + 'px';
-                    style.height = this.img.height + 'px';
-                } else if (this.wType == 1) { // 窗口大小
-                    style.width = window.innerWidth + 'px';
-                    style.height = window.innerHeight + 'px';
-                } else if (this.wType == 2) { // 页面大小
-                    style.width = window.innerWidth + 'px';
-                    style.height = (document.documentElement.scrollHeight || document.body.scrollHeight)+ 'px';
-                }
+            wType(val) {
+                    let style = this.$refs.mockup.style;
+                    if (val == 0) { // 原图大小
+                        style.width = this.img.width + 'px';
+                        style.height = this.img.height + 'px';
+                    } else if (val == 1) { // 窗口大小
+                        style.width = window.innerWidth + 'px';
+                        style.height = window.innerHeight + 'px';
+                    } else if (val == 2) { // 页面大小
+                        style.width = window.innerWidth + 'px';
+                        style.height = (document.documentElement.scrollHeight || document.body.scrollHeight)+ 'px';
+                    }
             },
             src: {
                 handler(val) {
@@ -265,7 +279,8 @@
                             width: img.naturalWidth,
                             height: img.naturalHeight,
                             src: img.src
-                        }
+                        };
+                        this.wType = 0; // 原图大小
                     }, err => {
                         console.error('failed to get img', val);
                     });
@@ -312,24 +327,11 @@
             reset() {
                 const mockup = this.$refs.mockup;
                 mockup.style.webkitTransform = mockup.style.transform = 'translate(0, 0)';
-                mockup.style.width = '100%';
-                mockup.style.height = '100%';
                 mockup.setAttribute('data-x', 0);
                 mockup.setAttribute('data-y', 0);
+
+                this.wType = 0;
             },
-            // changeImg(e) {
-            //     if (this.img.src) URL.revokeObjectURL(this.img.src);
-            //
-            //     let [file] = e.target.files;
-            //     this.getImg(file).then(img => {
-            //         this.img = {
-            //             name: file.name,
-            //             width: img.naturalWidth,
-            //             height: img.naturalHeight,
-            //             src: img.src
-            //         }
-            //     }, e => console.error(e));
-            // },
 
             getImg(url) {
                 return new Promise((resolve, reject)=>{
@@ -339,21 +341,6 @@
                     img.onerror = reject;
                 })
             },
-
-            // dataURLtoBlob(dataUrl) {
-            //     let arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-            //         bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-            //     while (n--) u8arr[n] = bstr.charCodeAt(n);
-            //     return new Blob([u8arr], {type: mime});
-            // },
-            //
-            // readFileAsDataUrl(file) {
-            //     return new Promise(resolve => {
-            //         const reader = new FileReader();
-            //         reader.onload = function(e) {resolve(e.target.result)};
-            //         reader.readAsDataURL(file);
-            //     })
-            // },
 
             initMockup() {
                 let onmove =(event)=>{
@@ -372,13 +359,13 @@
                     target.setAttribute('data-y', y);
                 };
 
-                // interact(this.$refs.toggler)
-                //     .on('click', event => event.stopImmediatePropagation(), { capture: true })
-                //     .draggable({
-                //         inertia: true,
-                //         autoScroll: true,
-                //         onmove
-                //     });
+                interact(this.$refs.toggler)
+                    .on('click', event => event.stopImmediatePropagation(), { capture: true })
+                    .draggable({
+                        inertia: true,
+                        autoScroll: true,
+                        onmove
+                    });
 
                 interact(this.$refs.mockup)
                     .draggable({
@@ -413,6 +400,8 @@
 
                         target.setAttribute('data-x', x);
                         target.setAttribute('data-y', y);
+
+                        this.wType = -1;
                     });
             },
             send(data, cb) {
