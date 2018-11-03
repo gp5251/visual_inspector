@@ -20,6 +20,7 @@
             border-color: black;
             background: #eee;
             z-index: 9999;
+            touch-action: none;
 
             span{
                 display: block;
@@ -192,7 +193,7 @@
             </div>
 
             <div class="vi_formLine vi_others">
-                <checkbox v-model="showMockup" title="显示隐藏图层">显示</checkbox>
+                <!--<checkbox v-model="showMockup" title="显示隐藏图层">显示</checkbox>-->
                 <checkbox v-model="freeze" title="冻结后图层将不可拖动和拉伸">冻结</checkbox>
             </div>
 
@@ -229,7 +230,7 @@
                 opacity: 1,
                 freeze: 0,
                 blendMode: 'normal',
-                wTypes: ['原图', '窗口', '页面'],
+                wTypes: ['原图', '原图/2', '窗口', '页面'],
                 wType: -1,
                 mockup: {
                     // width: window.innerWidth,
@@ -261,13 +262,16 @@
         watch: {
             wType(val) {
                     let style = this.$refs.mockup.style;
-                    if (val == 0) { // 原图大小
+                    if (val === 0) { // 原图大小
                         style.width = this.img.width + 'px';
                         style.height = this.img.height + 'px';
-                    } else if (val == 1) { // 窗口大小
+                    } else if (val === 1) { // 原图大小/2
+                        style.width = this.img.width / 2 + 'px';
+                        style.height = this.img.height / 2 + 'px';
+                    } else if (val === 2) { // 窗口大小
                         style.width = window.innerWidth + 'px';
                         style.height = window.innerHeight + 'px';
-                    } else if (val == 2) { // 页面大小
+                    } else if (val === 3) { // 页面大小
                         style.width = window.innerWidth + 'px';
                         style.height = (document.documentElement.scrollHeight || document.body.scrollHeight)+ 'px';
                     }
@@ -280,7 +284,7 @@
                             height: img.naturalHeight,
                             src: img.src
                         };
-                        this.wType = 0; // 原图大小
+                        this.wType = 2;
                     }, err => {
                         console.error('failed to get img', val);
                     });
@@ -368,7 +372,22 @@
 
                 interact(this.$refs.mockup)
                     .draggable({
-                        onmove
+                        onmove,
+                        snap: {
+                            targets: [
+                                {x: 0, y: 0, range: 20},
+                                function () {
+                                    return {
+                                        x: window.innerWidth,
+                                        y: 0,
+                                        range: 20
+                                    }
+                                }
+                            ],
+                            relativePoints: [
+                                {x: 0, y: 0}, {x: 1, y: 0}
+                            ]
+                        }
                     })
                     .resizable({
                         // resize from all edges and corners
@@ -376,7 +395,7 @@
 
                         // minimum size
                         restrictSize: {
-                            min: {width: 200, height: 100},
+                            min: {width: 100, height: 50},
                         },
 
                         inertia: true,

@@ -38,35 +38,8 @@ let config = {
         maxModules: 5,
     },
 
-    // optimization: {
-    //     nodeEnv: 'production',
-    //     minimize: true,
-    //     minimizer:[
-    //         new UglifyJsPlugin({
-    //             cache: true,
-    //             parallel: true,
-    //             sourceMap: true
-    //         }),
-    //         new OptimizeCSSAssetsPlugin()
-    //     ],
-    //     splitChunks: {
-    //         chunks: 'all',
-    //         cacheGroups: {
-    //             vendors: {
-    //                 test: /node_modules/,
-    //                 name: 'vendors',
-    //                 // 设置优先级，防止和自定义的公共代码提取时被覆盖，不进行打包
-    //                 // minSize: 30000,
-    //                 minChunks: 2,
-    //                 priority: -10,
-    //                 // chunks: 'initial'
-    //             }
-    //         }
-    //     }
-    // },
-
     plugins: [
-        new webpack.HashedModuleIdsPlugin(), // id改为hash，便于缓存
+        new webpack.HashedModuleIdsPlugin(),
         new VueLoaderPlugin(),
         new MiniCssExtractPlugin({
             filename:'css/[name].[contenthash].css'
