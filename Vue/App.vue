@@ -30,6 +30,24 @@
                 border-radius: 3px;
                 padding: 0 5px;
             }
+
+            .moveBar{
+                height: 12px;
+                /*background-color: #aaa;*/
+                /*background: rgba(183,222,237,1);background: -moz-linear-gradient(top, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(183,222,237,1)), color-stop(50%, rgba(113,206,239,1)), color-stop(51%, rgba(33,180,226,1)), color-stop(100%, rgba(183,222,237,1)));background: -webkit-linear-gradient(top, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);background: -o-linear-gradient(top, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);background: -ms-linear-gradient(top, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);background: linear-gradient(to bottom, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b7deed', endColorstr='#b7deed', GradientType=0 );*!*/
+                background: linear-gradient(to bottom, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
+                position: relative;
+
+                &::after{
+                    content: '';
+                    position: absolute;
+                    top: 40%;
+                    left: 20%;
+                    right: 20%;
+                    height: 0;
+                    border-bottom: 1px dotted #333;
+                }
+            }
         }
 
         .vi_mockup {
@@ -175,6 +193,7 @@
 <template>
     <div class="Visual_Inspector" :class="{'vi_closed': closed}">
         <div ref="toggler" class="vi_toggler">
+            <span class="moveBar"></span>
             <span @click="closed = !closed" >{{ closed ? '打开面板' : '收起面板'}}</span>
             <span @click="showMockup = !showMockup" >{{ showMockup ? '隐藏图层' : '显示图层'}}</span>
             <span class="vi_quit" @click="$emit('quit')">退出</span>
@@ -365,6 +384,7 @@
                 interact(this.$refs.toggler)
                     // .on('click', event => event.stopImmediatePropagation(), { capture: true })
                     .draggable({
+                        allowFrom: '.moveBar',
                         inertia: true,
                         autoScroll: true,
                         onmove
