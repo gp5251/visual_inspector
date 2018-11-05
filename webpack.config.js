@@ -1,11 +1,10 @@
 const webpack               = require('webpack');
 const path                  = require('path');
-// const fs                    = require('fs');
 const MiniCssExtractPlugin  = require('mini-css-extract-plugin');
 const VueLoaderPlugin       = require('vue-loader/lib/plugin');
 const UglifyJsPlugin        = require("uglifyjs-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-// const isProd = process.env.NODE_ENV == 'production';
+const isProd = process.env.NODE_ENV == 'production';
 
 let config = {
     entry: {
@@ -16,26 +15,19 @@ let config = {
     output: {
         path: path.resolve(__dirname, './build'),
         filename: '[name].js',
-        chunkFilename: '[name].js' // 通过 import() 在js代码中倒入的模块
     },
 
     externals: {
         "vue": "Vue"
     },
 
-    devtool : 'source-map',
-
-    mode : 'production',
-
     resolve: {
         extensions: ['.js', '.vue'],
-        // alias: {
-        //     vue$: isProd ? 'vue/dist/vue.runtime.js' : 'vue/dist/vue.js'
-        // }
     },
 
     stats: {
         maxModules: 5,
+        timings: true
     },
 
     plugins: [
@@ -87,6 +79,24 @@ let config = {
             ]
         }]
     }
+};
+
+if (isProd) {
+    config.mode = 'production';
+    config.optimization = {
+        minimizer:[
+            new UglifyJsPlugin({
+                cache: true,
+                parallel: true,
+                sourceMap: false
+            }),
+            new OptimizeCSSAssetsPlugin()
+        ]
+    }
+    // config.devtool = 'source-map';
+} else {
+    config.mode = 'development';
+    config.devtool = 'cheap-eval-source-map';
 }
 
 module.exports = config;

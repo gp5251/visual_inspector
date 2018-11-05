@@ -1,10 +1,11 @@
 {
-  "name": "chrome_fe_extension",
+  "name": "Visual_Inspector",
   "version": "1.0.0",
-  "description": "",
+  "description": "A chrome plug-in which provides a variety of ways to help front-end developers quickly locate differences between design drafts and web pages.",
   "main": "content.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack --watch --mode development",
+    "build": "NODE_ENV=production webpack"
   },
   "keywords": [],
   "author": "",

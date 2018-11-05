@@ -2,7 +2,7 @@
   "name": "Visual Inspector",
   "version": "1.0.0",
   "manifest_version": 2,
-  "description": "A chrome plug-in which provides a variety of ways to help front-end developers quickly discover differences between design drafts and web pages.",
+  "description": "A chrome plug-in which provides a variety of ways to help front-end developers quickly locate differences between design drafts and web pages.",
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "icons": {
     "128": "icon.png"
