@@ -125,6 +125,7 @@
             display: inline-block;
             vertical-align: middle;
             margin-right: 5px;
+            padding: 3px 0;
 
             &::before{
                 transform-origin: 0 center;
@@ -167,11 +168,9 @@
             &::before{
                 content: '透明:';
                 float: left;
-                margin-top: 8px;
             }
 
             .vi_sliderWraper{
-                // max-width: 100px;
                 min-width: 80px;
                 display: block;
                 margin-left: 30px;
@@ -180,6 +179,10 @@
             .vi_slider{
                 width: 100%;
                 vertical-align: middle;
+
+            }
+            .vi_slider /deep/ .vi-ivu-slider-wrap{
+                margin: 8px 0;
             }
         }
         .vi_others{
@@ -239,8 +242,10 @@
             </div>
 
             <div class="vi_customSize vi_formLine">
-                <input v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.width" @keydown.stop @keypress="handleCustomSizeInput"/>
-                <input v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.height" @keydown.stop @keypress="handleCustomSizeInput"/>
+                <input title="width" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.width" @keydown.stop @keypress="handleCustomSizeInput"/>
+                <input title="height" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.height" @keydown.stop @keypress="handleCustomSizeInput"/>
+                <input title="left" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.left" @keydown.stop @keypress="handleCustomSizeInput"/>
+                <input title="top" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.top" @keydown.stop @keypress="handleCustomSizeInput"/>
             </div>
         </div>
     </div>
@@ -324,18 +329,32 @@
                             height: img.naturalHeight,
                             src: img.src
                         };
-                        this.wType = 0;
+                        this.reset();
                     }, err => console.error('failed to get img', err));
                 },
                 immediate: true
             },
-            "mockup.width": function (val, oldVal) {
+            "mockup.width": function (val) {
                 let value = +val;
                 if (value > 0) this.$refs.mockup.style.width = value + 'px';
             },
-            "mockup.height": function (val, oldVal) {
+            "mockup.height": function (val) {
                 let value = +val;
                 if (value > 0) this.$refs.mockup.style.height = value + 'px';
+            },
+            "mockup.left": function (val) {
+                let value = +val;
+                if (value > 0) {
+                    let {y} = this.$refs.mockup.dataset;
+                    this.moveMockup(val, y);
+                }
+            },
+            "mockup.top": function (val) {
+                let value = +val;
+                if (value > 0) {
+                    let {x} = this.$refs.mockup.dataset;
+                    this.moveMockup(x, val);
+                }
             }
         },
         methods: {
@@ -377,13 +396,16 @@
                 }
             },
             reset() {
-                const mockup = this.$refs.mockup;
-                mockup.style.webkitTransform = mockup.style.transform = 'translate(0, 0)';
-                mockup.setAttribute('data-x', 0);
-                mockup.setAttribute('data-y', 0);
-
+                this.moveMockup(0, 0);
                 if (this.img.width > window.innerWidth) this.wType = 2;
                 else this.wType = 0;
+            },
+
+            moveMockup(x = 0, y = 0) {
+                let {mockup} = this.$refs;
+                mockup.style.webkitTransform = mockup.style.transform = `translate(${x}px, ${y}px)`;
+                mockup.setAttribute('data-x', x);
+                mockup.setAttribute('data-y', y);
             },
 
             getImg(url) {
@@ -483,21 +505,25 @@
         directives: {
             autoSelect: {
                 bind(el) {
-                    el.addEventListener('focus', el.select)
+                    // fix mac popup contextMenu bug
+                    el._select = function() {
+                        if (el._tid) clearTimeout(el._tid);
+                        el._tid = setTimeout(el.select.bind(el), 20)
+                    };
+
+                    el.addEventListener('focus', el._select)
                 },
                 unbind(el) {
-                    el.removeEventListener('focus', el.select)
+                    el.removeEventListener('focus', el._select)
                 }
             }
         },
         mounted() {
             this.initMockup();
-            this._handlePreventScroll = this.handlePreventScroll.bind(this);
-            //
-            document.body.addEventListener('keydown', this._handlePreventScroll)
+            document.body.addEventListener('keydown', this.handlePreventScroll)
         },
         beforeDestroy() {
-            document.body.removeEventListener('keydown', this._handlePreventScroll)
+            document.body.removeEventListener('keydown', this.handlePreventScroll)
         }
     }
 </script>

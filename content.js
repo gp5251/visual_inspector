@@ -39,7 +39,7 @@ const app = function () {
 		},
 
 		quit() {
-			if (appState === 'running') vm.$destroy();
+			if (appState === 'running') vm.destroy();
 		},
 
 		createUI(src) {
