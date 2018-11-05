@@ -3,8 +3,8 @@ const path                  = require('path');
 const MiniCssExtractPlugin  = require('mini-css-extract-plugin');
 const VueLoaderPlugin       = require('vue-loader/lib/plugin');
 const UglifyJsPlugin        = require("uglifyjs-webpack-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const isProd = process.env.NODE_ENV == 'production';
+const CopyWebpackPlugin     = require('copy-webpack-plugin');
+const isProd                = process.env.NODE_ENV == 'production';
 
 let config = {
     entry: {
@@ -17,12 +17,11 @@ let config = {
         filename: '[name].js',
     },
 
-    externals: {
-        "vue": "Vue"
-    },
-
     resolve: {
         extensions: ['.js', '.vue'],
+        alias: {
+            vue: `vue/dist/vue${isProd ? '.min' : ''}.js`
+        }
     },
 
     stats: {
@@ -40,7 +39,8 @@ let config = {
             "process.env": {
                 DEVKIT_STAGE: JSON.stringify('production')
             }
-        })
+        }),
+        new CopyWebpackPlugin(['./copy']),
     ],
 
     module: {
@@ -89,8 +89,7 @@ if (isProd) {
                 cache: true,
                 parallel: true,
                 sourceMap: false
-            }),
-            new OptimizeCSSAssetsPlugin()
+            })
         ]
     }
     // config.devtool = 'source-map';

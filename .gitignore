@@ -10,5 +10,4 @@ temp/
 *.swp
 .vscode
 src/
-build/content.js*
-build/popup.js*
+build/

@@ -43,22 +43,7 @@ new Vue({
                     console.log('response', response);
                 });
             });
-        },
-
-        // loadState() {
-        //     console.log('load state');
-        //     return new Promise(resolve => {
-        //         chrome.storage.local.get('state', state => {
-        //             if(JSON.stringify(state) !== '{}') resolve(state);
-        //             else resolve(null);
-        //         });
-        //     })
-        // },
-        //
-        // saveState() {
-        //     console.log('save state');
-        //     chrome.storage.local.set('state', this.$data);
-        // }
+        }
     }
 });
 
