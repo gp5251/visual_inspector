@@ -10,44 +10,6 @@
             }
         }
 
-        .vi_toggler{
-            position: fixed;
-            right: 5px;
-            top: 5px;
-            line-height: 30px;
-            text-align: center;
-            border-radius: 5px;
-            border-color: black;
-            background: #eee;
-            z-index: 9999;
-            touch-action: none;
-
-            span{
-                display: block;
-                white-space: nowrap;
-                line-height: 30px;
-                border: 1px solid #ddd;
-                border-radius: 3px;
-                padding: 0 5px;
-            }
-
-            .moveBar{
-                height: 15px;
-                background: linear-gradient(to bottom, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
-                position: relative;
-
-                &::after{
-                    content: '';
-                    position: absolute;
-                    top: 40%;
-                    left: 20%;
-                    right: 20%;
-                    height: 0;
-                    border-bottom: 1px dotted #333;
-                }
-            }
-        }
-
         .vi_mockup {
             width: 100%;
             height: 100%;
@@ -73,14 +35,14 @@
                 top: -3px;
                 box-sizing: content-box;
                 background: radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat left top,
-                            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat left bottom,
-                            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right top,
-                            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right bottom,
-                            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat left 50%,
-                            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat 50% top,
-                            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat 50% bottom,
-                            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right top,
-                            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right 50%;
+                radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat left bottom,
+                radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right top,
+                radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right bottom,
+                radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat left 50%,
+                radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat 50% top,
+                radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat 50% bottom,
+                radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right top,
+                radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right 50%;
                 background-size: 6px 6px;
             }
         }
@@ -211,13 +173,11 @@
 </style>
 
 <template>
-    <div class="Visual_Inspector" :class="{'vi_closed': closed}">
-        <div ref="toggler" class="vi_toggler">
-            <span class="moveBar"></span>
-            <span @click="closed = !closed" >{{ closed ? '打开面板' : '收起面板'}}</span>
-            <span @click="showMockup = !showMockup" >{{ showMockup ? '隐藏图层' : '显示图层'}}</span>
-            <span class="vi_quit" @click="$emit('quit')">退出</span>
-        </div>
+    <div class="Visual_Inspector" :class="{'vi_closed': !showPanel}">
+        <FloatingBar
+                :showPanel="showPanel"
+                :showMockup="showMockup"
+                @togglePanel="showPanel = !showPanel" @toggleMockup="showMockup = !showMockup" @quit="$emit('quit')"/>
 
         <div class="vi_mockup" :class="{freeze}" ref="mockup" :style="mockupStyle" v-show="showMockup"></div>
 
@@ -255,13 +215,14 @@
 <script>
     import interact from 'interactjs';
     import Blender from './Blender';
+    import FloatingBar from './floatingBar';
     import Checkbox from '../iview/components/checkbox';
     import Slider from '../iview/components/slider';
     import '../iview/iview.css';
 
     export default {
         name: "App",
-        components: {Blender, Checkbox, Slider},
+        components: {Blender, Checkbox, Slider, FloatingBar},
         props: {
             src : {
                 type: String,
@@ -272,7 +233,7 @@
         },
         data() {
             return {
-                closed: false,
+                showPanel: true,
                 showMockup: true,
                 opacity: 1,
                 freeze: 0,
@@ -422,33 +383,23 @@
             },
 
             initMockup() {
-                let onmove =(event)=>{
-                    let target = event.target,
-                        // keep the dragged position in the data-x/data-y attributes
-                        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-                        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-                    // translate the element
-                    target.style.webkitTransform =
-                        target.style.transform =
-                            'translate(' + x + 'px, ' + y + 'px)';
-
-                    // update the posiion attributes
-                    target.setAttribute('data-x', x);
-                    target.setAttribute('data-y', y);
-                };
-
-                interact(this.$refs.toggler)
-                    .draggable({
-                        allowFrom: '.moveBar',
-                        inertia: true,
-                        // autoScroll: true,
-                        onmove
-                    });
-
                 interact(this.$refs.mockup)
                     .draggable({
-                        onmove,
+                        onmove(event){
+                            let target = event.target,
+                                // keep the dragged position in the data-x/data-y attributes
+                                x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+                                y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+                            // translate the element
+                            target.style.webkitTransform =
+                                target.style.transform =
+                                    'translate(' + x + 'px, ' + y + 'px)';
+
+                            // update the posiion attributes
+                            target.setAttribute('data-x', x);
+                            target.setAttribute('data-y', y);
+                        },
                         snap: {
                             targets: [
                                 {x: 0, y: 0, range: 10},

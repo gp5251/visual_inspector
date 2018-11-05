@@ -1,4 +1,4 @@
-<style lang="less">
+<style scoped lang="less">
     .vi_blender {
         .vi_select{
             width: 100px;
@@ -6,7 +6,7 @@
             // box-shadow: 1px 1px 1px #aaa;
         }
 
-        .vi-ivu-icon-ios-arrow-down:before{
+        /deep/ .vi-ivu-icon-ios-arrow-down:before{
             content: 'V' !important;
             font-weight: bold;
             transform: scale(.8, .5);
