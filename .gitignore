@@ -10,4 +10,5 @@ temp/
 *.swp
 .vscode
 src/
-iview/
+build/content.js*
+build/popup.js*
