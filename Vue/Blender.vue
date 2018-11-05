@@ -17,7 +17,6 @@
 
 <template>
     <div class="vi_blender">
-        <!--<span>对比模式：</span>-->
         <Select :value="blendMode" size="small" @on-change="changeMode" class="vi_select">
             <Option :value="value" :key="item" v-for="(item, value) in modes">{{ item }}</Option>
         </Select>
@@ -63,7 +62,6 @@
         },
         methods: {
             changeMode(mode) {
-                console.log(mode);
                 this.$emit('changeMode', mode)
             }
         }

@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import App from './Vue/App';
-import './iview/iview.css'
 
 const app = function () {
 	let vm, 

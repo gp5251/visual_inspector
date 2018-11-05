@@ -32,9 +32,7 @@
             }
 
             .moveBar{
-                height: 12px;
-                /*background-color: #aaa;*/
-                /*background: rgba(183,222,237,1);background: -moz-linear-gradient(top, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(183,222,237,1)), color-stop(50%, rgba(113,206,239,1)), color-stop(51%, rgba(33,180,226,1)), color-stop(100%, rgba(183,222,237,1)));background: -webkit-linear-gradient(top, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);background: -o-linear-gradient(top, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);background: -ms-linear-gradient(top, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);background: linear-gradient(to bottom, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b7deed', endColorstr='#b7deed', GradientType=0 );*!*/
+                height: 15px;
                 background: linear-gradient(to bottom, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
                 position: relative;
 
@@ -57,7 +55,7 @@
             position: absolute;
             left: 0;
             top: 0;
-            background: rgba(255, 255, 255, .5) url() no-repeat center ~"0 / 100%" auto;
+            background: rgba(0, 0, 0, .5) url() no-repeat center ~"0 / 100%" auto;
             box-shadow: 0 0 1px 0 #ccc;
             touch-action: none;
 
@@ -140,7 +138,7 @@
 
         .vi_blender{
             &::before{
-                content: '对比模式:';
+                content: '混合模式:';
             }
         }
         .vi_resize{
@@ -187,6 +185,25 @@
         .vi_others{
             white-space: nowrap;
         }
+
+        .vi_customSize{
+            &::before{
+                content: '自定义:';
+            }
+
+            .vi_input{
+                height: 22px;
+                padding: 2px;
+                width: 48px;
+                border: 1px solid #ddd;
+                border-radius: 3px;
+                margin-right: 2px;
+                &:focus{
+                    outline: none;
+                    box-shadow: 0 0 5px #5cadff;
+                }
+            }
+        }
     }
 </style>
 
@@ -212,13 +229,18 @@
             </div>
 
             <div class="vi_formLine vi_others">
-                <!--<checkbox v-model="showMockup" title="显示隐藏图层">显示</checkbox>-->
-                <checkbox v-model="freeze" title="冻结后图层将不可拖动和拉伸">冻结</checkbox>
+                <!--<Checkbox v-model="allowKeyMove">方向键</Checkbox>-->
+                <Checkbox v-model="freeze">冻结</Checkbox>
             </div>
 
             <div class="vi_formLine vi_resize">
                 <button @click="reset" class="vi_reset">重置</button>
                 <button class="vi_reset" :key="index" v-for="(item, index) in wTypes" @click="wType = index">{{ item }}</button>
+            </div>
+
+            <div class="vi_customSize vi_formLine">
+                <input v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.width" @keydown.stop @keypress="handleCustomSizeInput"/>
+                <input v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.height" @keydown.stop @keypress="handleCustomSizeInput"/>
             </div>
         </div>
     </div>
@@ -226,10 +248,11 @@
 
 
 <script>
-    import interact from 'interactjs'
-    import Blender from './Blender'
+    import interact from 'interactjs';
+    import Blender from './Blender';
     import Checkbox from '../iview/components/checkbox';
     import Slider from '../iview/components/slider';
+    import '../iview/iview.css';
 
     export default {
         name: "App",
@@ -252,18 +275,17 @@
                 wTypes: ['原图', '原图/2', '窗口', '页面'],
                 wType: -1,
                 mockup: {
-                    // width: window.innerWidth,
-                    // height: window.innerHeight,
+                    width: 0,
+                    height: 0,
                     left: 0,
                     top: 0
                 },
                 img: {
-                    name: '暂无',
                     width: 0,
                     height: 0,
                     src: ''
                 },
-                preventScroll: true
+                allowKeyMove: true,
             }
         },
         computed: {
@@ -274,26 +296,25 @@
                 };
                 if (this.freeze) style.pointerEvents = 'none';
                 if (this.img.src) style.backgroundImage = `url(${this.img.src})`;
-                // style.backgroundSize = this.getBgSize(this.wType);
                 return style;
             }
         },
         watch: {
             wType(val) {
-                    let style = this.$refs.mockup.style;
-                    if (val === 0) { // 原图大小
-                        style.width = this.img.width + 'px';
-                        style.height = this.img.height + 'px';
-                    } else if (val === 1) { // 原图大小/2
-                        style.width = this.img.width / 2 + 'px';
-                        style.height = this.img.height / 2 + 'px';
-                    } else if (val === 2) { // 窗口大小
-                        style.width = window.innerWidth + 'px';
-                        style.height = window.innerHeight + 'px';
-                    } else if (val === 3) { // 页面大小
-                        style.width = window.innerWidth + 'px';
-                        style.height = (document.documentElement.scrollHeight || document.body.scrollHeight)+ 'px';
-                    }
+                let style = this.$refs.mockup.style;
+                if (val === 0) { // 原图大小
+                    style.width = this.img.width + 'px';
+                    style.height = this.img.height + 'px';
+                } else if (val === 1) { // 原图大小/2
+                    style.width = this.img.width / 2 + 'px';
+                    style.height = this.img.height / 2 + 'px';
+                } else if (val === 2) { // 窗口大小
+                    style.width = window.innerWidth + 'px';
+                    style.height = window.innerHeight + 'px';
+                } else if (val === 3) { // 页面大小
+                    style.width = window.innerWidth + 'px';
+                    style.height = document.documentElement.scrollHeight + 'px';
+                }
             },
             src: {
                 handler(val) {
@@ -303,20 +324,29 @@
                             height: img.naturalHeight,
                             src: img.src
                         };
-                        this.wType = 2;
-                    }, err => {
-                        console.error('failed to get img', val);
-                    });
+                        this.wType = 0;
+                    }, err => console.error('failed to get img', err));
                 },
                 immediate: true
+            },
+            "mockup.width": function (val, oldVal) {
+                let value = +val;
+                if (value > 0) this.$refs.mockup.style.width = value + 'px';
+            },
+            "mockup.height": function (val, oldVal) {
+                let value = +val;
+                if (value > 0) this.$refs.mockup.style.height = value + 'px';
             }
         },
         methods: {
             changeBlendMode(mode) {
                 this.blendMode = mode;
             },
+            handleCustomSizeInput(e) {
+                if (e.which >57 || e.which < 48) e.preventDefault();
+            },
             handlePreventScroll(e) {
-                if (this.preventScroll) {
+                if (!this.freeze && 37 <= e.which && e.which <= 40) {
                     e.preventDefault();
 
                     let {mockup} = this.$refs,
@@ -352,7 +382,8 @@
                 mockup.setAttribute('data-x', 0);
                 mockup.setAttribute('data-y', 0);
 
-                this.wType = 0;
+                if (this.img.width > window.innerWidth) this.wType = 2;
+                else this.wType = 0;
             },
 
             getImg(url) {
@@ -382,11 +413,10 @@
                 };
 
                 interact(this.$refs.toggler)
-                    // .on('click', event => event.stopImmediatePropagation(), { capture: true })
                     .draggable({
                         allowFrom: '.moveBar',
                         inertia: true,
-                        autoScroll: true,
+                        // autoScroll: true,
                         onmove
                     });
 
@@ -395,12 +425,12 @@
                         onmove,
                         snap: {
                             targets: [
-                                {x: 0, y: 0, range: 20},
+                                {x: 0, y: 0, range: 10},
                                 function () {
                                     return {
                                         x: window.innerWidth,
                                         y: 0,
-                                        range: 20
+                                        range: 10
                                     }
                                 }
                             ],
@@ -448,6 +478,16 @@
                         cb && cb(response);
                     })
                 })
+            }
+        },
+        directives: {
+            autoSelect: {
+                bind(el) {
+                    el.addEventListener('focus', el.select)
+                },
+                unbind(el) {
+                    el.removeEventListener('focus', el.select)
+                }
             }
         },
         mounted() {
