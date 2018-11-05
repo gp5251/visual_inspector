@@ -337,16 +337,19 @@
             "mockup.width": function (val) {
                 let value = +val;
                 if (value > 0) this.$refs.mockup.style.width = value + 'px';
+                this.wType = -1;
             },
             "mockup.height": function (val) {
                 let value = +val;
                 if (value > 0) this.$refs.mockup.style.height = value + 'px';
+                this.wType = -1;
             },
             "mockup.left": function (val) {
                 let value = +val;
                 if (value > 0) {
                     let {y} = this.$refs.mockup.dataset;
                     this.moveMockup(val, y);
+                    this.wType = -1;
                 }
             },
             "mockup.top": function (val) {
@@ -354,6 +357,7 @@
                 if (value > 0) {
                     let {x} = this.$refs.mockup.dataset;
                     this.moveMockup(x, val);
+                    this.wType = -1;
                 }
             }
         },
