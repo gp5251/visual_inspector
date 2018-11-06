@@ -4,12 +4,6 @@
         font-size: 12px;
         color: #17233d;
 
-        &.vi_closed{
-            .vi_controllers{
-                display: none;
-            }
-        }
-
         .vi_mockup {
             width: 100%;
             height: 100%;
@@ -172,7 +166,7 @@
 </style>
 
 <template>
-    <div class="Visual_Inspector" :class="{'vi_closed': !showPanel}">
+    <div class="Visual_Inspector">
         <FloatingBar
                 :showPanel="showPanel"
                 :showMockup="showMockup"
@@ -180,7 +174,7 @@
 
         <div class="vi_mockup" :class="{freeze}" ref="mockup" :style="mockupStyle" v-show="showMockup"></div>
 
-        <div class="vi_controllers">
+        <div class="vi_controllers" v-show="showPanel">
             <h3>Visual Inspector</h3>
             <Blender @changeMode="changeBlendMode" :blendMode="blendMode" class="vi_blender vi_formLine"/>
 
@@ -201,10 +195,10 @@
             </div>
 
             <div class="vi_customSize vi_formLine" @keydown.stop @keyup.stop>
-                <input title="width" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.width" @keypress="handleCustomSizeInput"/>
-                <input title="height" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.height" @keypress="handleCustomSizeInput"/>
-                <input title="left" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.left" @keypress="handleCustomSizeInput"/>
-                <input title="top" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.top" @keypress="handleCustomSizeInput"/>
+                <input placeholder="width" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.width" @keypress="handleCustomSizeInput"/>
+                <input placeholder="height" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.height" @keypress="handleCustomSizeInput"/>
+                <input placeholder="left" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.left" @keypress="handleCustomSizeInput"/>
+                <input placeholder="top" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.top" @keypress="handleCustomSizeInput"/>
             </div>
         </div>
     </div>
@@ -240,10 +234,10 @@
                 wTypes: ['原图', '原图/2', '窗口', '页面'],
                 wType: -1,
                 mockup: {
-                    width: 0,
-                    height: 0,
-                    left: 0,
-                    top: 0
+                    width: '',
+                    height: '',
+                    left: '',
+                    top: ''
                 },
                 img: {
                     width: 0,
@@ -306,7 +300,7 @@
             },
             "mockup.left": function (val) {
                 let value = +val;
-                if (value > 0) {
+                if (value >= 0) {
                     let {y} = this.$refs.mockup.dataset;
                     this.moveMockup(val, y);
                     this.wType = -1;
@@ -314,7 +308,7 @@
             },
             "mockup.top": function (val) {
                 let value = +val;
-                if (value > 0) {
+                if (value >= 0) {
                     let {x} = this.$refs.mockup.dataset;
                     this.moveMockup(x, val);
                     this.wType = -1;
@@ -329,6 +323,7 @@
                 if (e.which >57 || e.which < 48) e.preventDefault();
             },
             handlePreventScroll(e) {
+                if (e.target.tagName.toLowerCase() !== 'body') return;
                 if (!this.freeze && 37 <= e.which && e.which <= 40) {
                     e.preventDefault();
 
@@ -357,11 +352,18 @@
                 }
             },
 
-            toggleShowMockup(e) {
+            toggleMockup(e) {
+                if (e.target.tagName.toLowerCase() !== 'body') return;
                 if (e.key === 'h') this.showMockup = !this.showMockup;
             },
 
+            togglePannel(e) {
+                if (e.target.tagName.toLowerCase() !== 'body') return;
+                if (e.key === 'f') this.showPanel = !this.showPanel;
+            },
+
             fastOpacity(e) {
+                if (e.target.tagName.toLowerCase() !== 'body') return;
                 if (+e.key >= 0) {
                     if (this._tid) clearTimeout(this._tid);
                     if (!this._fastOpacity) this._fastOpacity = [];
@@ -480,13 +482,15 @@
             },
             bindEvs() {
                 document.body.addEventListener('keydown', this.handlePreventScroll);
-                document.body.addEventListener('keyup', this.toggleShowMockup);
+                document.body.addEventListener('keyup', this.toggleMockup);
                 document.body.addEventListener('keyup', this.fastOpacity);
+                document.body.addEventListener('keyup', this.togglePannel);
             },
             unBindEvs() {
                 document.body.removeEventListener('keydown', this.handlePreventScroll)
-                document.body.removeEventListener('keyup', this.toggleShowMockup);
+                document.body.removeEventListener('keyup', this.toggleMockup);
                 document.body.removeEventListener('keyup', this.fastOpacity);
+                document.body.removeEventListener('keyup', this.togglePannel);
             }
         },
         directives: {
