@@ -4,7 +4,7 @@
   "description": "A chrome plug-in which provides a variety of ways to help front-end developers quickly locate differences between design drafts and web pages.",
   "main": "content.js",
   "scripts": {
-    "start": "webpack --watch --mode development",
+    "start": "webpack --watch",
     "build": "NODE_ENV=production webpack"
   },
   "keywords": [],
@@ -12,11 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "interactjs": "^1.3.4",
-    "iview": "^3.1.4",
-    "jquery": "^3.3.1",
-    "vue": "^2.5.17",
-    "vue-drag-resize": "^1.3.2",
-    "vuex": "^3.0.1"
+    "vue": "^2.5.17"
   },
   "devDependencies": {
     "@babel/core": "^7.0.1",

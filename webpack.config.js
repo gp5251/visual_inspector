@@ -81,19 +81,7 @@ let config = {
     }
 };
 
-if (isProd) {
-    config.mode = 'production';
-    config.optimization = {
-        minimizer:[
-            new UglifyJsPlugin({
-                cache: true,
-                parallel: true,
-                sourceMap: false
-            })
-        ]
-    }
-    // config.devtool = 'source-map';
-} else {
+if (!isProd) {
     config.mode = 'development';
     config.devtool = 'cheap-eval-source-map';
 }
