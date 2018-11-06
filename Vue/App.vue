@@ -260,19 +260,19 @@
         },
         watch: {
             wType(val) {
-                let style = this.$refs.mockup.style;
+                let mockup = this.mockup;
                 if (val === 0) { // 原图大小
-                    style.width = this.img.width + 'px';
-                    style.height = this.img.height + 'px';
+                    mockup.width = this.img.width;
+                    mockup.height = this.img.height;
                 } else if (val === 1) { // 原图大小/2
-                    style.width = this.img.width / 2 + 'px';
-                    style.height = this.img.height / 2 + 'px';
+                    mockup.width = this.img.width / 2;
+                    mockup.height = this.img.height / 2;
                 } else if (val === 2) { // 窗口大小
-                    style.width = window.innerWidth + 'px';
-                    style.height = window.innerHeight + 'px';
+                    mockup.width = window.innerWidth;
+                    mockup.height = window.innerHeight;
                 } else if (val === 3) { // 页面大小
-                    style.width = window.innerWidth + 'px';
-                    style.height = document.documentElement.scrollHeight + 'px';
+                    mockup.width = window.innerWidth;
+                    mockup.height = document.documentElement.scrollHeight;
                 }
             },
             src: {
@@ -300,17 +300,17 @@
             },
             "mockup.left": function (val) {
                 let value = +val;
-                if (value >= 0) {
+                if (!isNaN(value)) {
                     let {y} = this.$refs.mockup.dataset;
-                    this.moveMockup(val, y);
+                    this._moveMockup(val, y);
                     this.wType = -1;
                 }
             },
             "mockup.top": function (val) {
                 let value = +val;
-                if (value >= 0) {
+                if (!isNaN(value)) {
                     let {x} = this.$refs.mockup.dataset;
-                    this.moveMockup(x, val);
+                    this._moveMockup(x, val);
                     this.wType = -1;
                 }
             }
@@ -390,11 +390,16 @@
                 else this.wType = 0;
             },
 
-            moveMockup(x = 0, y = 0) {
+            _moveMockup(x = 0, y = 0) {
                 let {mockup} = this.$refs;
                 mockup.style.webkitTransform = mockup.style.transform = `translate(${x}px, ${y}px)`;
                 mockup.setAttribute('data-x', x);
                 mockup.setAttribute('data-y', y);
+            },
+
+            moveMockup(x = 0, y = 0) {
+                this.mockup.left = x;
+                this.mockup.top = y;
             },
 
             getImg(url) {
@@ -409,36 +414,29 @@
             initMockup() {
                 interact(this.$refs.mockup)
                     .draggable({
-                        onmove(event){
+                        onmove: event => {
                             let target = event.target,
                                 // keep the dragged position in the data-x/data-y attributes
                                 x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
                                 y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 
-                            // translate the element
-                            target.style.webkitTransform =
-                                target.style.transform =
-                                    'translate(' + x + 'px, ' + y + 'px)';
-
-                            // update the posiion attributes
-                            target.setAttribute('data-x', x);
-                            target.setAttribute('data-y', y);
+                            this.moveMockup(+x.toFixed(1), +y.toFixed(1));
                         },
-                        snap: {
-                            targets: [
-                                {x: 0, y: 0, range: 10},
-                                function () {
-                                    return {
-                                        x: window.innerWidth,
-                                        y: 0,
-                                        range: 10
-                                    }
-                                }
-                            ],
-                            relativePoints: [
-                                {x: 0, y: 0}, {x: 1, y: 0}
-                            ]
-                        }
+                        // snap: {
+                        //     targets: [
+                        //         {x: 0, y: 0, range: 15},
+                        //         function () {
+                        //             return {
+                        //                 x: window.innerWidth,
+                        //                 y: 0,
+                        //                 range: 15
+                        //             }
+                        //         }
+                        //     ],
+                        //     relativePoints: [
+                        //         {x: 0, y: 0}, {x: 1, y: 0}
+                        //     ]
+                        // }
                     })
                     .resizable({
                         // resize from all edges and corners
@@ -456,19 +454,13 @@
                             x = (parseFloat(target.getAttribute('data-x')) || 0),
                             y = (parseFloat(target.getAttribute('data-y')) || 0);
 
-                        // update the element's style
-                        target.style.width  = event.rect.width + 'px';
-                        target.style.height = event.rect.height + 'px';
-
-                        // translate when resizing from top or left edges
                         x += event.deltaRect.left;
                         y += event.deltaRect.top;
 
-                        target.style.webkitTransform = target.style.transform =
-                            'translate(' + x + 'px,' + y + 'px)';
+                        this.mockup.width = +event.rect.width.toFixed(1);
+                        this.mockup.height = +event.rect.height.toFixed(1);
 
-                        target.setAttribute('data-x', x);
-                        target.setAttribute('data-y', y);
+                        this.moveMockup(+x.toFixed(1), +y.toFixed(1));
 
                         this.wType = -1;
                     });
