@@ -342,22 +342,18 @@
                     switch (e.which) {
                         case 37:
                             x -= count;
-                            mockup.dataset.x = x;
                             break;
                         case 38:
                             y -= count;
-                            mockup.dataset.y = y;
                             break;
                         case 39:
                             x += count;
-                            mockup.dataset.x = x;
                             break;
                         case 40:
                             y += count;
-                            mockup.dataset.y = y;
                     }
 
-                    mockup.style.webkitTransform = mockup.style.transform = `translate(${x}px, ${y}px)`;
+                    this.moveMockup(x, y);
                 }
             },
             reset() {
