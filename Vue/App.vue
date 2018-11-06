@@ -52,15 +52,14 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background-color: #eee;
             z-index: 9998;
             padding: 10px;
             text-shadow: 1px 1px 0 white;
             border-top: 1px solid #ddd;
 
-            // background: rgba(242,246,248,1);background: -moz-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(242,246,248,1)), color-stop(50%, rgba(216,225,231,1)), color-stop(51%, rgba(181,198,208,1)), color-stop(100%, rgba(224,239,249,1)));background: -webkit-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);background: -o-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);background: -ms-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);background: linear-gradient(to bottom, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6f8', endColorstr='#e0eff9', GradientType=0 );
-            // background: rgba(183,222,237,1);background: -moz-linear-gradient(top, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(183,222,237,1)), color-stop(50%, rgba(113,206,239,1)), color-stop(51%, rgba(33,180,226,1)), color-stop(100%, rgba(183,222,237,1)));background: -webkit-linear-gradient(top, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);background: -o-linear-gradient(top, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);background: -ms-linear-gradient(top, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);background: linear-gradient(to bottom, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b7deed', endColorstr='#b7deed', GradientType=0 );
-            background: rgba(255,255,255,1);background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255,255,255,1)), color-stop(47%, rgba(246,246,246,1)), color-stop(100%, rgba(237,237,237,1)));background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);background: -o-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed', GradientType=0 );
+            // background: linear-gradient(to bottom, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%)
+            // background: linear-gradient(to bottom, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);
+            background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
 
             h3{
                 padding-bottom: 5px;
@@ -187,7 +186,7 @@
 
             <div class="vi_formLine vi_opacity">
                 <div class="vi_sliderWraper">
-                    <Slider class="vi_slider" v-model="opacity"  :step="0.05"  :min="0" :max="1"></Slider>
+                    <Slider class="vi_slider" v-model="opacity"  :step="0.01"  :min="0" :max="1"></Slider>
                 </div>
             </div>
 
@@ -201,11 +200,11 @@
                 <button class="vi_reset" :key="index" v-for="(item, index) in wTypes" @click="wType = index">{{ item }}</button>
             </div>
 
-            <div class="vi_customSize vi_formLine">
-                <input title="width" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.width" @keydown.stop @keypress="handleCustomSizeInput"/>
-                <input title="height" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.height" @keydown.stop @keypress="handleCustomSizeInput"/>
-                <input title="left" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.left" @keydown.stop @keypress="handleCustomSizeInput"/>
-                <input title="top" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.top" @keydown.stop @keypress="handleCustomSizeInput"/>
+            <div class="vi_customSize vi_formLine" @keydown.stop @keyup.stop>
+                <input title="width" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.width" @keypress="handleCustomSizeInput"/>
+                <input title="height" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.height" @keypress="handleCustomSizeInput"/>
+                <input title="left" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.left" @keypress="handleCustomSizeInput"/>
+                <input title="top" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.top" @keypress="handleCustomSizeInput"/>
             </div>
         </div>
     </div>
@@ -336,6 +335,7 @@
                     let {mockup} = this.$refs,
                         {x = 0, y = 0} = mockup.dataset,
                         count = e.shiftKey ? 10 : 1;
+
                     x = +x;
                     y = +y;
 
@@ -356,6 +356,32 @@
                     this.moveMockup(x, y);
                 }
             },
+
+            toggleShowMockup(e) {
+                if (e.key === 'h') this.showMockup = !this.showMockup;
+            },
+
+            fastOpacity(e) {
+                if (+e.key >= 0) {
+                    if (this._tid) clearTimeout(this._tid);
+                    if (!this._fastOpacity) this._fastOpacity = [];
+
+                    let num = e.key;
+                    this._fastOpacity.push(num);
+                    if (this._fastOpacity.length >= 2) {
+                        let arr = this._fastOpacity.slice(-2);
+                        let opacity = (+arr.join('')) / 100;
+                        this._fastOpacity = [];
+                        if (opacity === 0) opacity = 1;
+                        this.opacity = opacity;
+                    }
+
+                    this._tid = setTimeout(()=>{
+                        this._fastOpacity = [];
+                    }, 3000)
+                }
+            },
+
             reset() {
                 this.moveMockup(0, 0);
                 if (this.img.width > window.innerWidth) this.wType = 2;
@@ -451,6 +477,16 @@
                         cb && cb(response);
                     })
                 })
+            },
+            bindEvs() {
+                document.body.addEventListener('keydown', this.handlePreventScroll);
+                document.body.addEventListener('keyup', this.toggleShowMockup);
+                document.body.addEventListener('keyup', this.fastOpacity);
+            },
+            unBindEvs() {
+                document.body.removeEventListener('keydown', this.handlePreventScroll)
+                document.body.removeEventListener('keyup', this.toggleShowMockup);
+                document.body.removeEventListener('keyup', this.fastOpacity);
             }
         },
         directives: {
@@ -471,13 +507,13 @@
         },
         created() {
             window.scrollTo(0,0);
+            this.bindEvs();
         },
         mounted() {
             this.initMockup();
-            document.body.addEventListener('keydown', this.handlePreventScroll)
         },
         beforeDestroy() {
-            document.body.removeEventListener('keydown', this.handlePreventScroll)
+            this.unBindEvs();
         }
     }
 </script>

@@ -26,17 +26,17 @@
             border-radius: 2px;
             display: block;
             height: 15px;
-            background: linear-gradient(to bottom, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
             position: relative;
 
             &::after{
                 content: '';
                 position: absolute;
-                top: 40%;
-                left: 20%;
-                right: 20%;
-                height: 0;
-                border-bottom: 1px dotted #333;
+                top: -20%;
+                height: 100%;
+                left: 0;
+                right: 0;
+                background-color: #2d8cf0;
+                border-bottom: 1px dotted #fff;
             }
         }
     }
