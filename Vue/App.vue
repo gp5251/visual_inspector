@@ -234,10 +234,10 @@
                 wTypes: ['原图', '原图/2', '窗口', '页面'],
                 wType: -1,
                 mockup: {
-                    width: '',
-                    height: '',
-                    left: '',
-                    top: ''
+                    width: 0,
+                    height: 0,
+                    left: 0,
+                    top: 0
                 },
                 img: {
                     width: 0,
