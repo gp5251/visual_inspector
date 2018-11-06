@@ -469,6 +469,9 @@
                 }
             }
         },
+        created() {
+            window.scrollTo(0,0);
+        },
         mounted() {
             this.initMockup();
             document.body.addEventListener('keydown', this.handlePreventScroll)
