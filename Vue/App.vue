@@ -61,8 +61,10 @@
             }
         }
         .vi_resize{
+            white-space: nowrap;
+
             &::before{
-                content: '位置大小:';
+                content: '适配:';
             }
 
             button{
@@ -163,7 +165,7 @@
             </div>
 
             <div class="vi_formLine vi_resize">
-                <!--<button @click="reset" class="vi_reset">重置</button>-->
+                <button @click="reset" class="vi_reset">重置</button>
                 <button class="vi_reset" :key="index" v-for="(item, index) in wTypes" @click="wType = index">{{ item }}</button>
             </div>
 
@@ -204,7 +206,7 @@
                 opacity: 1,
                 freeze: 0,
                 blendMode: 'normal',
-                wTypes: ['原图', '原图/2', '窗口', '页面'],
+                wTypes: ['原图', '原图/2', '窗口', '页面', '居中'],
                 wType: -1,
                 mockup: {
                     width: 0,
@@ -222,18 +224,26 @@
         watch: {
             wType(val) {
                 let mockup = this.mockup;
-                if (val === 0) { // 原图大小
-                    mockup.width = this.img.width;
-                    mockup.height = this.img.height;
-                } else if (val === 1) { // 原图大小/2
-                    mockup.width = this.img.width / 2;
-                    mockup.height = this.img.height / 2;
-                } else if (val === 2) { // 窗口大小
-                    mockup.width = window.innerWidth;
-                    mockup.height = window.innerHeight;
-                } else if (val === 3) { // 页面大小
-                    mockup.width = window.innerWidth;
-                    mockup.height = document.documentElement.scrollHeight;
+                switch (val) {
+                    case 0:
+                        mockup.width = this.img.width;
+                        mockup.height = this.img.height;
+                        break;
+                    case 1:
+                        mockup.width = this.img.width / 2;
+                        mockup.height = this.img.height / 2;
+                        break;
+                    case 2:
+                        mockup.width = window.innerWidth;
+                        mockup.height = window.innerHeight;
+                        break;
+                    case 3:
+                        mockup.width = window.innerWidth;
+                        mockup.height = document.documentElement.scrollHeight;
+                        break;
+                    case 4:
+                        mockup.left = Math.max(0, (window.innerWidth - mockup.width) / 2);
+                        mockup.top = Math.max(0, (window.innerHeight - mockup.height) / 2 + window.scrollY);
                 }
             },
             src: {
@@ -244,9 +254,7 @@
                             height: img.naturalHeight,
                             src: img.src
                         };
-                        // this.reset();
-                        if (this.img.width > window.innerWidth) this.wType = 2;
-                        else this.wType = 0;
+                        this.reset();
                     }, err => console.error('failed to get img', err));
                 },
                 immediate: true
@@ -331,15 +339,14 @@
             },
 
             reset() {
-                // this.moveMockup(0, 0);
+                this.moveMockup(0, 0);
                 if (this.img.width > window.innerWidth) this.wType = 2;
                 else this.wType = 0;
             },
 
             moveAndResize(rect) {
                 Object.assign(this.mockup, rect);
-
-                if (rect.width && rect.height) this.wType = -1;
+                this.wType = -1;
             },
 
             moveMockup(x = 0, y = 0) {

@@ -45,6 +45,7 @@
 
 <script>
     import interact from 'interactjs';
+    import {throttle} from "../utils";
 
     export default {
         name: "Mockup",
@@ -75,7 +76,7 @@
             initMockup() {
                 interact(this.$el)
                     .draggable({
-                        onmove: event => {
+                        onmove: throttle(event => {
                             let target = event.target,
                                 x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
                                 y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
@@ -84,7 +85,7 @@
                             y = y.toFixed(1);
 
                             this.$emit('moveAndResize', {left: x, top: y})
-                        }
+                        }, 16)
                     })
                     .resizable({
                         edges: {left: true, right: true, bottom: true, top: true},
@@ -93,21 +94,22 @@
                         },
                         inertia: true,
                     })
-                    .on('resizemove',(event) => {
-                        let target = event.target,
-                            x = (parseFloat(target.getAttribute('data-x')) || 0),
-                            y = (parseFloat(target.getAttribute('data-y')) || 0);
+                    .on('resizemove', throttle(event => {
+                            let target = event.target,
+                                x = (parseFloat(target.getAttribute('data-x')) || 0),
+                                y = (parseFloat(target.getAttribute('data-y')) || 0);
 
-                        x += event.deltaRect.left;
-                        y += event.deltaRect.top;
+                            x += event.deltaRect.left;
+                            y += event.deltaRect.top;
 
-                        this.$emit('moveAndResize', {
-                            width: event.rect.width.toFixed(1),
-                            height: event.rect.height.toFixed(1),
-                            left: x.toFixed(1),
-                            top: y.toFixed(1)
-                        })
-                    });
+                            this.$emit('moveAndResize', {
+                                width: event.rect.width.toFixed(1),
+                                height: event.rect.height.toFixed(1),
+                                left: x.toFixed(1),
+                                top: y.toFixed(1)
+                            })
+                        }, 16)
+                    );
             },
         },
         mounted() {
