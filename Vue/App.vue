@@ -150,7 +150,7 @@
             v-if="img.src"
             v-show="showMockup"/>
 
-        <div class="vi_controllers" v-show="showPanel">
+        <div class="vi_controllers" v-if="showPanel">
             <h3>Visual Inspector</h3>
             <Blender @changeMode="changeBlendMode" :blendMode="blendMode" class="vi_blender vi_formLine"/>
 

@@ -85,7 +85,7 @@
                             y = y.toFixed(1);
 
                             this.$emit('moveAndResize', {left: x, top: y})
-                        }, 16)
+                        }, 12)
                     })
                     .resizable({
                         edges: {left: true, right: true, bottom: true, top: true},
