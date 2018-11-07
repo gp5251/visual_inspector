@@ -110,7 +110,7 @@
             }
 
             .vi_input{
-                height: 22px;
+                height: 18px;
                 padding: 2px;
                 width: 48px;
                 border: 1px solid #ddd;
