@@ -4,43 +4,6 @@
         font-size: 12px;
         color: #17233d;
 
-        .vi_mockup {
-            width: 100%;
-            height: 100%;
-            z-index: 9997;
-            position: absolute;
-            left: 0;
-            top: 0;
-            background: rgba(0, 0, 0, .5) url() no-repeat center ~"0 / 100%" auto;
-            box-shadow: 0 0 1px 0 #ccc;
-            touch-action: none;
-
-            &.freeze::after{
-                display: none;
-            }
-
-            &::after{
-                content: '';
-                width: 100%;
-                height: 100%;
-                padding: 3px;
-                position: absolute;
-                left: -3px;
-                top: -3px;
-                box-sizing: content-box;
-                background: radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat left top,
-                radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat left bottom,
-                radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right top,
-                radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right bottom,
-                radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat left 50%,
-                radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat 50% top,
-                radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat 50% bottom,
-                radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right top,
-                radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right 50%;
-                background-size: 6px 6px;
-            }
-        }
-
         .vi_controllers {
             position: fixed;
             bottom: 0;
@@ -140,9 +103,6 @@
                 margin: 8px 0;
             }
         }
-        .vi_others{
-            white-space: nowrap;
-        }
 
         .vi_customSize{
             &::before{
@@ -168,11 +128,24 @@
 <template>
     <div class="Visual_Inspector">
         <FloatingBar
-                :showPanel="showPanel"
-                :showMockup="showMockup"
-                @togglePanel="showPanel = !showPanel" @toggleMockup="showMockup = !showMockup" @quit="$emit('quit')"/>
+            :showPanel="showPanel"
+            :showMockup="showMockup"
+            @togglePanel="showPanel = !showPanel"
+            @toggleMockup="showMockup = !showMockup"
+            @quit="$emit('quit')"/>
 
-        <div class="vi_mockup" :class="{freeze}" ref="mockup" :style="mockupStyle" v-show="showMockup"></div>
+        <Mockup
+            :opacity="opacity"
+            :blendMode="blendMode"
+            :freeze="freeze"
+            :src="img.src"
+            :w="mockup.width"
+            :h="mockup.height"
+            :x="mockup.left"
+            :y="mockup.top"
+            @moveAndResize="moveAndResize"
+            v-if="img.src"
+            v-show="showMockup"/>
 
         <div class="vi_controllers" v-show="showPanel">
             <h3>Visual Inspector</h3>
@@ -184,8 +157,7 @@
                 </div>
             </div>
 
-            <div class="vi_formLine vi_others">
-                <!--<Checkbox v-model="allowKeyMove">方向键</Checkbox>-->
+            <div class="vi_formLine">
                 <Checkbox v-model="freeze">冻结</Checkbox>
             </div>
 
@@ -208,14 +180,15 @@
 <script>
     import interact from 'interactjs';
     import Blender from './Blender';
-    import FloatingBar from './floatingBar';
+    import FloatingBar from './FloatingBar';
+    import Mockup from './Mockup';
     import Checkbox from '../iview/components/checkbox';
     import Slider from '../iview/components/slider';
     import '../iview/iview.css';
 
     export default {
         name: "App",
-        components: {Blender, Checkbox, Slider, FloatingBar},
+        components: {Blender, Checkbox, Slider, FloatingBar, Mockup},
         props: {
             src : {
                 type: String,
@@ -243,19 +216,7 @@
                     width: 0,
                     height: 0,
                     src: ''
-                },
-                allowKeyMove: true,
-            }
-        },
-        computed: {
-            mockupStyle() {
-                let style = {
-                    opacity: this.opacity,
-                    'mix-blend-mode': this.blendMode,
-                };
-                if (this.freeze) style.pointerEvents = 'none';
-                if (this.img.src) style.backgroundImage = `url(${this.img.src})`;
-                return style;
+                }
             }
         },
         watch: {
@@ -287,48 +248,24 @@
                     }, err => console.error('failed to get img', err));
                 },
                 immediate: true
-            },
-            "mockup.width": function (val) {
-                let value = +val;
-                if (value > 0) this.$refs.mockup.style.width = value + 'px';
-                this.wType = -1;
-            },
-            "mockup.height": function (val) {
-                let value = +val;
-                if (value > 0) this.$refs.mockup.style.height = value + 'px';
-                this.wType = -1;
-            },
-            "mockup.left": function (val) {
-                let value = +val;
-                if (!isNaN(value)) {
-                    let {y} = this.$refs.mockup.dataset;
-                    this._moveMockup(val, y);
-                    this.wType = -1;
-                }
-            },
-            "mockup.top": function (val) {
-                let value = +val;
-                if (!isNaN(value)) {
-                    let {x} = this.$refs.mockup.dataset;
-                    this._moveMockup(x, val);
-                    this.wType = -1;
-                }
             }
         },
         methods: {
             changeBlendMode(mode) {
                 this.blendMode = mode;
             },
+
             handleCustomSizeInput(e) {
                 if (e.which >57 || e.which < 48) e.preventDefault();
             },
+
             handlePreventScroll(e) {
                 if (e.target.tagName.toLowerCase() !== 'body') return;
                 if (!this.freeze && 37 <= e.which && e.which <= 40) {
                     e.preventDefault();
 
-                    let {mockup} = this.$refs,
-                        {x = 0, y = 0} = mockup.dataset,
+                    let x = this.mockup.left,
+                        y = this.mockup.top,
                         count = e.shiftKey ? 10 : 1;
 
                     x = +x;
@@ -390,16 +327,12 @@
                 else this.wType = 0;
             },
 
-            _moveMockup(x = 0, y = 0) {
-                let {mockup} = this.$refs;
-                mockup.style.webkitTransform = mockup.style.transform = `translate(${x}px, ${y}px)`;
-                mockup.setAttribute('data-x', x);
-                mockup.setAttribute('data-y', y);
+            moveAndResize(rect) {
+                Object.assign(this.mockup, rect);
             },
 
             moveMockup(x = 0, y = 0) {
-                this.mockup.left = x;
-                this.mockup.top = y;
+                this.moveAndResize({left: x, top: y});
             },
 
             getImg(url) {
@@ -411,60 +344,6 @@
                 })
             },
 
-            initMockup() {
-                interact(this.$refs.mockup)
-                    .draggable({
-                        onmove: event => {
-                            let target = event.target,
-                                // keep the dragged position in the data-x/data-y attributes
-                                x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-                                y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-                            this.moveMockup(+x.toFixed(1), +y.toFixed(1));
-                        },
-                        // snap: {
-                        //     targets: [
-                        //         {x: 0, y: 0, range: 15},
-                        //         function () {
-                        //             return {
-                        //                 x: window.innerWidth,
-                        //                 y: 0,
-                        //                 range: 15
-                        //             }
-                        //         }
-                        //     ],
-                        //     relativePoints: [
-                        //         {x: 0, y: 0}, {x: 1, y: 0}
-                        //     ]
-                        // }
-                    })
-                    .resizable({
-                        // resize from all edges and corners
-                        edges: {left: true, right: true, bottom: true, top: true},
-
-                        // minimum size
-                        restrictSize: {
-                            min: {width: 100, height: 50},
-                        },
-
-                        inertia: true,
-                    })
-                    .on('resizemove',(event) => {
-                        let target = event.target,
-                            x = (parseFloat(target.getAttribute('data-x')) || 0),
-                            y = (parseFloat(target.getAttribute('data-y')) || 0);
-
-                        x += event.deltaRect.left;
-                        y += event.deltaRect.top;
-
-                        this.mockup.width = +event.rect.width.toFixed(1);
-                        this.mockup.height = +event.rect.height.toFixed(1);
-
-                        this.moveMockup(+x.toFixed(1), +y.toFixed(1));
-
-                        this.wType = -1;
-                    });
-            },
             send(data, cb) {
                 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                     chrome.tabs.sendMessage( tabs[0].id, data, function(response) {
@@ -472,12 +351,14 @@
                     })
                 })
             },
+
             bindEvs() {
                 document.body.addEventListener('keydown', this.handlePreventScroll);
                 document.body.addEventListener('keyup', this.toggleMockup);
                 document.body.addEventListener('keyup', this.fastOpacity);
                 document.body.addEventListener('keyup', this.togglePannel);
             },
+
             unBindEvs() {
                 document.body.removeEventListener('keydown', this.handlePreventScroll)
                 document.body.removeEventListener('keyup', this.toggleMockup);
@@ -502,11 +383,8 @@
             }
         },
         created() {
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
             this.bindEvs();
-        },
-        mounted() {
-            this.initMockup();
         },
         beforeDestroy() {
             this.unBindEvs();
