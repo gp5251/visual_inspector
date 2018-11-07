@@ -2,7 +2,7 @@
   "name": "Visual Inspector",
   "version": "1.0.0",
   "manifest_version": 2,
-  "description": "Help front-end developers and designers to quickly locate differences between design drafts and web pages.",
+  "description": "A helper tool for fe and designers to locate differences between design drafts and web pages.前端重构和视觉走查辅助工具。",
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "icons": {
     "128": "icon.png"
