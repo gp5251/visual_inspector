@@ -11,8 +11,12 @@
         touch-action: none;
         will-change: translate, width, height;
 
-        &.freeze::after{
-            display: none;
+        &.freeze{
+            background-color: transparent;
+
+            &::after{
+                display: none;
+            }
         }
 
         &::after{

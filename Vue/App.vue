@@ -3,6 +3,8 @@
         user-select: none;
         font-size: 12px;
         color: #17233d;
+        font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+        text-align: center;
 
         *{
             padding: 0;
@@ -58,12 +60,16 @@
 
             &::before{
                 transform-origin: 0 center;
-                transform: scale(.9, .9);
+                /*transform: scale(.9, .9);*/
                 display: inline-block;
                 color: #17233d;
                 margin-right: 5px;
                 text-shadow: 1px 1px 0 white;
             }
+        }
+
+        .vi_freeze{
+            margin-right: 5px;
         }
 
         .vi_blender {
@@ -95,7 +101,7 @@
         }
         .vi_opacity{
             min-width: 25%;
-            padding-right: 5px;
+            padding-right: 12px;
 
             &::before{
                 content: '透明:';
@@ -116,22 +122,21 @@
             .vi_slider /deep/ .vi-ivu-slider-wrap{
                 margin: 8px 0;
             }
+
+            .vi_slider /deep/ .vi-ivu-slider-button-wrap{
+                top: -6px;
+            }
         }
 
         .vi_customSize{
-
             .vi_input{
-                height: 24px;
+                height: 18px;
                 padding: 2px;
                 width: 42px;
                 font-size: 12px;
                 border: 1px solid #ddd;
                 border-radius: 3px;
                 margin-right: -5px;
-                /*&:focus{*/
-                    /*outline: none;*/
-                    /*box-shadow: 0 0 5px #5cadff;*/
-                /*}*/
             }
         }
     }
@@ -170,7 +175,7 @@
             </div>
 
             <div class="vi_formLine">
-                <Checkbox v-model="freeze">冻结</Checkbox>
+                <Checkbox v-model="freeze" class="vi_freeze">冻结</Checkbox>
                 <Checkbox v-model="showMockup">显示</Checkbox>
             </div>
 
