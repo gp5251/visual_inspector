@@ -5,7 +5,7 @@ const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const VueLoaderPlugin       = require('vue-loader/lib/plugin');
 const UglifyJsPlugin        = require("uglifyjs-webpack-plugin");
 const CopyWebpackPlugin     = require('copy-webpack-plugin');
-const isProd                = process.env.NODE_ENV == 'production';
+const isProd                = process.env.NODE_ENV === 'production';
 
 let config = {
     entry: {
@@ -27,7 +27,9 @@ let config = {
 
     stats: {
         maxModules: 5,
-        timings: true
+        timings: true,
+        modules: false,
+        entrypoints: false
     },
 
     plugins: [

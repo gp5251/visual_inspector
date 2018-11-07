@@ -61,6 +61,20 @@
             }
         }
 
+        .vi_blender {
+            .tit{
+                background-color: white;
+                border: 1px solid #ddd;
+                border-radius: 3px;
+                padding: 4px 12px;
+
+                .ico{
+                    vertical-align: middle;
+                    font-weight: bold;
+                }
+            }
+        }
+
         .vi_quickMatch{
             .tit{
                 background-color: white;
@@ -120,12 +134,12 @@
 
 <template>
     <div class="Visual_Inspector">
-        <FloatingBar
-            :showPanel="showPanel"
-            :showMockup="showMockup"
-            @togglePanel="showPanel = !showPanel"
-            @toggleMockup="showMockup = !showMockup"
-            @quit="$emit('quit')"/>
+        <!--<FloatingBar-->
+            <!--:showPanel="showPanel"-->
+            <!--:showMockup="showMockup"-->
+            <!--@togglePanel="showPanel = !showPanel"-->
+            <!--@toggleMockup="showMockup = !showMockup"-->
+            <!--@quit="$emit('quit')"/>-->
 
         <Mockup
             :opacity="opacity"
@@ -155,7 +169,18 @@
                 <Checkbox v-model="showMockup">显示</Checkbox>
             </div>
 
-            <Blender @changeMode="changeBlendMode" :blendMode="blendMode" class="vi_formLine"/>
+            <div class="vi_formLine vi_blender">
+                <Dropdown trigger="click">
+                    <span class="tit">{{ modes[blendMode] }} <span class="ico">^</span></span>
+                    <DropdownMenu slot="list">
+                        <DropdownItem
+                                :selected="key === blendMode"
+                                :key="key"
+                                v-for="(value, key) in modes"
+                                @click.native="blendMode = key">{{ value }}</DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+            </div>
 
             <div class="vi_formLine vi_quickMatch">
                 <Dropdown trigger="click">
@@ -177,10 +202,8 @@
     </div>
 </template>
 
-
 <script>
-    import Blender from './Blender';
-    import FloatingBar from './FloatingBar';
+    // import FloatingBar from './FloatingBar';
     import Mockup from './Mockup';
     import Checkbox from '../iview/components/checkbox';
     import Slider from '../iview/components/slider';
@@ -192,7 +215,9 @@
     export default {
         name: "App",
         components: {
-            Blender, Checkbox, Slider, Dropdown, DropdownMenu, DropdownItem, FloatingBar, Mockup
+            Checkbox, Slider, Dropdown, DropdownMenu, DropdownItem,
+            // FloatingBar,
+            Mockup
         },
         props: {
             src : {
@@ -221,6 +246,24 @@
                     width: 0,
                     height: 0,
                     src: ''
+                },
+                modes: {
+                    normal: '正常',
+                    multiply: '正片叠底',
+                    screen: '滤色',
+                    overlay: '叠加',
+                    darken: '变暗',
+                    lighten: '变亮',
+                    "color-dodge": '颜色减淡',
+                    "color-burn": '颜色加深',
+                    "hard-light": '强光',
+                    "soft-light": '柔光',
+                    difference: '差值',
+                    exclusion: '排除',
+                    hue: '色相',
+                    saturation: '饱和度',
+                    color: '颜色',
+                    luminosity: '亮度',
                 }
             }
         },
@@ -264,10 +307,6 @@
             }
         },
         methods: {
-            changeBlendMode(mode) {
-                this.blendMode = mode;
-            },
-
             handleCustomSizeInput(e) {
                 if (e.which >57 || e.which < 48) e.preventDefault();
                 if (e.which === 13) e.target.blur();
@@ -402,7 +441,7 @@
         directives: {
             autoSelect: {
                 bind(el) {
-                    // fix mac popup contextMenu bug
+                    // fix mac popup context menu bug
                     el._select = function() {
                         if (el._tid) clearTimeout(el._tid);
                         el._tid = setTimeout(el.select.bind(el), 20)
