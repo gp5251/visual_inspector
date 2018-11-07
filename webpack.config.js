@@ -89,6 +89,7 @@ if (!isProd) {
     config.mode = 'development';
     config.devtool = 'cheap-eval-source-map';
 } else {
+    config.mode = 'production';
     config.optimization = {
         minimizer:[
             new UglifyJsPlugin({
