@@ -113,6 +113,7 @@
                 height: 18px;
                 padding: 2px;
                 width: 48px;
+                font-size: 12px;
                 border: 1px solid #ddd;
                 border-radius: 3px;
                 margin-right: 2px;
