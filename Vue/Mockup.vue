@@ -9,6 +9,7 @@
         background: rgba(0, 0, 0, .5) url() no-repeat center ~"0 / 100%" auto;
         box-shadow: 0 0 1px 0 #ccc;
         touch-action: none;
+        will-change: translate, width, height;
 
         &.freeze::after{
             display: none;
@@ -68,7 +69,6 @@
                     .draggable({
                         onmove: event => {
                             let target = event.target,
-                                // keep the dragged position in the data-x/data-y attributes
                                 x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
                                 y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 
@@ -82,14 +82,10 @@
                         }
                     })
                     .resizable({
-                        // resize from all edges and corners
                         edges: {left: true, right: true, bottom: true, top: true},
-
-                        // minimum size
                         restrictSize: {
                             min: {width: 100, height: 50},
                         },
-
                         inertia: true,
                     })
                     .on('resizemove',(event) => {

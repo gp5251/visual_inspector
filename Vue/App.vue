@@ -178,7 +178,6 @@
 
 
 <script>
-    import interact from 'interactjs';
     import Blender from './Blender';
     import FloatingBar from './FloatingBar';
     import Mockup from './Mockup';
@@ -316,8 +315,13 @@
                     }
 
                     this._tid = setTimeout(()=>{
+                        if (this._fastOpacity.length === 1) {
+                            let [opacity] = this._fastOpacity;
+                            if (opacity > 0) opacity /= 10;
+                            this.opacity = opacity;
+                        }
                         this._fastOpacity = [];
-                    }, 3000)
+                    }, 1000)
                 }
             },
 
