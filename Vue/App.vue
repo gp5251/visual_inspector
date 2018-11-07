@@ -106,6 +106,7 @@
             &::before{
                 content: '透明:';
                 float: left;
+                margin-top: 10px;
             }
 
             .vi_sliderWraper{
@@ -130,13 +131,14 @@
 
         .vi_customSize{
             .vi_input{
-                height: 18px;
+                height: 24px;
                 padding: 2px;
                 width: 42px;
                 font-size: 12px;
                 border: 1px solid #ddd;
                 border-radius: 3px;
                 margin-right: -5px;
+                background-color: white;
             }
         }
     }
