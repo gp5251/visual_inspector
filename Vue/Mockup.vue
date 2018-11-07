@@ -49,6 +49,14 @@
     export default {
         name: "Mockup",
         props: ['src', 'opacity', 'freeze', 'blendMode', 'w', 'h', 'x', 'y'],
+        watch: {
+            x(val) {
+                this.$el.setAttribute('data-x', val);
+            },
+            y(val) {
+                this.$el.setAttribute('data-y', val);
+            }
+        },
         computed: {
             mockupStyle() {
                 let style = {
@@ -75,9 +83,6 @@
                             x = x.toFixed(1);
                             y = y.toFixed(1);
 
-                            target.setAttribute('data-x', x);
-                            target.setAttribute('data-y', y);
-
                             this.$emit('moveAndResize', {left: x, top: y})
                         }
                     })
@@ -95,9 +100,6 @@
 
                         x += event.deltaRect.left;
                         y += event.deltaRect.top;
-
-                        target.setAttribute('data-x', x);
-                        target.setAttribute('data-y', y);
 
                         this.$emit('moveAndResize', {
                             width: event.rect.width.toFixed(1),

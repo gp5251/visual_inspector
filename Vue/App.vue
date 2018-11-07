@@ -162,7 +162,7 @@
             </div>
 
             <div class="vi_formLine vi_resize">
-                <button @click="reset" class="vi_reset">重置</button>
+                <!--<button @click="reset" class="vi_reset">重置</button>-->
                 <button class="vi_reset" :key="index" v-for="(item, index) in wTypes" @click="wType = index">{{ item }}</button>
             </div>
 
@@ -243,7 +243,9 @@
                             height: img.naturalHeight,
                             src: img.src
                         };
-                        this.reset();
+                        // this.reset();
+                        if (this.img.width > window.innerWidth) this.wType = 2;
+                        else this.wType = 0;
                     }, err => console.error('failed to get img', err));
                 },
                 immediate: true
@@ -317,8 +319,10 @@
                     this._tid = setTimeout(()=>{
                         if (this._fastOpacity.length === 1) {
                             let [opacity] = this._fastOpacity;
-                            if (opacity > 0) opacity /= 10;
-                            this.opacity = opacity;
+                            if (opacity > 0) {
+                                opacity /= 10;
+                                this.opacity = opacity;
+                            }
                         }
                         this._fastOpacity = [];
                     }, 1000)
@@ -326,13 +330,15 @@
             },
 
             reset() {
-                this.moveMockup(0, 0);
+                // this.moveMockup(0, 0);
                 if (this.img.width > window.innerWidth) this.wType = 2;
                 else this.wType = 0;
             },
 
             moveAndResize(rect) {
                 Object.assign(this.mockup, rect);
+
+                if (rect.width && rect.height) this.wType = -1;
             },
 
             moveMockup(x = 0, y = 0) {
@@ -368,6 +374,17 @@
                 document.body.removeEventListener('keyup', this.toggleMockup);
                 document.body.removeEventListener('keyup', this.fastOpacity);
                 document.body.removeEventListener('keyup', this.togglePannel);
+            },
+
+            insertCss() {
+                this._link = document.createElement('link');
+                this._link.rel = "stylesheet";
+                this._link.href = chrome.extension.getURL('content.css');
+                (document.head||document.documentElement).appendChild(this._link);
+            },
+
+            removeCss() {
+                this._link.remove();
             }
         },
         directives: {
@@ -389,9 +406,11 @@
         created() {
             window.scrollTo(0, 0);
             this.bindEvs();
+            this.insertCss();
         },
         beforeDestroy() {
             this.unBindEvs();
+            this.removeCss();
         }
     }
 </script>

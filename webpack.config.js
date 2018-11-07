@@ -1,6 +1,7 @@
 const webpack               = require('webpack');
 const path                  = require('path');
 const MiniCssExtractPlugin  = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const VueLoaderPlugin       = require('vue-loader/lib/plugin');
 const UglifyJsPlugin        = require("uglifyjs-webpack-plugin");
 const CopyWebpackPlugin     = require('copy-webpack-plugin');
@@ -33,7 +34,7 @@ let config = {
         new webpack.HashedModuleIdsPlugin(),
         new VueLoaderPlugin(),
         new MiniCssExtractPlugin({
-            filename:'css/[name].[contenthash].css'
+            filename:'[name].css'
         }),
         new webpack.DefinePlugin({
             "process.env": {
@@ -59,7 +60,8 @@ let config = {
         },{
             test: /\.(less|css)$/,
             use: [
-                'vue-style-loader',
+                // 'vue-style-loader',
+                MiniCssExtractPlugin.loader,
                 'css-loader',
                 'postcss-loader',
                 'less-loader'
@@ -84,6 +86,17 @@ let config = {
 if (!isProd) {
     config.mode = 'development';
     config.devtool = 'cheap-eval-source-map';
+} else {
+    config.optimization = {
+        minimizer:[
+            new UglifyJsPlugin({
+                cache: true,
+                parallel: true,
+                sourceMap: false
+            }),
+            new OptimizeCSSAssetsPlugin()
+        ]
+    }
 }
 
 module.exports = config;

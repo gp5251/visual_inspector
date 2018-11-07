@@ -27,10 +27,10 @@
       "js": ["content.js"],
       "run_at": "document_end"
     }
+  ],
+   "web_accessible_resources": [
+     "content.css"
   ]
-  // "web_accessible_resources": [
-  //   "inject.js"
-  // ],
   // "background":{
   //   "scripts":[
   //     "background.js"
