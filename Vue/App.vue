@@ -106,7 +106,6 @@
             &::before{
                 content: '透明:';
                 float: left;
-                margin-top: 10px;
             }
 
             .vi_sliderWraper{
