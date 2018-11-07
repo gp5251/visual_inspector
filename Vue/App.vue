@@ -60,26 +60,32 @@
                 content: '混合模式:';
             }
         }
-        .vi_resize{
-            white-space: nowrap;
-
-            &::before{
-                content: '适配:';
-            }
-
-            button{
-                line-height: 14px;
-                background: white;
+        .vi_quickMatch{
+            .tit{
+                background-color: white;
                 border: 1px solid #ddd;
-                // box-shadow: 0 0 3px #ccc;
-                font-size: 12px;
-                color: #17233d;
+                border-radius: 3px;
+                padding: 4px 12px;
 
-                &:focus{
-                    outline: none;
-                    box-shadow: 0 0 5px #5cadff;
-                }
+                /*&:focus{*/
+                    /*outline: none;*/
+                    /*box-shadow: 0 0 5px #5cadff;*/
+                /*}*/
             }
+
+            /*button{*/
+                /*line-height: 14px;*/
+                /*background: white;*/
+                /*border: 1px solid #ddd;*/
+                /*// box-shadow: 0 0 3px #ccc;*/
+                /*font-size: 12px;*/
+                /*color: #17233d;*/
+
+                /*&:focus{*/
+                    /*outline: none;*/
+                    /*box-shadow: 0 0 5px #5cadff;*/
+                /*}*/
+            /*}*/
         }
         .vi_opacity{
             min-width: 25%;
@@ -152,7 +158,6 @@
 
         <div class="vi_controllers" v-if="showPanel">
             <h3>Visual Inspector</h3>
-            <Blender @changeMode="changeBlendMode" :blendMode="blendMode" class="vi_blender vi_formLine"/>
 
             <div class="vi_formLine vi_opacity">
                 <div class="vi_sliderWraper">
@@ -164,9 +169,16 @@
                 <Checkbox v-model="freeze">冻结</Checkbox>
             </div>
 
-            <div class="vi_formLine vi_resize">
-                <button @click="reset" class="vi_reset">重置</button>
-                <button class="vi_reset" :key="index" v-for="(item, index) in wTypes" @click="wType = index">{{ item }}</button>
+            <Blender @changeMode="changeBlendMode" :blendMode="blendMode" class="vi_blender vi_formLine"/>
+
+            <div class="vi_formLine vi_quickMatch">
+                <Dropdown trigger="click">
+                    <span class="tit">快速适配</span>
+                    <DropdownMenu slot="list">
+                        <DropdownItem @click.native="reset">重置</DropdownItem>
+                        <DropdownItem :key="index" v-for="(item, index) in wTypes" @click.native="wType = index">{{ item }}</DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
             </div>
 
             <div class="vi_customSize vi_formLine" @keydown.stop @keyup.stop>
@@ -186,11 +198,16 @@
     import Mockup from './Mockup';
     import Checkbox from '../iview/components/checkbox';
     import Slider from '../iview/components/slider';
+    import Dropdown from '../iview/components/dropdown';
+    import DropdownMenu from '../iview/components/dropdown-menu';
+    import DropdownItem from '../iview/components/dropdown-item';
     import '../iview/iview.css';
 
     export default {
         name: "App",
-        components: {Blender, Checkbox, Slider, FloatingBar, Mockup},
+        components: {
+            Blender, Checkbox, Slider, Dropdown, DropdownMenu, DropdownItem, FloatingBar, Mockup
+        },
         props: {
             src : {
                 type: String,
@@ -206,7 +223,7 @@
                 opacity: 1,
                 freeze: 0,
                 blendMode: 'normal',
-                wTypes: ['原图', '原图/2', '窗口', '页面', '居中'],
+                wTypes: ['原图大小', '原图大小/2', '窗口宽高', '页面宽高', '窗口居中'],
                 wType: -1,
                 mockup: {
                     width: 0,

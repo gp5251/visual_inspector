@@ -2,7 +2,7 @@
     <li :class="classes" @click="handleClick"><slot></slot></li>
 </template>
 <script>
-    const prefixCls = 'ivu-dropdown-item';
+    const prefixCls = 'vi-ivu-dropdown-item';
     import { findComponentUpward } from '../../utils/assist';
     export default {
         name: 'DropdownItem',
