@@ -1,35 +1,42 @@
 <style scoped lang="less">
     .vi_blender {
-        .vi_select{
-            width: 100px;
-            display: inline-block;
-            // box-shadow: 1px 1px 1px #aaa;
-        }
+        .tit{
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            padding: 4px 12px;
 
-        /deep/ .vi-ivu-icon-ios-arrow-down:before{
-            content: 'V' !important;
-            font-weight: bold;
-            transform: scale(.8, .5);
-            display: inline-block;
+            .ico{
+                vertical-align: middle;
+                font-weight: bold;
+            }
         }
     }
 </style>
 
 <template>
     <div class="vi_blender">
-        <Select :value="blendMode" size="small" @on-change="changeMode" class="vi_select">
-            <Option :value="value" :key="item" v-for="(item, value) in modes">{{ item }}</Option>
-        </Select>
+        <Dropdown trigger="click">
+            <span class="tit">{{ curMode }} <span class="ico">^</span></span>
+            <DropdownMenu slot="list">
+                <DropdownItem
+                        :selected="key === blendMode"
+                        :key="key"
+                        v-for="(value, key) in modes"
+                        @click.native="$emit('changeMode', key)">{{ value }}</DropdownItem>
+            </DropdownMenu>
+        </Dropdown>
     </div>
 </template>
 
 <script>
-    import Select from '../iview/components/select';
-    import Option from '../iview/components/option';
+    import Dropdown from '../iview/components/dropdown';
+    import DropdownMenu from '../iview/components/dropdown-menu';
+    import DropdownItem from '../iview/components/dropdown-item';
 
     export default {
         name: "Blender",
-        components:{Select, Option},
+        components:{Dropdown, DropdownMenu, DropdownItem},
         props: {
             blendMode: {
                 type: String,
@@ -60,9 +67,9 @@
                 }
             }
         },
-        methods: {
-            changeMode(mode) {
-                this.$emit('changeMode', mode)
+        computed: {
+            curMode() {
+                return this.modes[this.blendMode];
             }
         }
     }

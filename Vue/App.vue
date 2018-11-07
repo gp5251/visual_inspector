@@ -28,10 +28,16 @@
 
             .vi_quit{
                 position: absolute;
-                right: 5px;
-                top: 5px;
+                right: -10px;
+                top: -15px;
                 font-weight: bold;
                 cursor: pointer;
+                background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+                width: 30px;
+                height: 30px;
+                text-align: center;
+                line-height: 30px;
+                border-radius: 15px;
             }
         }
         .vi_reset{
@@ -55,11 +61,6 @@
             }
         }
 
-        .vi_blender{
-            &::before{
-                content: '混合模式:';
-            }
-        }
         .vi_quickMatch{
             .tit{
                 background-color: white;
@@ -67,25 +68,11 @@
                 border-radius: 3px;
                 padding: 4px 12px;
 
-                /*&:focus{*/
-                    /*outline: none;*/
-                    /*box-shadow: 0 0 5px #5cadff;*/
-                /*}*/
+                .ico{
+                    vertical-align: middle;
+                    font-weight: bold;
+                }
             }
-
-            /*button{*/
-                /*line-height: 14px;*/
-                /*background: white;*/
-                /*border: 1px solid #ddd;*/
-                /*// box-shadow: 0 0 3px #ccc;*/
-                /*font-size: 12px;*/
-                /*color: #17233d;*/
-
-                /*&:focus{*/
-                    /*outline: none;*/
-                    /*box-shadow: 0 0 5px #5cadff;*/
-                /*}*/
-            /*}*/
         }
         .vi_opacity{
             min-width: 25%;
@@ -113,22 +100,19 @@
         }
 
         .vi_customSize{
-            &::before{
-                content: '自定义:';
-            }
 
             .vi_input{
-                height: 18px;
+                height: 24px;
                 padding: 2px;
-                width: 48px;
+                width: 42px;
                 font-size: 12px;
                 border: 1px solid #ddd;
                 border-radius: 3px;
-                margin-right: 2px;
-                &:focus{
-                    outline: none;
-                    box-shadow: 0 0 5px #5cadff;
-                }
+                margin-right: -5px;
+                /*&:focus{*/
+                    /*outline: none;*/
+                    /*box-shadow: 0 0 5px #5cadff;*/
+                /*}*/
             }
         }
     }
@@ -158,6 +142,7 @@
 
         <div class="vi_controllers" v-if="showPanel">
             <h3>Visual Inspector</h3>
+            <span class="vi_quit" @click="$emit('quit')">X</span>
 
             <div class="vi_formLine vi_opacity">
                 <div class="vi_sliderWraper">
@@ -167,13 +152,14 @@
 
             <div class="vi_formLine">
                 <Checkbox v-model="freeze">冻结</Checkbox>
+                <Checkbox v-model="showMockup">显示</Checkbox>
             </div>
 
-            <Blender @changeMode="changeBlendMode" :blendMode="blendMode" class="vi_blender vi_formLine"/>
+            <Blender @changeMode="changeBlendMode" :blendMode="blendMode" class="vi_formLine"/>
 
             <div class="vi_formLine vi_quickMatch">
                 <Dropdown trigger="click">
-                    <span class="tit">快速适配</span>
+                    <span class="tit">快速适配 <span class="ico">^</span></span>
                     <DropdownMenu slot="list">
                         <DropdownItem @click.native="reset">重置</DropdownItem>
                         <DropdownItem :key="index" v-for="(item, index) in wTypes" @click.native="wType = index">{{ item }}</DropdownItem>
@@ -284,6 +270,7 @@
 
             handleCustomSizeInput(e) {
                 if (e.which >57 || e.which < 48) e.preventDefault();
+                if (e.which === 13) e.target.blur();
             },
 
             handlePreventScroll(e) {
