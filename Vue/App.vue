@@ -33,20 +33,6 @@
                 color: #2d8cf0;
                 font-size: 14px;
             }
-
-            /*.vi_quit{*/
-                /*position: absolute;*/
-                /*right: -10px;*/
-                /*top: -15px;*/
-                /*cursor: pointer;*/
-                /*background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);*/
-                /*width: 30px;*/
-                /*height: 30px;*/
-                /*text-align: center;*/
-                /*line-height: 30px;*/
-                /*border-radius: 15px;*/
-                /*font-size:  14px;*/
-            /*}*/
         }
         .vi_reset{
             padding: 3px 10px;
@@ -169,7 +155,6 @@
 
         <div class="vi_controllers" v-if="showPanel">
             <h3>Visual Inspector</h3>
-            <!--<span class="vi_quit" @click="$emit('quit')">X</span>-->
 
             <div class="vi_formLine vi_opacity">
                 <div class="vi_sliderWraper">

@@ -3,14 +3,15 @@ import Vue from 'vue';
 new Vue({
     el: '#app',
     data: {
-        appIsRunning: false
+        appIsRunning: false,
+        newInputKey: 0
     },
     template: `
         <div id="app">
             <h3>Visual Inspector</h3>
             <div class="filePicker">
                 <span class="tit">点击插入设计稿</span>
-                <input type="file" @change="insertImg" />
+                <input type="file" @change="insertImg" :key="newInputKey" />
             </div>
             <button @click="quit" v-if="appIsRunning"> 退出 </button>
         </div>
@@ -21,7 +22,10 @@ new Vue({
             this.readFileAsDataUrl(file)
                 .then(dataUrl => {
                     this.send({type: 'insertImg', payload: {dataUrl}}, ({type, state}) => {
-                        if (type === 'insertImg') this.appIsRunning = !!state
+                        if (type === 'insertImg') {
+                            this.appIsRunning = !!state;
+                            this.newInputKey = Math.random();
+                        }
                     });
                 })
         },
