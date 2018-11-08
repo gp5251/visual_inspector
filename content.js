@@ -7,10 +7,20 @@ const app = function () {
 		appState = 'stopped';
 	return {
 		init() {
-			chrome.runtime.onMessage.addListener((request) => {
-                if (request.type === 'insertImg') {
-                    this.run(request.payload);
-				}
+			chrome.runtime.onMessage.addListener((request, sender, cb) => {
+				switch (request.type) {
+					case 'insertImg':
+                        this.run(request.payload);
+                        cb({type: 'insertImg', state: true});
+                        break;
+                    case 'quit':
+                        this.quit();
+                        cb({type: 'quit', state: false});
+                        break;
+                    case 'getAppState':
+                        cb({type: 'getAppState', state: appState === 'running'});
+                }
+
 			    return true;
 		    });
 		},
@@ -47,7 +57,7 @@ const app = function () {
 				vm = new Vue({
 				    // render: h => h(App),
 					data: { src },
-					template: ` <App :src = "src" @quit="destroy" /> `,
+					template: `<App :src = "src" />`,
 				    destroyed() {
 				    	uiCreated = false;
 						appState = 'stopped';

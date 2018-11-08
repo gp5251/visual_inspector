@@ -2,14 +2,17 @@ import Vue from 'vue';
 
 new Vue({
     el: '#app',
+    data: {
+        appIsRunning: false
+    },
     template: `
         <div id="app">
             <h3>Visual Inspector</h3>
-            <!--<button @click="run">run</button> <button @click="stop">stop</button>-->
             <div class="filePicker">
                 <span class="tit">点击插入设计稿</span>
                 <input type="file" @change="insertImg" />
             </div>
+            <button @click="quit" v-if="appIsRunning"> 退出 </button>
         </div>
     `,
     methods: {
@@ -17,7 +20,9 @@ new Vue({
             let [file] = e.target.files;
             this.readFileAsDataUrl(file)
                 .then(dataUrl => {
-                    this.send({type: 'insertImg', payload: {dataUrl}});
+                    this.send({type: 'insertImg', payload: {dataUrl}}, ({type, state}) => {
+                        if (type === 'insertImg') this.appIsRunning = !!state
+                    });
                 })
         },
 
@@ -36,14 +41,25 @@ new Vue({
             })
         },
 
+        quit() {
+            this.send({type: 'quit'}, ({type, state}) => {
+                if (type === 'quit') this.appIsRunning = !!state
+            });
+        },
+
         send(data, cb) {
-            chrome.tabs.query( {active: true, currentWindow: true}, function(tabs) {
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                 chrome.tabs.sendMessage( tabs[0].id, data, function(response) {
                     cb && cb(response);
-                    console.log('response', response);
+                    // console.log('response', response);
                 });
             });
         }
+    },
+    created() {
+        this.send({type: 'getAppState'}, ({type, state}) => {
+            if (type === 'getAppState') this.appIsRunning = !!state
+        });
     }
 });
 

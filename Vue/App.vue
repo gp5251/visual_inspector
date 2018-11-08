@@ -31,21 +31,22 @@
                 margin-right: 10px;
                 text-shadow: 1px 1px 0 white;
                 color: #2d8cf0;
+                font-size: 14px;
             }
 
-            .vi_quit{
-                position: absolute;
-                right: -10px;
-                top: -15px;
-                cursor: pointer;
-                background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
-                width: 30px;
-                height: 30px;
-                text-align: center;
-                line-height: 30px;
-                border-radius: 15px;
-                font-size:  14px;
-            }
+            /*.vi_quit{*/
+                /*position: absolute;*/
+                /*right: -10px;*/
+                /*top: -15px;*/
+                /*cursor: pointer;*/
+                /*background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);*/
+                /*width: 30px;*/
+                /*height: 30px;*/
+                /*text-align: center;*/
+                /*line-height: 30px;*/
+                /*border-radius: 15px;*/
+                /*font-size:  14px;*/
+            /*}*/
         }
         .vi_reset{
             padding: 3px 10px;
@@ -103,15 +104,15 @@
             min-width: 25%;
             padding-right: 12px;
 
-            &::before{
-                content: '透明:';
-                float: left;
-            }
+            /*&::before{*/
+                /*content: '透明:';*/
+                /*float: left;*/
+            /*}*/
 
             .vi_sliderWraper{
                 min-width: 80px;
                 display: block;
-                margin-left: 30px;
+                /*margin-left: 30px;*/
             }
 
             .vi_slider{
@@ -138,6 +139,7 @@
                 border-radius: 3px;
                 margin-right: -5px;
                 background-color: white;
+                box-sizing: border-box;
             }
         }
     }
@@ -167,7 +169,7 @@
 
         <div class="vi_controllers" v-if="showPanel">
             <h3>Visual Inspector</h3>
-            <span class="vi_quit" @click="$emit('quit')">X</span>
+            <!--<span class="vi_quit" @click="$emit('quit')">X</span>-->
 
             <div class="vi_formLine vi_opacity">
                 <div class="vi_sliderWraper">
