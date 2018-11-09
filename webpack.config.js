@@ -4,6 +4,7 @@ const MiniCssExtractPlugin  = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const VueLoaderPlugin       = require('vue-loader/lib/plugin');
 const UglifyJsPlugin        = require("uglifyjs-webpack-plugin");
+const ZipPlugin             = require('zip-webpack-plugin');
 const CopyWebpackPlugin     = require('copy-webpack-plugin');
 const isProd                = process.env.NODE_ENV === 'production';
 
@@ -85,11 +86,9 @@ let config = {
     }
 };
 
-if (!isProd) {
-    config.mode = 'development';
-    config.devtool = 'cheap-eval-source-map';
-} else {
+if (isProd) {
     config.mode = 'production';
+    config.plugins.push(new ZipPlugin({ path: '../', filename: 'VisualInspector.zip' }));
     config.optimization = {
         minimizer:[
             new UglifyJsPlugin({
@@ -100,6 +99,9 @@ if (!isProd) {
             new OptimizeCSSAssetsPlugin()
         ]
     }
+} else {
+    config.mode = 'development';
+    config.devtool = 'cheap-eval-source-map';
 }
 
 module.exports = config;
