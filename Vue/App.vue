@@ -106,9 +106,6 @@
                 vertical-align: middle;
 
             }
-            .vi_slider /deep/ .vi-ivu-slider-wrap{
-                margin: 8px 0;
-            }
 
             .vi_slider /deep/ .vi-ivu-slider-button-wrap{
                 top: -6px;
@@ -126,6 +123,7 @@
                 margin-right: -5px;
                 background-color: white;
                 box-sizing: border-box;
+                display: inline-block;
             }
         }
     }
