@@ -47,7 +47,6 @@
 
             &::before{
                 transform-origin: 0 center;
-                /*transform: scale(.9, .9);*/
                 display: inline-block;
                 color: #17233d;
                 margin-right: 5px;
@@ -90,15 +89,9 @@
             min-width: 25%;
             padding-right: 12px;
 
-            /*&::before{*/
-                /*content: '透明:';*/
-                /*float: left;*/
-            /*}*/
-
             .vi_sliderWraper{
                 min-width: 80px;
                 display: block;
-                /*margin-left: 30px;*/
             }
 
             .vi_slider{
@@ -268,24 +261,19 @@
                 let mockup = this.mockup;
                 switch (val) {
                     case 0:
-                        mockup.width = this.img.width;
-                        mockup.height = this.img.height;
+                        this.moveAndResize({width: this.img.width, height: this.img.height});
                         break;
                     case 1:
-                        mockup.width = this.img.width / 2;
-                        mockup.height = this.img.height / 2;
+                        this.moveAndResize({width: this.img.width / 2, height: this.img.height / 2});
                         break;
                     case 2:
-                        mockup.width = window.innerWidth;
-                        mockup.height = window.innerHeight;
+                        this.moveAndResize({width: window.innerWidth, height: window.innerHeight});
                         break;
                     case 3:
-                        mockup.width = window.innerWidth;
-                        mockup.height = document.documentElement.scrollHeight;
+                        this.moveAndResize({width: window.innerWidth, height: document.documentElement.scrollHeight});
                         break;
                     case 4:
-                        mockup.left = Math.max(0, (window.innerWidth - mockup.width) / 2);
-                        mockup.top = Math.max(0, (window.innerHeight - mockup.height) / 2 + window.scrollY);
+                        this.moveAndResize({left: Math.max(0, (window.innerWidth - mockup.width) / 2), top: Math.max(0, (window.innerHeight - mockup.height) / 2 + window.scrollY)});
                 }
             },
             src: {
@@ -334,18 +322,15 @@
                             y += count;
                     }
 
-                    this.moveMockup(x, y);
+                    this.moveAndResize({left: x, top: y});
                 }
             },
 
-            toggleMockup(e) {
+            fastToggle(e) {
                 if (e.target.tagName.toLowerCase() !== 'body') return;
                 if (e.key === 'h') this.showMockup = !this.showMockup;
-            },
-
-            togglePannel(e) {
-                if (e.target.tagName.toLowerCase() !== 'body') return;
                 if (e.key === 'f') this.showPanel = !this.showPanel;
+                if (e.key === 'd') this.freeze = !this.freeze;
             },
 
             fastOpacity(e) {
@@ -378,7 +363,7 @@
             },
 
             reset() {
-                this.moveMockup(0, 0);
+                this.moveAndResize({left: 0, top: 0});
                 if (this.img.width > window.innerWidth) this.wType = 2;
                 else this.wType = 0;
             },
@@ -386,10 +371,6 @@
             moveAndResize(rect) {
                 Object.assign(this.mockup, rect);
                 this.wType = -1;
-            },
-
-            moveMockup(x = 0, y = 0) {
-                this.moveAndResize({left: x, top: y});
             },
 
             getImg(url) {
@@ -411,16 +392,14 @@
 
             bindEvs() {
                 document.body.addEventListener('keydown', this.handlePreventScroll);
-                document.body.addEventListener('keyup', this.toggleMockup);
+                document.body.addEventListener('keyup', this.fastToggle);
                 document.body.addEventListener('keyup', this.fastOpacity);
-                document.body.addEventListener('keyup', this.togglePannel);
             },
 
             unBindEvs() {
                 document.body.removeEventListener('keydown', this.handlePreventScroll)
-                document.body.removeEventListener('keyup', this.toggleMockup);
+                document.body.removeEventListener('keyup', this.fastToggle);
                 document.body.removeEventListener('keyup', this.fastOpacity);
-                document.body.removeEventListener('keyup', this.togglePannel);
             },
 
             insertCss() {
@@ -437,7 +416,7 @@
         directives: {
             autoSelect: {
                 bind(el) {
-                    // fix mac popup context menu bug
+                    // fix popup context menu bug
                     el._select = function() {
                         if (el._tid) clearTimeout(el._tid);
                         el._tid = setTimeout(el.select.bind(el), 20)
