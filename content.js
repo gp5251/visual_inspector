@@ -8,17 +8,23 @@ const app = function () {
 	return {
 		init() {
 			chrome.runtime.onMessage.addListener((request, sender, cb) => {
-				switch (request.type) {
+				let {type} = request;
+				if (!type) {
+					console.error('err', 'missing type');
+					return;
+                }
+
+				switch (type) {
 					case 'insertImg':
                         this.run(request.payload);
-                        cb({type: 'insertImg', state: true});
+                        cb({type, state: true});
                         break;
                     case 'quit':
                         this.quit();
-                        cb({type: 'quit', state: false});
+                        cb({type, state: false});
                         break;
                     case 'getAppState':
-                        cb({type: 'getAppState', state: appState === 'running'});
+                        cb({type, state: appState === 'running'});
                 }
 
 			    return true;
