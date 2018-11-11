@@ -54,8 +54,8 @@ new Vue({
         send(data, cb) {
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                 chrome.tabs.sendMessage( tabs[0].id, data, function(response) {
-                    cb && cb(response);
-                    // console.log('response', response);
+                    cb && response && cb(response);
+                    console.log('response', response);
                 });
             });
         }

@@ -39,11 +39,6 @@ let config = {
         new MiniCssExtractPlugin({
             filename:'[name].css'
         }),
-        new webpack.DefinePlugin({
-            "process.env": {
-                DEVKIT_STAGE: JSON.stringify('production')
-            }
-        }),
         new CopyWebpackPlugin(['./copy']),
     ],
 
