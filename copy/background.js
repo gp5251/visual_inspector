@@ -23,7 +23,7 @@ chrome.runtime.onMessage.addListener((request, sender, cb) => {
     let {type} = request;
 
     if (type === 'pluninLoaded') {
-        if (tids[sender.tab.id]) clearTimeout();
+        if (tids[sender.tab.id]) clearTimeout(tids[sender.tab.id]);
         else tids[sender.tab.id] = true;
 
         chrome.browserAction.setIcon({
