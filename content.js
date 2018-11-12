@@ -34,6 +34,7 @@ const app = function () {
 		getImgSrc(dataUrl) {
             let blobObj = this.dataURLtoBlob(dataUrl);
             return URL.createObjectURL(blobObj);
+            // return dataUrl;
 		},
 
         dataURLtoBlob(dataUrl) {

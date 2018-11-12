@@ -16,7 +16,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            z-index: 9998;
+            z-index: 99998;
             padding: 10px;
             text-shadow: 1px 1px 0 white;
             border-top: 1px solid #ddd;
