@@ -118,6 +118,9 @@
         },
         mounted() {
             this.initMockup();
+
+            this.$el.setAttribute('data-x', this.x);
+            this.$el.setAttribute('data-y', this.y);
         }
     }
 </script>

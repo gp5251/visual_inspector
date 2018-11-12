@@ -32,7 +32,7 @@ const app = function () {
             chrome.runtime.sendMessage({type: "pluninLoaded"});
 
             if (sessionStorage._viData && sessionStorage._viDataUrl) {
-                let viData = JSOn.parse(sessionStorage._viData);
+                let viData = JSON.parse(sessionStorage._viData);
                 let dataUrl = sessionStorage._viDataUrl;
                 this.run({dataUrl, ...viData});
 			}

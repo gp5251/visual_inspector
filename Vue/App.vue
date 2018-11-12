@@ -156,6 +156,7 @@
             <div class="vi_formLine">
                 <Checkbox v-model="freeze" class="vi_freeze">冻结</Checkbox>
                 <Checkbox v-model="showMockup">显示</Checkbox>
+                <Checkbox v-model="useRestore">恢复</Checkbox>
             </div>
 
             <div class="vi_formLine vi_blender">
@@ -219,7 +220,7 @@
                 type: Object,
                 default: function () {
                     return {
-                        useRestore: false
+                        // useRestore: false
                     }
                 }
             }
@@ -293,7 +294,7 @@
                             height: img.naturalHeight,
                             src: img.src
                         };
-                        this.reset();
+                        if (!this.useRestore) this.reset();
                     }, err => console.error('failed to get img', err));
                 },
                 immediate: true
