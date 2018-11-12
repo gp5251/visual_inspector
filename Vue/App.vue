@@ -200,6 +200,7 @@
     import Dropdown from '../iview/components/dropdown';
     import DropdownMenu from '../iview/components/dropdown-menu';
     import DropdownItem from '../iview/components/dropdown-item';
+    import {throttle} from "../utils";
     import '../iview/iview.css';
 
     export default {
@@ -302,7 +303,7 @@
             useRestore: {
                 handler(val) {
                     if (val) {
-                        let fn = ()=>{
+                        let fn = throttle(()=>{
                             if (this.useRestore) {
                                 let {opacity, freeze, blendMode, wType, mockup, img, useRestore} = this.$data;
                                 sessionStorage._viData = JSON.stringify({opacity, freeze, blendMode, wType, mockup, img, useRestore});
@@ -310,7 +311,7 @@
                             } else {
                                 delete sessionStorage._viData;
                             }
-                        };
+                        }, 500);
 
                         requestAnimationFrame(fn);
                     }
