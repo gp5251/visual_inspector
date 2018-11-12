@@ -218,7 +218,9 @@
             restoreData: {
                 type: Object,
                 default: function () {
-                    return {}
+                    return {
+                        useRestore: false
+                    }
                 }
             }
         },
@@ -301,8 +303,8 @@
                     if (val) {
                         let fn = ()=>{
                             if (this.useRestore) {
-                                let {opacity, freeze, blendMode, wType, mockup, img} = this.$data;
-                                sessionStorage._viData = JSON.stringify({opacity, freeze, blendMode, wType, mockup, img});
+                                let {opacity, freeze, blendMode, wType, mockup, img, useRestore} = this.$data;
+                                sessionStorage._viData = JSON.stringify({opacity, freeze, blendMode, wType, mockup, img, useRestore});
                                 requestAnimationFrame(fn);
                             } else {
                                 delete sessionStorage._viData;

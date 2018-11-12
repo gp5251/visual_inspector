@@ -12,11 +12,11 @@ const app = function () {
 
 				switch (type) {
 					case 'insertImg':
-                        this.run(request.payload);
-                        cb({type, state: true});
-
                         delete sessionStorage._viData;
                         delete sessionStorage._viDataUrl;
+
+                        this.run(request.payload);
+                        cb({type, state: true});
                         break;
                     case 'quit':
                         this.quit();
@@ -33,7 +33,7 @@ const app = function () {
 
             if (sessionStorage._viData && sessionStorage._viDataUrl) {
                 let viData = JSOn.parse(sessionStorage._viData);
-                let dataUrl = sessionStorage._viData;
+                let dataUrl = sessionStorage._viDataUrl;
                 this.run({dataUrl, ...viData});
 			}
         },
@@ -60,6 +60,8 @@ const app = function () {
                 document.body.appendChild(rootEl);
                 this.createUI(src, data).$mount(rootEl);
 			}
+
+            sessionStorage._viDataUrl = dataUrl;
 		},
 
 		quit() {
