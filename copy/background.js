@@ -13,6 +13,8 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
         return;
     }
 
+    if (changeInfo.status === 'loading') delete tids[tabId];
+
     if (changeInfo.status === 'complete') {
         if (tids[tabId]) return;
         tids[tabId] = setTimeout(()=>loadFailed(tabId), 1000);
