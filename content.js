@@ -14,6 +14,9 @@ const app = function () {
 					case 'insertImg':
                         this.run(request.payload);
                         cb({type, state: true});
+
+                        delete sessionStorage._viData;
+                        delete sessionStorage._viDataUrl;
                         break;
                     case 'quit':
                         this.quit();
@@ -27,6 +30,12 @@ const app = function () {
 		    });
 
             chrome.runtime.sendMessage({type: "pluninLoaded"});
+
+            if (sessionStorage._viData && sessionStorage._viDataUrl) {
+                let viData = JSOn.parse(sessionStorage._viData);
+                let dataUrl = sessionStorage._viData;
+                this.run({dataUrl, ...viData});
+			}
         },
 
 		getImgSrc(dataUrl) {
@@ -42,14 +51,14 @@ const app = function () {
             return new Blob([u8arr], {type: mime});
         },
 
-		run({dataUrl}) {
+		run({dataUrl, ...data}) {
 			let src = this.getImgSrc(dataUrl);
             if (vm) {
                 vm.src = src;
 			} else {
-                let rootEl = document.createElement('div')
+                let rootEl = document.createElement('div');
                 document.body.appendChild(rootEl);
-                this.createUI(src).$mount(rootEl);
+                this.createUI(src, data).$mount(rootEl);
 			}
 		},
 
@@ -57,12 +66,11 @@ const app = function () {
 			if (appState === 'running') vm.destroy();
 		},
 
-		createUI(src) {
+		createUI(src, restoreData = {}) {
 			if (!uiCreated) {
 				vm = new Vue({
-				    // render: h => h(App),
-					data: { src },
-					template: `<App :src = "src" />`,
+					data: { src, restoreData },
+					template: `<App :src = "src" :restoreData="restoreData" />`,
 				    destroyed() {
 				    	uiCreated = false;
 						appState = 'stopped';

@@ -214,10 +214,16 @@
                 default: function () {
                     return ''
                 }
+            },
+            restoreData: {
+                type: Object,
+                default: function () {
+                    return {}
+                }
             }
         },
         data() {
-            return {
+            return Object.assign({
                 showPanel: true,
                 showMockup: true,
                 opacity: 1,
@@ -253,8 +259,9 @@
                     saturation: '饱和度',
                     color: '颜色',
                     luminosity: '亮度',
-                }
-            }
+                },
+                useRestore: false,
+            }, this.restoreData);
         },
         watch: {
             wType(val) {
@@ -286,6 +293,24 @@
                         };
                         this.reset();
                     }, err => console.error('failed to get img', err));
+                },
+                immediate: true
+            },
+            useRestore: {
+                handler(val) {
+                    if (val) {
+                        let fn = ()=>{
+                            if (this.useRestore) {
+                                let {opacity, freeze, blendMode, wType, mockup, img} = this.$data;
+                                sessionStorage._viData = JSON.stringify({opacity, freeze, blendMode, wType, mockup, img});
+                                requestAnimationFrame(fn);
+                            } else {
+                                delete sessionStorage._viData;
+                            }
+                        };
+
+                        requestAnimationFrame(fn);
+                    }
                 },
                 immediate: true
             }
@@ -433,6 +458,7 @@
             window.scrollTo(0, 0);
             this.bindEvs();
             this.insertCss();
+
         },
         beforeDestroy() {
             this.unBindEvs();
