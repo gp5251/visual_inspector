@@ -9,10 +9,6 @@ const app = function () {
 		init() {
 			chrome.runtime.onMessage.addListener((request, sender, cb) => {
 				let {type} = request;
-				if (!type) {
-					console.error('err', 'missing type');
-					return;
-                }
 
 				switch (type) {
 					case 'insertImg':
@@ -29,7 +25,9 @@ const app = function () {
 
 			    return true;
 		    });
-		},
+
+            chrome.runtime.sendMessage({type: "pluninLoaded"});
+        },
 
 		getImgSrc(dataUrl) {
             let blobObj = this.dataURLtoBlob(dataUrl);

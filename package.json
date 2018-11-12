@@ -1,7 +1,7 @@
 {
   "name": "Visual_Inspector",
-  "version": "1.0.0",
-  "description": "A chrome plug-in which provides a variety of ways to help front-end developers quickly locate differences between design drafts and web pages.",
+  "version": "1.0.1",
+  "description": "A helper tool for fast front-end development and visual inspection.",
   "main": "content.js",
   "scripts": {
     "start": "webpack --watch",
