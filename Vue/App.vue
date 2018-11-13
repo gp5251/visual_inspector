@@ -17,7 +17,7 @@
             left: 0;
             right: 0;
             z-index: 99998;
-            padding: 10px;
+            padding: 5px;
             text-shadow: 1px 1px 0 white;
             border-top: 1px solid #ddd;
 
@@ -86,13 +86,8 @@
             }
         }
         .vi_opacity{
-            min-width: 25%;
+            min-width: 20%;
             padding-right: 12px;
-
-            .vi_sliderWraper{
-                min-width: 80px;
-                display: block;
-            }
 
             .vi_slider{
                 width: 100%;
@@ -148,9 +143,7 @@
             <h3>Visual Inspector</h3>
 
             <div class="vi_formLine vi_opacity">
-                <div class="vi_sliderWraper">
-                    <Slider class="vi_slider" v-model="opacity"  :step="0.01"  :min="0" :max="1"></Slider>
-                </div>
+                <Slider class="vi_slider" v-model="opacity"  :step="0.01"  :min="0" :max="1"></Slider>
             </div>
 
             <div class="vi_formLine">
