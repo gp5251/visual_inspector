@@ -156,7 +156,7 @@
             <div class="vi_formLine">
                 <Checkbox v-model="freeze" class="vi_freeze">冻结</Checkbox>
                 <Checkbox v-model="showMockup">显示</Checkbox>
-                <Checkbox v-model="useRestore">恢复</Checkbox>
+                <Checkbox v-model="useRestore">实时</Checkbox>
             </div>
 
             <div class="vi_formLine vi_blender">
