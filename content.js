@@ -68,11 +68,11 @@ const app = function () {
 			if (appState === 'running') vm.destroy();
 		},
 
-		createUI(src, restoreData = {}) {
+		createUI(src, restoredData = {}) {
 			if (!uiCreated) {
 				vm = new Vue({
-					data: { src, restoreData },
-					template: `<App :src = "src" :restoreData="restoreData" />`,
+					data: { src, restoredData },
+					template: `<App :src = "src" :restoredData="restoredData" />`,
 				    destroyed() {
 				    	uiCreated = false;
 						appState = 'stopped';

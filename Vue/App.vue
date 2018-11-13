@@ -217,11 +217,10 @@
                     return ''
                 }
             },
-            restoreData: {
+            restoredData: {
                 type: Object,
                 default: function () {
                     return {
-                        // useRestore: false
                     }
                 }
             }
@@ -265,7 +264,7 @@
                     luminosity: '亮度',
                 },
                 useRestore: false,
-            }, this.restoreData);
+            }, this.restoredData);
         },
         watch: {
             wType(val) {
@@ -467,6 +466,7 @@
         beforeDestroy() {
             this.unBindEvs();
             this.removeCss();
+            this.useRestore = false;
         }
     }
 </script>
