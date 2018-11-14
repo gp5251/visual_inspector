@@ -281,11 +281,9 @@
             },
             src: {
                 handler(val) {
-                    this.getImg(val).then(img => {
+                    this.getImg(val).then(({width, height, src}) => {
                         this.img = {
-                            width: img.naturalWidth,
-                            height: img.naturalHeight,
-                            src: img.src
+                            width, height, src
                         };
                         if (!this.useRestore) this.reset();
                     }, err => console.error('failed to get img', err));
@@ -398,7 +396,11 @@
                 return new Promise((resolve, reject)=>{
                     const img = new Image;
                     img.src = url;
-                    img.onload = () => resolve(img);
+                    img.onload = () => resolve({
+                        width: img.naturalWidth,
+                        height: img.naturalHeight,
+                        src: url
+                    });
                     img.onerror = reject;
                 })
             },
