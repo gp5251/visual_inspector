@@ -62,7 +62,7 @@ new Vue({
     },
     created() {
         this.send({type: 'getAppState'}, ({type, state}) => {
-            if (type === 'getAppState') this.appIsRunning = !!state
+            if (type === 'getAppState') this.appIsRunning = state === 'running'
         });
     }
 });

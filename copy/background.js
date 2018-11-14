@@ -1,40 +1,36 @@
-const tids = {};
-
-function loadFailed(tabId) {
+function setAppState(tabId, state) {
     chrome.browserAction.setPopup({
         tabId: tabId,
-        popup: 'popup_loading_failed.html'
+        popup: state ? 'popup.html': 'popup_loading_failed.html'
     });
+	chrome.browserAction.setIcon({
+		tabId: tabId,
+		path: state ? 'icon.png': 'icon_gray.png'
+	});
+}
+
+function send(data, cb) {
+	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+		chrome.tabs.sendMessage( tabs[0].id, data, function(response) {
+			cb && cb(response);
+			console.log('response', response);
+		});
+	});
 }
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if(tab.url.indexOf ("http") === -1) {
-        loadFailed(tabId);
+        setAppState(tabId, false);
         return;
     }
 
-    if (changeInfo.status === 'loading') delete tids[tabId];
-
     if (changeInfo.status === 'complete') {
-        if (tids[tabId]) return;
-        tids[tabId] = setTimeout(()=>loadFailed(tabId), 1000);
-    }
-});
-
-chrome.runtime.onMessage.addListener((request, sender, cb) => {
-    let {type} = request;
-
-    if (type === 'pluninLoaded') {
-        if (tids[sender.tab.id]) clearTimeout(tids[sender.tab.id]);
-        else tids[sender.tab.id] = true;
-
-        chrome.browserAction.setIcon({
-            tabId: sender.tab.id,
-            path: 'icon.png'
-        });
-        chrome.browserAction.setPopup({
-            tabId: sender.tab.id,
-            popup: 'popup.html'
-        });
+    	send({
+			type: 'getAppStateFromBg'
+		}, response => {
+    		if (response && response.type === 'getAppStateFromBg') {
+    			setAppState(tabId, true)
+			}
+		})
     }
 });

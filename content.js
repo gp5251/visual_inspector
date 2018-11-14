@@ -22,14 +22,15 @@ const app = function () {
                         this.quit();
                         cb({type, state: false});
                         break;
+					case 'getAppStateFromBg':
+						cb({type, state: true});
+						break;
                     case 'getAppState':
-                        cb({type, state: appState === 'running'});
+                        cb({type, state: appState});
                 }
 
 			    return true;
 		    });
-
-            chrome.runtime.sendMessage({type: "pluninLoaded"});
 
             if (sessionStorage._viData && sessionStorage._viDataUrl) {
                 let viData = JSON.parse(sessionStorage._viData);
