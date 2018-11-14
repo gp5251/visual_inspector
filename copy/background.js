@@ -25,10 +25,14 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     }
 
     if (changeInfo.status === 'complete') {
+    	let _tid = setTimeout(()=>{
+			setAppState(tabId, false);
+		}, 1000);
     	send({
 			type: 'getAppStateFromBg'
 		}, response => {
     		if (response && response.type === 'getAppStateFromBg') {
+    			clearTimeout(_tid);
     			setAppState(tabId, true)
 			}
 		})
