@@ -4,7 +4,6 @@
   "version": "1.1.0",
   "manifest_version": 2,
   "author":"paul",
-  "homepage_url": "https://github.com/gp5251/visual_inspector",
   "description": "A helper tool for fast front-end development and visual inspection. 前端重构和视觉走查的辅助工具。",
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
   "icons": {
