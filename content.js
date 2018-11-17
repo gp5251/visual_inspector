@@ -14,6 +14,7 @@ const app = function () {
 					case 'insertImg':
                         delete sessionStorage._viData;
                         delete sessionStorage._viDataUrl;
+                        if (vm && vm.src) window.URL.revokeObjectURL(vm.src);
 
                         this.run(request.payload);
                         cb({type, state: true});
@@ -31,6 +32,8 @@ const app = function () {
 
 			    return true;
 		    });
+
+			this.send({type: 'appLoaded'});
 
             if (sessionStorage._viData && sessionStorage._viDataUrl) {
                 let viData = JSON.parse(sessionStorage._viData);
@@ -74,9 +77,10 @@ const app = function () {
 				vm = new Vue({
 					data: { src, restoredData },
 					template: `<App :src = "src" :restoredData="restoredData" />`,
-				    destroyed() {
+				    beforeDestroy() {
 				    	uiCreated = false;
 						appState = 'stopped';
+						window.URL.revokeObjectURL(vm.src);
 						vm.$el.remove();
 				    },
 				    created() {
@@ -94,6 +98,10 @@ const app = function () {
 			}
 
 			return vm;
+		},
+
+		send(data) {
+			chrome.runtime.sendMessage(data);
 		}
 	}
 }();
