@@ -4,7 +4,8 @@ new Vue({
     el: '#app',
     data: {
         appIsRunning: false,
-        newInputKey: 0
+        newInputKey: 0,
+        lang: 'cn'
     },
     template: `
         <div id="app">
@@ -12,6 +13,10 @@ new Vue({
             <div class="filePicker">
                 <span class="tit">点击插入设计稿</span>
                 <input type="file" @change="insertImg" :key="newInputKey" />
+                <div class="lang">
+					<span @click="lang = 'cn'" :class="{on: lang == 'cn'}">中文</span>
+					<span @click="lang = 'en'" :class="{en: lang == 'en'}">English</span>
+				</div>
             </div>
             <button @click="quit" v-if="appIsRunning"> 退出 </button>
         </div>
@@ -61,8 +66,11 @@ new Vue({
         }
     },
     created() {
-        this.send({type: 'getAppState'}, ({type, state}) => {
-            if (type === 'getAppState') this.appIsRunning = state === 'running'
+        this.send({type: 'getAppState'}, ({type, data}) => {
+            if (type === 'getAppState') {
+                this.appIsRunning = data.state === 'running'
+                this.lang = data.lang;
+			}
         });
     }
 });

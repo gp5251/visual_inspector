@@ -1,0 +1,31 @@
+{
+  "freeze": "Freeze",
+  "show": "Show Image",
+  "realtime": "Realtime",
+  "modes": {
+    "normal": "normal",
+    "multiply": "multiply",
+    "screen": "screen",
+    "overlay": "overlay",
+    "darken": "darken",
+    "lighten": "lighten",
+    "color-dodge": "color-dodge",
+    "color-burn": "color-burn",
+    "hard-light": "hard-light",
+    "soft-light": "soft-light",
+    "difference": "difference",
+    "exclusion": "exclusion",
+    "hue": "hue",
+    "saturation": "saturation",
+    "color": "color",
+    "luminosity": "luminosity"
+  },
+  "quickMatch": {
+    "reset": "reset",
+    "naturalWidth": "natural width",
+    "naturalWidth/2": "half of natural Width",
+    "windowWidthAndHeight": "window's width and height",
+    "pageWidthAndHeight": "page's width and height",
+    "centerInWindow": "center in window"
+  }
+}

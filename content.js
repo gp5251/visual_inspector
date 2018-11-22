@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import App from './Vue/App';
+import i18n from "./locales";
 
 const app = function () {
 	let vm, 
@@ -27,7 +28,7 @@ const app = function () {
 						cb({type, state: true});
 						break;
                     case 'getAppState':
-                        cb({type, state: appState});
+                        cb({type, data: {state: appState}, lang: 'cn'});
                 }
 
 			    return true;
@@ -77,6 +78,7 @@ const app = function () {
 				vm = new Vue({
 					data: { src, restoredData },
 					template: `<App :src = "src" :restoredData="restoredData" />`,
+					i18n,
 				    beforeDestroy() {
 				    	uiCreated = false;
 						appState = 'stopped';

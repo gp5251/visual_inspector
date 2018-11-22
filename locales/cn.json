@@ -1,0 +1,31 @@
+{
+  "freeze": "冻结",
+  "show": "显示",
+  "realtime": "实时",
+  "modes": {
+    "normal": "正常",
+    "multiply": "正片叠底",
+    "screen": "滤色",
+    "overlay": "叠加",
+    "darken": "变暗",
+    "lighten": "变亮",
+    "color-dodge": "颜色减淡",
+    "color-burn": "颜色加深",
+    "hard-light": "强光",
+    "soft-light": "柔光",
+    "difference": "差值",
+    "exclusion": "排除",
+    "hue": "色相",
+    "saturation": "饱和度",
+    "color": "颜色",
+    "luminosity": "亮度"
+  },
+  "quickMatch": {
+    "reset": "重置",
+    "naturalWidth": "原图大小",
+    "naturalWidth/2": "原图大小/2",
+	"windowWidthAndHeight": "窗口大小",
+	"pageWidthAndHeight": "页面大小",
+    "centerInWindow": "窗口居中"
+  }
+}
