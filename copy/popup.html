@@ -32,18 +32,50 @@
             color: white;
         }
         .lang {
-            padding: 5px;
-            text-align: center;
+            padding-top: 2px;
+            text-align: justify;
+            font-size: 12px;
+			/*text-align-last: justify;*/
         }
         .lang span{
             display: inline-block;
-            padding: 5px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-            text-align: center;
-            margin: 0 2px;
-            width: ;
+            line-height: 20px;
+			/*text-align: center;*/
+            /*text-align-last: center;*/
+            /*width: 45%;*/
+            /*position: relative;*/
+            cursor: pointer;
         }
+
+        .lang span:first-child{
+            margin-right: 5px;
+        }
+        /*ff9900*/
+        /*515a6e*/
+        /*c5c8ce*/
+        .lang span::before{
+            content: '';
+            display: inline-block;
+            vertical-align: middle;
+            width: 5px;
+            height: 5px;
+            border-radius: 5px;
+            border: 2px solid #515a6e;
+            background-color: white;
+            margin-right: 5px;
+        }
+
+        .lang span.on{
+			color:#ff9900;
+        }
+
+        .lang span.on::before{
+            border-color: #515a6e;
+            background-color: #ff9900;
+        }
+        /*.lang span.on::before{*/
+			/*content: '';*/
+        /*}*/
     </style>
 </head>
 

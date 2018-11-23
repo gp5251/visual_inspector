@@ -14,7 +14,7 @@ const locales = {
 
 const i18n = new VueI18n({
 	locale: DEFAULT_LANG,
-	messages: locales,
+	messages: locales
 })
 
 export const setup = lang => {

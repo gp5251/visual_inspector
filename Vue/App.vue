@@ -147,9 +147,9 @@
             </div>
 
             <div class="vi_formLine">
-                <Checkbox v-model="freeze" class="vi_freeze">冻结</Checkbox>
-                <Checkbox v-model="showMockup">显示</Checkbox>
-                <Checkbox v-model="useRestore">实时</Checkbox>
+                <Checkbox v-model="freeze" class="vi_freeze">{{ this.$t("freeze") }}</Checkbox>
+                <Checkbox v-model="showMockup">{{ this.$t("show") }}</Checkbox>
+                <Checkbox v-model="useRestore">{{ this.$t("realtime") }}</Checkbox>
             </div>
 
             <div class="vi_formLine vi_blender">
@@ -167,9 +167,9 @@
 
             <div class="vi_formLine vi_quickMatch">
                 <Dropdown trigger="click">
-                    <span class="tit">快速适配 <span class="ico">^</span></span>
+                    <span class="tit">{{ this.$t("quickMatch.quickMatch") }} <span class="ico">^</span></span>
                     <DropdownMenu slot="list">
-                        <DropdownItem @click.native="reset">重置</DropdownItem>
+                        <DropdownItem @click.native="reset">{{ this.$t("quickMatch.reset") }}</DropdownItem>
                         <DropdownItem :key="index" v-for="(item, index) in wTypes" @click.native="wType = index">{{ item }}</DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
@@ -225,7 +225,6 @@
                 opacity: 1,
                 freeze: 0,
                 blendMode: 'normal',
-                wTypes: ['原图大小', '原图大小/2', '窗口宽高', '页面宽高', '窗口居中'],
                 wType: -1,
                 mockup: {
                     width: 0,
@@ -238,26 +237,39 @@
                     height: 0,
                     src: ''
                 },
-                modes: {
-                    normal: '正常',
-                    multiply: '正片叠底',
-                    screen: '滤色',
-                    overlay: '叠加',
-                    darken: '变暗',
-                    lighten: '变亮',
-                    "color-dodge": '颜色减淡',
-                    "color-burn": '颜色加深',
-                    "hard-light": '强光',
-                    "soft-light": '柔光',
-                    difference: '差值',
-                    exclusion: '排除',
-                    hue: '色相',
-                    saturation: '饱和度',
-                    color: '颜色',
-                    luminosity: '亮度',
-                },
                 useRestore: false,
             }, this.restoredData);
+        },
+		computed: {
+			modes() {
+				return {
+					normal: this.$t("modes.normal"),
+					multiply: this.$t("modes.multiply"),
+					screen: this.$t("modes.screen"),
+					overlay: this.$t("modes.overlay"),
+					darken: this.$t("modes.darken"),
+					lighten: this.$t("modes.lighten"),
+					"color-dodge": this.$t("modes.colorDodge"),
+					"color-burn": this.$t("modes.colorBurn"),
+					"hard-light": this.$t("modes.hardLight"),
+					"soft-light": this.$t("modes.softLight"),
+					difference: this.$t("modes.difference"),
+					exclusion: this.$t("modes.exclusion"),
+					hue: this.$t("modes.hue"),
+					saturation: this.$t("modes.saturation"),
+					color: this.$t("modes.color"),
+					luminosity: this.$t("modes.luminosity")
+                }
+			},
+			wTypes(){
+				return [
+					this.$t("quickMatch.naturalWidth"),
+					this.$t("quickMatch.naturalWidth/2"),
+					this.$t("quickMatch.windowWidthAndHeight"),
+					this.$t("quickMatch.pageWidthAndHeight"),
+					this.$t("quickMatch.centerInWindow")
+				]
+            }
         },
         watch: {
             wType(val) {

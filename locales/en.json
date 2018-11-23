@@ -9,10 +9,10 @@
     "overlay": "overlay",
     "darken": "darken",
     "lighten": "lighten",
-    "color-dodge": "color-dodge",
-    "color-burn": "color-burn",
-    "hard-light": "hard-light",
-    "soft-light": "soft-light",
+    "colorDodge": "color-dodge",
+    "colorBurn": "color-burn",
+    "hardLight": "hard-light",
+    "softLight": "soft-light",
     "difference": "difference",
     "exclusion": "exclusion",
     "hue": "hue",
@@ -21,6 +21,7 @@
     "luminosity": "luminosity"
   },
   "quickMatch": {
+    "quickMatch": "fastMatch",
     "reset": "reset",
     "naturalWidth": "natural width",
     "naturalWidth/2": "half of natural Width",

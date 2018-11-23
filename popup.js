@@ -13,11 +13,11 @@ new Vue({
             <div class="filePicker">
                 <span class="tit">点击插入设计稿</span>
                 <input type="file" @change="insertImg" :key="newInputKey" />
-                <div class="lang">
-					<span @click="lang = 'cn'" :class="{on: lang == 'cn'}">中文</span>
-					<span @click="lang = 'en'" :class="{en: lang == 'en'}">English</span>
-				</div>
             </div>
+			<div class="lang">
+				<span @click="changeLang('cn')" :class="{on: lang == 'cn'}">中文</span>
+				<span @click="changeLang('en')" :class="{en: lang == 'en'}">English</span>
+			</div>
             <button @click="quit" v-if="appIsRunning"> 退出 </button>
         </div>
     `,
@@ -26,13 +26,21 @@ new Vue({
             let [file] = e.target.files;
             this.readFileAsDataUrl(file)
                 .then(dataUrl => {
-                    this.send({type: 'insertImg', payload: {dataUrl}}, ({type, state}) => {
+                    this.send({type: 'insertImg', data: {dataUrl}}, ({type, state}) => {
                         if (type === 'insertImg') {
                             this.appIsRunning = !!state;
                             this.newInputKey = Math.random();
                         }
                     });
                 })
+        },
+
+        changeLang(lang) {
+			this.send({type: 'changeLang', data: {lang}}, response => {
+				if (response && response.type === 'changeLang') {
+					this.lang = response.data.lang;
+				}
+			})
         },
 
         dataURLtoBlob(dataUrl) {
@@ -68,7 +76,7 @@ new Vue({
     created() {
         this.send({type: 'getAppState'}, ({type, data}) => {
             if (type === 'getAppState') {
-                this.appIsRunning = data.state === 'running'
+                this.appIsRunning = data.state === 'running';
                 this.lang = data.lang;
 			}
         });

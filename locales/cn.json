@@ -9,10 +9,10 @@
     "overlay": "叠加",
     "darken": "变暗",
     "lighten": "变亮",
-    "color-dodge": "颜色减淡",
-    "color-burn": "颜色加深",
-    "hard-light": "强光",
-    "soft-light": "柔光",
+    "colorDodge": "颜色减淡",
+    "colorBurn": "颜色加深",
+    "hardLight": "强光",
+    "softLight": "柔光",
     "difference": "差值",
     "exclusion": "排除",
     "hue": "色相",
@@ -21,6 +21,7 @@
     "luminosity": "亮度"
   },
   "quickMatch": {
+    "quickMatch": "快速匹配",
     "reset": "重置",
     "naturalWidth": "原图大小",
     "naturalWidth/2": "原图大小/2",

@@ -17,7 +17,7 @@ const app = function () {
                         delete sessionStorage._viDataUrl;
                         if (vm && vm.src) window.URL.revokeObjectURL(vm.src);
 
-                        this.run(request.payload);
+                        this.run(request.data);
                         cb({type, state: true});
                         break;
                     case 'quit':
@@ -28,7 +28,16 @@ const app = function () {
 						cb({type, state: true});
 						break;
                     case 'getAppState':
-                        cb({type, data: {state: appState}, lang: 'cn'});
+                        cb({type, data: {state: appState, lang: 'cn'}});
+                        break;
+					case 'changeLang':
+						if (vm) {
+							vm.$i18n.locale = request.data.lang;
+							cb({type, data: {lang: vm.$i18n.locale}});
+						} else {
+							cb({type, data: {lang: ''}});
+						}
+
                 }
 
 			    return true;
