@@ -4,7 +4,7 @@ import VueI18n from "vue-i18n";
 Vue.use(VueI18n);
 
 const i18n = new VueI18n({
-	locale: 'cn', // 语言标识
+	locale: 'cn',
 	messages: {
 		cn: {
 			insert: "点击插入设计稿",
@@ -56,6 +56,7 @@ new Vue({
 			this.send({type: 'changeLang', data: {lang}}, response => {
 				if (response && response.type === 'changeLang') {
 					this.$i18n.locale = response.data.lang;
+					this.saveLang(response.data.lang);
 				}
 			})
         },
@@ -88,15 +89,32 @@ new Vue({
                     console.log('response', response);
                 });
             });
-        }
+        },
+
+        getLang() {
+        	return new Promise(resolve => {
+				chrome.storage.local.get({lang: 'cn'}, data=>{
+					resolve(data.lang);
+				});
+        	})
+        },
+
+		saveLang(lang) {
+			chrome.storage.local.set({lang}, ()=>{
+				console.log('lang saved');
+			});
+		}
     },
     created() {
-        this.send({type: 'getAppState'}, ({type, data}) => {
-            if (type === 'getAppState') {
-                this.appIsRunning = data.state === 'running';
-                this.$i18n.locale = data.lang;
-			}
-        });
+    	this.getLang().then(lang => {
+			this.$i18n.locale = lang;
+
+			this.send({type: 'appState', data: {lang}}, ({type, data}) => {
+				if (type === 'appState') {
+					this.appIsRunning = data.state === 'running';
+				}
+			});
+		})
     }
 });
 

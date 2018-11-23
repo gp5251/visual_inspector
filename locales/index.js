@@ -6,8 +6,6 @@ import en from "./en";
 Vue.use(VueI18n);
 
 const DEFAULT_LANG = 'cn'
-const LOCALE_KEY = 'localeLanguage'
-
 const locales = {
 	cn, en
 }
@@ -17,14 +15,9 @@ const i18n = new VueI18n({
 	messages: locales
 })
 
-export const setupLang = (lang) => {
-	if (lang === undefined) {
-		lang = window.localStorage.getItem(LOCALE_KEY)
-		if (locales[lang] === undefined) {
-			lang = DEFAULT_LANG
-		}
-	}
-	window.localStorage.setItem(LOCALE_KEY, lang);
+
+export const setupLang = (lang = DEFAULT_LANG) => {
+	if (locales[lang] === undefined) lang = DEFAULT_LANG;
 	Vue.config.lang = lang;
 	i18n.locale = lang;
 }

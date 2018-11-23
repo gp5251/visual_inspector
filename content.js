@@ -10,7 +10,7 @@ const app = function () {
 	return {
 		init() {
 			chrome.runtime.onMessage.addListener((request, sender, cb) => {
-				let {type} = request;
+				let {type, data} = request;
 
 				switch (type) {
 					case 'insertImg':
@@ -18,7 +18,7 @@ const app = function () {
                         delete sessionStorage._viDataUrl;
                         if (vm && vm.src) window.URL.revokeObjectURL(vm.src);
 
-                        this.run(request.data);
+                        this.run(data);
                         cb({type, state: true});
                         break;
                     case 'quit':
@@ -28,12 +28,13 @@ const app = function () {
 					case 'getAppStateFromBg':
 						cb({type, state: true});
 						break;
-                    case 'getAppState':
-                        cb({type, data: {state: appState, lang: i18n.locale}});
+                    case 'appState':
+                    	if (data.lang) setupLang(data.lang);
+                        cb({type, data: {state: appState}});
                         break;
 					case 'changeLang':
-						setupLang(request.data.lang);
-						cb({type, data: {lang: request.data.lang}});
+						setupLang(data.lang);
+						cb({type, data: {lang: data.lang}});
                 }
 
 			    return true;
@@ -44,9 +45,21 @@ const app = function () {
             if (sessionStorage._viData && sessionStorage._viDataUrl) {
                 let viData = JSON.parse(sessionStorage._viData);
                 let dataUrl = sessionStorage._viDataUrl;
-                this.run({dataUrl, ...viData});
+                this.getLang().then(lang => {
+                	setupLang(lang);
+					this.run({dataUrl, ...viData});
+				})
 			}
         },
+
+		getLang() {
+			return new Promise(resolve => {
+				chrome.storage.local.get({lang: 'cn'}, data=>{
+					resolve(data.lang);
+				});
+			})
+		},
+
 		getImgSrc(dataUrl) {
             let blobObj = this.dataURLtoBlob(dataUrl);
             return URL.createObjectURL(blobObj);
