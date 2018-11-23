@@ -115,6 +115,10 @@
             }
         }
     }
+
+    .vi_lang_en /deep/ .vi-ivu-dropdown .vi-ivu-dropdown-item{
+		line-height: 20px;
+    }
 </style>
 
 <template>
