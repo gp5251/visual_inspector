@@ -1,87 +1,75 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>FeHelper</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <link rel="stylesheet" type="text/css" media="screen" href="popup.css" /> -->
-    <style>
-        *{ padding: 0; margin: 0; }
-        h3{padding-bottom: 5px; font-size: 14px; color: #2d8cf0;}
-        #app{ padding: 5px; white-space: nowrap;}
-        .filePicker{ padding-top: 5px; position: relative;white-space: nowrap;}
-        .filePicker .tit{ display: inline-block;
-            width: 100%;
-            background-color: #2d8cf0;
-            text-align: center;
-            line-height: 30px;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 3px;
-            font-size: 12px;
-            box-sizing: border-box;
-        }
-        .filePicker input{ opacity: 0; width: 100%; height: 100%; position: absolute; left: 0; top: 0; }
-        button{
-            margin-top: 5px;
-            width: 100%;
-            height: 30px;
-            border-radius: 3px;
-            background-color: #808695;
-            color: white;
-        }
-        .lang {
-            padding-top: 3px;
-            text-align: justify;
-            font-size: 12px;
-			/*text-align-last: justify;*/
-            text-align: center;
-        }
-        .lang span{
-            display: inline-block;
-            line-height: 20px;
-			/*text-align: center;*/
-            /*text-align-last: center;*/
-            /*width: 45%;*/
-            /*position: relative;*/
-            cursor: pointer;
-        }
+<meta charset="utf-8" />
+<style>
+	*{ padding: 0; margin: 0; }
+	h3{padding-bottom: 5px; font-size: 14px; color: #2d8cf0;
+		text-align: center;}
+	#app{ padding: 5px; white-space: nowrap;}
+	.filePicker{ padding-top: 5px; position: relative;white-space: nowrap;
+		min-width: 150px;}
+	.filePicker .tit{ display: inline-block;
+		width: 100%;
+		background-color: #2d8cf0;
+		text-align: center;
+		line-height: 30px;
+		color: white;
+		padding: 5px 10px;
+		border-radius: 3px;
+		font-size: 12px;
+		box-sizing: border-box;
+	}
+	.filePicker input{ opacity: 0; width: 100%; height: 100%; position: absolute; left: 0; top: 0; }
+	button{
+		margin-top: 5px;
+		width: 100%;
+		height: 30px;
+		border-radius: 3px;
+		background-color: #808695;
+		color: white;
+	}
+	.lang {
+		padding-top: 3px;
+		text-align: justify;
+		font-size: 12px;
+		/*text-align-last: justify;*/
+		text-align: center;
+	}
+	.lang span{
+		display: inline-block;
+		line-height: 20px;
+		/*text-align: center;*/
+		/*text-align-last: center;*/
+		/*width: 45%;*/
+		/*position: relative;*/
+		cursor: pointer;
+	}
 
-        .lang span:first-child{
-            margin-right: 5px;
-        }
-        /*ff9900*/
-        /*515a6e*/
-        /*c5c8ce*/
-        .lang span::before{
-            content: '';
-            display: inline-block;
-            vertical-align: middle;
-            width: 5px;
-            height: 5px;
-            border-radius: 5px;
-            border: 2px solid #515a6e;
-            background-color: white;
-            margin-right: 5px;
-        }
+	.lang span:first-child{
+		margin-right: 5px;
+	}
+	/*ff9900*/
+	/*515a6e*/
+	/*c5c8ce*/
+	.lang span::before{
+		content: '';
+		display: inline-block;
+		vertical-align: middle;
+		width: 5px;
+		height: 5px;
+		border-radius: 5px;
+		border: 2px solid #515a6e;
+		background-color: white;
+		margin-right: 5px;
+	}
 
-        .lang span.on{
-			color:#ff9900;
-        }
+	.lang span.on{
+		color:#ff9900;
+	}
 
-        .lang span.on::before{
-            border-color: #515a6e;
-            background-color: #ff9900;
-        }
-        /*.lang span.on::before{*/
-			/*content: '';*/
-        /*}*/
-    </style>
-</head>
+	.lang span.on::before{
+		border-color: #515a6e;
+		background-color: #ff9900;
+	}
+</style>
 
-<body>
-    <div id="app"></div>
-    <script src="popup.js"></script>
-</body>
-</html>
+<div id="app"></div>
+<script src="popup.js"></script>

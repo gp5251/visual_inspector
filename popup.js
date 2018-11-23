@@ -11,7 +11,7 @@ const i18n = new VueI18n({
             quit: '退出'
         },
         en: {
-			insert: "Insert Mockup",
+			insert: "Click here to insert mockup",
 			quit: 'Quit'
         }
     }

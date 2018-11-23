@@ -6,6 +6,7 @@ const app = function () {
 	let vm, 
 		uiCreated = false,
 		appState = 'stopped';
+
 	return {
 		init() {
 			chrome.runtime.onMessage.addListener((request, sender, cb) => {
