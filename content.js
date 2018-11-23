@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import App from './Vue/App';
-import i18n from "./locales";
+import i18n, {setupLang} from "./locales";
 
 const app = function () {
 	let vm, 
@@ -28,16 +28,11 @@ const app = function () {
 						cb({type, state: true});
 						break;
                     case 'getAppState':
-                        cb({type, data: {state: appState, lang: 'cn'}});
+                        cb({type, data: {state: appState, lang: i18n.locale}});
                         break;
 					case 'changeLang':
-						if (vm) {
-							vm.$i18n.locale = request.data.lang;
-							cb({type, data: {lang: vm.$i18n.locale}});
-						} else {
-							cb({type, data: {lang: ''}});
-						}
-
+						setupLang(request.data.lang);
+						cb({type, data: {lang: request.data.lang}});
                 }
 
 			    return true;
@@ -51,7 +46,6 @@ const app = function () {
                 this.run({dataUrl, ...viData});
 			}
         },
-
 		getImgSrc(dataUrl) {
             let blobObj = this.dataURLtoBlob(dataUrl);
             return URL.createObjectURL(blobObj);
@@ -85,8 +79,13 @@ const app = function () {
 		createUI(src, restoredData = {}) {
 			if (!uiCreated) {
 				vm = new Vue({
-					data: { src, restoredData },
-					template: `<App :src = "src" :restoredData="restoredData" />`,
+					data: {src, restoredData},
+					template: `<App :class="lang" :src = "src" :restoredData="restoredData" />`,
+					computed: {
+						lang() {
+							return 'vi_lang_' + this.$i18n.locale
+						}
+					},
 					i18n,
 				    beforeDestroy() {
 				    	uiCreated = false;

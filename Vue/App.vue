@@ -265,9 +265,9 @@
 				return [
 					this.$t("quickMatch.naturalWidth"),
 					this.$t("quickMatch.naturalWidth/2"),
-					this.$t("quickMatch.windowWidthAndHeight"),
-					this.$t("quickMatch.pageWidthAndHeight"),
-					this.$t("quickMatch.centerInWindow")
+					this.$t("quickMatch.fullScreen"),
+					this.$t("quickMatch.fullPage"),
+					this.$t("quickMatch.centerInScreen")
 				]
             }
         },

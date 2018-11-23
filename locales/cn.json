@@ -25,8 +25,8 @@
     "reset": "重置",
     "naturalWidth": "原图大小",
     "naturalWidth/2": "原图大小/2",
-	"windowWidthAndHeight": "窗口大小",
-	"pageWidthAndHeight": "页面大小",
-    "centerInWindow": "窗口居中"
+	"fullScreen": "窗口大小",
+	"fullPage": "页面大小",
+    "centerInScreen": "窗口居中"
   }
 }

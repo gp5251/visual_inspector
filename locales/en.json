@@ -1,6 +1,6 @@
 {
   "freeze": "Freeze",
-  "show": "Show Image",
+  "show": "ShowMockup",
   "realtime": "Realtime",
   "modes": {
     "normal": "normal",
@@ -21,12 +21,12 @@
     "luminosity": "luminosity"
   },
   "quickMatch": {
-    "quickMatch": "fastMatch",
-    "reset": "reset",
-    "naturalWidth": "natural width",
-    "naturalWidth/2": "half of natural Width",
-    "windowWidthAndHeight": "window's width and height",
-    "pageWidthAndHeight": "page's width and height",
-    "centerInWindow": "center in window"
+    "quickMatch": "Fast Adaptation",
+    "reset": "Reset",
+    "naturalWidth": "Natural Width",
+    "naturalWidth/2": "Natural Width / 2",
+    "fullScreen": "Full Screen",
+    "fullPage": "Full Page",
+    "centerInScreen": "Center In Screen"
   }
 }

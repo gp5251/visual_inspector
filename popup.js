@@ -1,24 +1,41 @@
 import Vue from 'vue';
+import VueI18n from "vue-i18n";
+
+Vue.use(VueI18n);
+
+const i18n = new VueI18n({
+	locale: 'cn', // 语言标识
+	messages: {
+		cn: {
+			insert: "点击插入设计稿",
+            quit: '退出'
+        },
+        en: {
+			insert: "Insert Mockup",
+			quit: 'Quit'
+        }
+    }
+});
 
 new Vue({
     el: '#app',
+    i18n,
     data: {
         appIsRunning: false,
-        newInputKey: 0,
-        lang: 'cn'
+        newInputKey: 0
     },
     template: `
         <div id="app">
             <h3>Visual Inspector</h3>
             <div class="filePicker">
-                <span class="tit">点击插入设计稿</span>
+                <span class="tit">{{ $t("insert") }}</span>
                 <input type="file" @change="insertImg" :key="newInputKey" />
             </div>
+            <button @click="quit" v-if="appIsRunning"> {{ $t("quit") }} </button>
 			<div class="lang">
-				<span @click="changeLang('cn')" :class="{on: lang == 'cn'}">中文</span>
-				<span @click="changeLang('en')" :class="{en: lang == 'en'}">English</span>
+				<span @click="changeLang('cn')" :class="{on: $i18n.locale == 'cn'}">中文</span>
+				<span @click="changeLang('en')" :class="{on: $i18n.locale == 'en'}">English</span>
 			</div>
-            <button @click="quit" v-if="appIsRunning"> 退出 </button>
         </div>
     `,
     methods: {
@@ -38,7 +55,7 @@ new Vue({
         changeLang(lang) {
 			this.send({type: 'changeLang', data: {lang}}, response => {
 				if (response && response.type === 'changeLang') {
-					this.lang = response.data.lang;
+					this.$i18n.locale = response.data.lang;
 				}
 			})
         },
@@ -77,7 +94,7 @@ new Vue({
         this.send({type: 'getAppState'}, ({type, data}) => {
             if (type === 'getAppState') {
                 this.appIsRunning = data.state === 'running';
-                this.lang = data.lang;
+                this.$i18n.locale = data.lang;
 			}
         });
     }
