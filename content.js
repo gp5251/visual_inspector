@@ -5,7 +5,8 @@ import i18n, {setupLang} from "./locales";
 const app = function () {
 	let vm, 
 		uiCreated = false,
-		appState = 'stopped';
+		appState = 'stopped',
+		useBlob;
 
 	return {
 		init() {
@@ -16,7 +17,7 @@ const app = function () {
 					case 'insertImg':
                         delete sessionStorage._viData;
                         delete sessionStorage._viDataUrl;
-                        if (vm && vm.src) window.URL.revokeObjectURL(vm.src);
+                        if (vm && vm.src) useBlob && window.URL.revokeObjectURL(vm.src);
 
                         this.run(data);
                         cb({type, state: true});
@@ -50,6 +51,12 @@ const app = function () {
 					this.run({dataUrl, ...viData});
 				})
 			}
+
+			this.checkCSPForGlob().then(()=>{
+				useBlob = true;
+			}, ()=>{
+				useBlob = false;
+			});
         },
 
 		getLang() {
@@ -61,9 +68,24 @@ const app = function () {
 		},
 
 		getImgSrc(dataUrl) {
-            let blobObj = this.dataURLtoBlob(dataUrl);
-            return URL.createObjectURL(blobObj);
-            // return dataUrl;
+			if (useBlob) {
+				let blobObj = this.dataURLtoBlob(dataUrl);
+				return URL.createObjectURL(blobObj);
+			} else {
+				return dataUrl;
+			}
+		},
+
+		checkCSPForGlob() {
+			return new Promise((resolve, reject) => {
+				let dataUrl = document.createElement('canvas').toDataURL();
+				let blobUrl = this.dataURLtoBlob(dataUrl);
+				let imgSrc = window.createObjectURL(blobUrl);
+				let img = new Image;
+				img.onerror = reject;
+				img.onload = resolve;
+				img.src = imgSrc;
+			});
 		},
 
         dataURLtoBlob(dataUrl) {
@@ -104,7 +126,7 @@ const app = function () {
 				    beforeDestroy() {
 				    	uiCreated = false;
 						appState = 'stopped';
-						window.URL.revokeObjectURL(vm.src);
+						useBlob && window.URL.revokeObjectURL(vm.src);
 						vm.$el.remove();
 				    },
 				    created() {
