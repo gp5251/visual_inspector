@@ -6,7 +6,7 @@ const app = function () {
 	let vm, 
 		uiCreated = false,
 		appState = 'stopped',
-		cspBlockedBlob = false;
+		cspBlockedBlob = -1;
 
 	return {
 		init() {
@@ -17,7 +17,7 @@ const app = function () {
 					case 'insertImg':
                         delete sessionStorage._viData;
                         delete sessionStorage._viDataUrl;
-                        if (vm && vm.src && !cspBlockedBlob) window.URL.revokeObjectURL(vm.src);
+                        if (vm && vm.src && cspBlockedBlob === 0) window.URL.revokeObjectURL(vm.src);
 
                         this.run(data);
                         cb({type, state: true});
@@ -72,13 +72,18 @@ const app = function () {
 		},
 
 		async getImgSrc(dataUrl) {
-			if (cspBlockedBlob) return dataUrl;
+			if (cspBlockedBlob === 1) return dataUrl;
+			else if (cspBlockedBlob === 0) {
+				let blobObj = this.dataURLtoBlob(dataUrl);
+				return window.URL.createObjectURL(blobObj);
+			}
 
 			try {
 				let d = await this.checkCSPForGlob(dataUrl);
+				cspBlockedBlob = 0;
 				return d;
 			} catch (err) {
-				cspBlockedBlob = true;
+				cspBlockedBlob = 1;
 				return dataUrl;
 			}
 		},
@@ -145,7 +150,7 @@ const app = function () {
 				    beforeDestroy() {
 				    	uiCreated = false;
 						appState = 'stopped';
-						!cspBlockedBlob && window.URL.revokeObjectURL(vm.src);
+						cspBlockedBlob === 0 && window.URL.revokeObjectURL(vm.src);
 						vm.$el.remove();
 				    },
 				    created() {
