@@ -6,7 +6,7 @@ const app = function () {
 	let vm, 
 		uiCreated = false,
 		appState = 'stopped',
-		useBlob;
+		cspBlockedBlob = false;
 
 	return {
 		init() {
@@ -17,7 +17,7 @@ const app = function () {
 					case 'insertImg':
                         delete sessionStorage._viData;
                         delete sessionStorage._viDataUrl;
-                        if (vm && vm.src) useBlob && window.URL.revokeObjectURL(vm.src);
+                        if (vm && vm.src && !cspBlockedBlob) window.URL.revokeObjectURL(vm.src);
 
                         this.run(data);
                         cb({type, state: true});
@@ -52,11 +52,15 @@ const app = function () {
 				})
 			}
 
-			this.checkCSPForGlob().then(()=>{
-				useBlob = true;
-			}, ()=>{
-				useBlob = false;
-			});
+			// can not detect first ???
+			// this.checkCSPForGlob()
+			// 	.then(()=>{
+			// 		console.log('not blocked')
+			// 		cspBlockedBlob = false;
+			// 	}, ()=>{
+			// 		console.log('blocked')
+			// 		cspBlockedBlob = true;
+			// 	})
         },
 
 		getLang() {
@@ -67,25 +71,39 @@ const app = function () {
 			})
 		},
 
-		getImgSrc(dataUrl) {
-			if (useBlob) {
-				let blobObj = this.dataURLtoBlob(dataUrl);
-				return URL.createObjectURL(blobObj);
-			} else {
+		async getImgSrc(dataUrl) {
+			if (cspBlockedBlob) return dataUrl;
+
+			try {
+				let d = await this.checkCSPForGlob(dataUrl);
+				return d;
+			} catch (err) {
+				cspBlockedBlob = true;
 				return dataUrl;
 			}
 		},
 
-		checkCSPForGlob() {
+		checkCSPForGlob(dataUrl) {
 			return new Promise((resolve, reject) => {
-				let dataUrl = document.createElement('canvas').toDataURL();
-				let blobUrl = this.dataURLtoBlob(dataUrl);
-				let imgSrc = window.createObjectURL(blobUrl);
-				let img = new Image;
-				img.onerror = reject;
-				img.onload = resolve;
-				img.src = imgSrc;
-			});
+				let handleCspOnce = function(e) {
+					if (e.blockedURI === 'blob' && e.violatedDirective === 'img-src') reject();
+					document.removeEventListener("securitypolicyviolation", handleCspOnce);
+					div.remove();
+				};
+				let blobObj = this.dataURLtoBlob(dataUrl);
+				let url = window.URL.createObjectURL(blobObj);
+				let div = document.createElement('div');
+				div.style.cssText=`
+					width: 100px;
+					height: 100px;
+					background: url(${url});
+				`;
+				document.body.appendChild(div);
+				document.addEventListener("securitypolicyviolation", handleCspOnce);
+				setTimeout(function (){
+				    resolve(url)
+				}, 200);
+			})
 		},
 
         dataURLtoBlob(dataUrl) {
@@ -95,8 +113,9 @@ const app = function () {
             return new Blob([u8arr], {type: mime});
         },
 
-		run({dataUrl, ...data}) {
-			let src = this.getImgSrc(dataUrl);
+		async run({dataUrl, ...data}) {
+			let src = await this.getImgSrc(dataUrl);
+
             if (vm) {
                 vm.src = src;
 			} else {
@@ -126,7 +145,7 @@ const app = function () {
 				    beforeDestroy() {
 				    	uiCreated = false;
 						appState = 'stopped';
-						useBlob && window.URL.revokeObjectURL(vm.src);
+						!cspBlockedBlob && window.URL.revokeObjectURL(vm.src);
 						vm.$el.remove();
 				    },
 				    created() {
