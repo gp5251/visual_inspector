@@ -280,19 +280,34 @@
                 let mockup = this.mockup;
                 switch (val) {
                     case 0:
-                        this.moveAndResize({width: this.img.width, height: this.img.height});
+                        this.moveAndResize({
+                            width: this.img.width,
+                            height: this.img.height
+                        });
                         break;
                     case 1:
-                        this.moveAndResize({width: this.img.width / 2, height: this.img.height / 2});
+                        this.moveAndResize({
+                            width: this.img.width / 2,
+                            height: this.img.height / 2
+                        });
                         break;
                     case 2:
-                        this.moveAndResize({width: window.innerWidth, height: window.innerHeight});
+                        this.moveAndResize({
+                            width: window.innerWidth,
+                            height: window.innerHeight
+                        });
                         break;
                     case 3:
-                        this.moveAndResize({width: window.innerWidth, height: document.documentElement.scrollHeight});
+                        this.moveAndResize({
+                            width: window.innerWidth,
+                            height: document.documentElement.scrollHeight
+                        });
                         break;
                     case 4:
-                        this.moveAndResize({left: Math.max(0, (window.innerWidth - mockup.width) / 2), top: Math.max(0, (window.innerHeight - mockup.height) / 2 + window.scrollY)});
+                        this.moveAndResize({
+                            left: Math.max(0, (window.innerWidth - mockup.width) / 2),
+                            top: Math.max(0, (window.innerHeight - mockup.height) / 2 + Math.max(document.documentElement.scrollTop, document.body.scrollTop))
+                        });
                 }
             },
             src: {
@@ -398,9 +413,16 @@
             },
 
             reset() {
-                this.moveAndResize({left: 0, top: 0});
-                if (this.img.width > window.innerWidth) this.wType = 2;
-                else this.wType = 0;
+            	let width, height;
+                if (this.img.width > window.innerWidth) {
+					width = window.innerWidth;
+					height = this.img.height / (this.img.width / width);
+				} else {
+                	width = this.img.width;
+                	height = this.img.height;
+				}
+
+				this.moveAndResize({left: 0, top: 0, width, height});
             },
 
             moveAndResize(rect) {
