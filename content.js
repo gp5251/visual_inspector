@@ -106,6 +106,7 @@ const app = function () {
 				document.body.appendChild(div);
 				document.addEventListener("securitypolicyviolation", handleCspOnce);
 				setTimeout(function (){
+					div.remove();
 				    resolve(url)
 				}, 200);
 			})
