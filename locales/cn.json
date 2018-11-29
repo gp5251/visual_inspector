@@ -2,6 +2,7 @@
   "freeze": "冻结",
   "show": "显示",
   "realtime": "实时",
+  "ruler": "测量",
   "modes": {
     "normal": "正常",
     "multiply": "正片叠底",

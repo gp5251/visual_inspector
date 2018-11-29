@@ -2,6 +2,7 @@
   "freeze": "Freeze",
   "show": "ShowMockup",
   "realtime": "Realtime",
+  "ruler": "Measure",
   "modes": {
     "normal": "normal",
     "multiply": "multiply",

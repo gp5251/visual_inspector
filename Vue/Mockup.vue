@@ -2,7 +2,7 @@
     .vi_mockup {
         width: 100%;
         height: 100%;
-        z-index: 99997;
+        z-index: 99990;
         position: absolute;
         left: 0;
         top: 0;

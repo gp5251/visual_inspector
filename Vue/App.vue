@@ -16,7 +16,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            z-index: 99998;
+            z-index: 99999;
             padding: 5px;
             text-shadow: 1px 1px 0 white;
             border-top: 1px solid #ddd;
@@ -143,6 +143,8 @@
             v-if="img.src"
             v-show="showMockup"/>
 
+        <Ruler v-if="showRuler" />
+
         <div class="vi_controllers" v-if="showPanel">
             <h3>Visual Inspector</h3>
 
@@ -154,6 +156,7 @@
                 <Checkbox v-model="freeze" class="vi_freeze">{{ this.$t("freeze") }}</Checkbox>
                 <Checkbox v-model="showMockup">{{ this.$t("show") }}</Checkbox>
                 <Checkbox v-model="useRestore">{{ this.$t("realtime") }}</Checkbox>
+				<Checkbox v-model="showRuler">{{ this.$t("ruler") }}</Checkbox>
             </div>
 
             <div class="vi_formLine vi_blender">
@@ -199,13 +202,14 @@
     import DropdownItem from '../iview/components/dropdown-item';
     import {throttle} from "../utils";
     import '../iview/iview.css';
+	import Ruler from "./Ruler";
 
-    export default {
+
+
+	export default {
         name: "App",
         components: {
-            Checkbox, Slider, Dropdown, DropdownMenu, DropdownItem,
-            // FloatingBar,
-            Mockup
+            Checkbox, Slider, Dropdown, DropdownMenu, DropdownItem, Mockup, Ruler
         },
         props: {
             src : {
@@ -242,6 +246,7 @@
                     src: ''
                 },
                 useRestore: false,
+                showRuler: false,
             }, this.restoredData);
         },
 		computed: {
@@ -381,6 +386,7 @@
                 if (e.key === 'h') this.showMockup = !this.showMockup;
                 if (e.key === 'f') this.showPanel = !this.showPanel;
                 if (e.key === 'd') this.freeze = !this.freeze;
+				if (e.key === 'm') this.showRuler = !this.showRuler;
             },
 
             fastOpacity(e) {
