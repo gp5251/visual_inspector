@@ -1,6 +1,6 @@
 {
   "name": "Visual_Inspector",
-  "version": "1.3.3",
+  "version": "1.3.5",
   "description": "A helper tool for fast front-end development and visual inspection.",
   "main": "content.js",
   "scripts": {
