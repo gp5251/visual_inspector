@@ -86,7 +86,7 @@
             }
         }
         .vi_opacity{
-            min-width: 20%;
+            min-width: 15%;
             padding-right: 12px;
 
             .vi_slider{
@@ -134,6 +134,7 @@
             :opacity="opacity"
             :blendMode="blendMode"
             :freeze="freeze"
+            :showRuler="showRuler"
             :src="img.src"
             :w="mockup.width"
             :h="mockup.height"

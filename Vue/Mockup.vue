@@ -11,7 +11,7 @@
         touch-action: none;
         will-change: translate, width, height;
 
-        &.freeze{
+        &.static{
             background-color: transparent;
 
             &::after{
@@ -44,7 +44,7 @@
 </style>
 
 <template>
-    <div class="vi_mockup" :class="{freeze}" :style="mockupStyle"></div>
+    <div class="vi_mockup" :class="{static: freeze || showRuler}" :style="mockupStyle"></div>
 </template>
 
 <script>
@@ -53,7 +53,7 @@
 
     export default {
         name: "Mockup",
-        props: ['src', 'opacity', 'freeze', 'blendMode', 'w', 'h', 'x', 'y'],
+        props: ['src', 'opacity', 'freeze', 'showRuler', 'blendMode', 'w', 'h', 'x', 'y'],
         watch: {
             x(val) {
                 this.$el.setAttribute('data-x', val);

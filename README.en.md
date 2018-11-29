@@ -39,9 +39,10 @@
 
 ### This plugin also supports shortcut key operations:
 
-- h: quickly show or hide mockup
-- f: Quickly show or hide the bottom toolbar
-- d: fast freeze or unfreeze mockup
+- h: show or hide mockup
+- f: show or hide the bottom toolbar
+- d: freeze or unfreeze mockup
+- m: enable or disable measurement
 - Number keys (0-9): Quickly set the mockup transparency. For example, if you press 5 twice in 1 second, the transparency of the mockup will be set at 55%. If only the number key is pressed once in 1 second, such as 5, it will automatically fill 0 after one second, that is, set the mockup transparency to 50%.
 - Arrow keys: Move the mockup and move 1px at a time. If you press the Shift key at the same time, you will move 10px at a time.
 

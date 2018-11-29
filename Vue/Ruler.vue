@@ -24,10 +24,11 @@
 				background-color: rgba(237,237,237,1);
 				border-radius: 3px;
 				padding: 2px 3px;
+				line-height: 1;
 			}
 
 			.close{
-				text-shadow: 0 0 2px white;
+				line-height: 1;
 				position: absolute;
 				right: 2px;
 				top: 2px;
@@ -35,6 +36,7 @@
 				background-color: gray;
 				cursor: pointer;
 				padding: 2px;
+				color: rgba(237,237,237,1);
 			}
 		}
     }
@@ -69,6 +71,7 @@
 			let ey = e.touches ? e.touches[0].clientY : e.clientY;
 			let w = ex - item._x;
 			let h = ey - item._y;
+
 			if (w > 0) {
 				item.w = w;
 				item.x = item._x;
@@ -76,6 +79,7 @@
 				item.w = Math.abs(w);
 				item.x = item._x + w;
 			}
+
 			if (h > 0) {
 				item.h = h;
 				item.y = item._y;
@@ -84,7 +88,7 @@
 				item.y = item._y + h;
 			}
 		}
-	}, 50);
+	}, 32);
 
 	export default {
         name: "Ruler",
