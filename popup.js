@@ -29,7 +29,7 @@ new Vue({
             <h3>Visual Inspector</h3>
             <div class="filePicker">
                 <span class="tit">{{ $t("insert") }}</span>
-                <input type="file" @change="insertImg" :key="newInputKey" />
+                <input type="file" @change="insertImg" :key="newInputKey" accept="image/*" />
             </div>
             <button @click="quit" v-if="appIsRunning"> {{ $t("quit") }} </button>
 			<div class="lang">
