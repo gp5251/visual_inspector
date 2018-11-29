@@ -16,7 +16,7 @@
     "default_popup": "popup_loading.html"
   },
   "permissions": [
-    "storage", "tabs", "http://*/*", "https://*/*"
+    "unlimitedStorage", "storage", "tabs", "http://*/*", "https://*/*"
   ],
   "content_scripts": [
     {

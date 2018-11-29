@@ -15,8 +15,7 @@ const app = function () {
 
 				switch (type) {
 					case 'insertImg':
-                        delete sessionStorage._viData;
-                        delete sessionStorage._viDataUrl;
+						chrome.storage.local.remove(['_viData', '_viDataUrl', '_url']);
                         if (vm && vm.src && cspBlockedBlob === 0) window.URL.revokeObjectURL(vm.src);
 
                         this.run(data);
@@ -43,14 +42,17 @@ const app = function () {
 
 			this.send({type: 'appLoaded'});
 
-            if (sessionStorage._viData && sessionStorage._viDataUrl) {
-                let viData = JSON.parse(sessionStorage._viData);
-                let dataUrl = sessionStorage._viDataUrl;
-                this.getLang().then(lang => {
-                	setupLang(lang);
-					this.run({dataUrl, ...viData});
-				})
-			}
+			chrome.storage.local.get(['_viData', '_viDataUrl', '_url'], ({_viData, _viDataUrl, _url}) => {
+				if (_url === location.href && _viData && _viDataUrl) {
+					let viData = JSON.parse(_viData);
+					let dataUrl = _viDataUrl;
+					this.getLang().then(lang => {
+						setupLang(lang);
+						this.run({dataUrl, ...viData});
+					})
+				}
+			});
+
 
 			// can not detect first ???
 			// this.checkCSPForGlob()
@@ -130,7 +132,7 @@ const app = function () {
                 this.createUI(src, data).$mount(rootEl);
 			}
 
-            sessionStorage._viDataUrl = dataUrl;
+            chrome.storage.local.set({_viDataUrl: dataUrl, _url: location.href})
 		},
 
 		quit() {
