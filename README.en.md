@@ -47,4 +47,4 @@
 - Arrow keys: Move the mockup and move 1px at a time. If you press the Shift key at the same time, you will move 10px at a time.
 
 ### Tips:
-If the shortcut does not work, please check if the current page's focus is inside other form controls (such as input, textarea...)? The easiest way, click on the blank area and to try again :)
+If the shortcut does not work, please check if the current page's focus is inside other form controls (such as input, textarea...)? The easiest way, click on the mockup and to try again :)
