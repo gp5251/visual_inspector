@@ -101,6 +101,7 @@ const app = function () {
 				let url = window.URL.createObjectURL(blobObj);
 				let div = document.createElement('div');
 				div.style.cssText=`
+					display:none;
 					width: 100px;
 					height: 100px;
 					background: url(${url});
