@@ -25,9 +25,9 @@
     "quickMatch": "快速匹配",
     "reset": "重置",
     "naturalWidth": "原图大小",
-    "naturalWidth/2": "原图大小/2",
-	"fullScreen": "窗口宽度",
-	"fullPage": "页面宽度",
+    "naturalWidth/2": "原图一半",
+    "naturalWidth*2": "原图两倍",
+	"windowWidth": "窗口宽度",
     "centerInScreen": "窗口居中"
   },
   "tip": {

@@ -276,8 +276,8 @@
 				return [
 					this.$t("quickMatch.naturalWidth"),
 					this.$t("quickMatch.naturalWidth/2"),
-					this.$t("quickMatch.fullScreen"),
-					this.$t("quickMatch.fullPage"),
+					this.$t("quickMatch.naturalWidth*2"),
+					this.$t("quickMatch.windowWidth"),
 					this.$t("quickMatch.centerInScreen")
 				]
             }
@@ -301,31 +301,30 @@
             wType(val) {
                 let mockup = this.mockup;
                 switch (val) {
-                    case 0:
+                    case 0: // 原图大小
                         this.moveAndResize({
                             width: this.img.width,
                             height: this.img.height
                         });
                         break;
-                    case 1:
+                    case 1: // 原图一半大小
                         this.moveAndResize({
                             width: this.img.width / 2,
                             height: this.img.height / 2
                         });
                         break;
-                    case 2:
-                        this.moveAndResize({
-                            width: window.innerWidth,
-                            height: window.innerHeight
-                        });
+					case 2: // 原图两倍
+						this.moveAndResize({
+							width: this.img.width * 2,
+							height: this.img.height * 2
+						});
+						break;
+                    case 3: // 窗口宽度
+						let width = window.innerWidth,
+							height = this.img.height / (this.img.width / width);
+						this.moveAndResize({left: 0, top: 0, width, height});
                         break;
-                    case 3:
-                        this.moveAndResize({
-                            width: window.innerWidth,
-                            height: document.documentElement.scrollHeight
-                        });
-                        break;
-                    case 4:
+                    case 4: // 窗口居中
                         this.moveAndResize({
                             left: Math.max(0, (window.innerWidth - mockup.width) / 2),
                             top: Math.max(0, (window.innerHeight - mockup.height) / 2 + Math.max(document.documentElement.scrollTop, document.body.scrollTop))
@@ -404,11 +403,18 @@
                 if (e.key === 'f' || e.which === 70) this.showPanel = !this.showPanel;
                 if (e.key === 'd' || e.which === 68) this.freeze = !this.freeze;
 				if (e.key === 'm' || e.which === 77) this.showRuler = !this.showRuler;
-				// if (e.key === 'Backspace' || e.which === 8) this.$emit('quit');
+
+				if (e.ctrlKey) {
+					if (e.key === '0' || e.which === 48) this.reset();
+					if (e.key === '1' || e.which === 49) this.wType = 0;
+					if (e.key === '2' || e.which === 50) this.wType = 1;
+					if (e.key === '3' || e.which === 51) this.wType = 2;
+					if (e.key === '4' || e.which === 52) this.wType = 3;
+                }
             },
 
             fastOpacity(e) {
-                if (e.target.tagName.toLowerCase() !== 'body') return;
+                if (e.target.tagName.toLowerCase() !== 'body' || e.ctrlKey || e.shiftKey) return;
                 if (+e.key >= 0) {
                     if (this._tid) clearTimeout(this._tid);
                     if (!this._fastOpacity) this._fastOpacity = [];
@@ -518,7 +524,6 @@
             window.scrollTo(0, 0);
             this.bindEvs();
             this.insertCss();
-
         },
         beforeDestroy() {
             this.unBindEvs();

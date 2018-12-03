@@ -26,8 +26,8 @@
     "reset": "Reset",
     "naturalWidth": "Natural Width",
     "naturalWidth/2": "Natural Width / 2",
-    "fullScreen": "Full Screen",
-    "fullPage": "Full Page",
+	"naturalWidth*2": "Natural Width * 2",
+    "windowWidth": "Window Width",
     "centerInScreen": "Center In Screen"
   },
   "tip": {

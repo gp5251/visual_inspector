@@ -33,8 +33,8 @@
 	- Reset, which is also the default way to show the mockup. When the mockup is inserted into the page, if the original size of the mockup exceeds the width of the page, the image is scaled. If the original size of the mockup is smaller than the page width, the original size is displayed.
 	- Original image size. The mockup is displayed in its original size at the current location.
 	- Original size /2. The mockup is reduced to half of the original mockup at the current position.
-	- Full Window. The width of the mockup is the width of the window, and the portion of the mockup that exceeds the height of the window is not displayed (but can be stretched manually)
-	- Full Page. The width of the mockup is the width of the window, and the mockup is displayed as a whole page size (possibly beyond tne window).
+	- Original size *2. The mockup is stretched to double of the original mockup at the current position.
+	- Window Width. The width of the mockup is the width of the window
 	- centered in window. Centers the mockup at the current window position.
 
 ### This plugin also supports shortcut key operations:
