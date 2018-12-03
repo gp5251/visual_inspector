@@ -295,9 +295,6 @@
 			freeze(val) {
 				this.tipMsg = this.$t(val ? "tip.freeze" : "tip.unFreeze");
 			},
-			useRestore(val) {
-				this.tipMsg = this.$t(val ? "tip.useRestore" : "tip.unUseRestore");
-			},
             wType(val) {
                 let mockup = this.mockup;
                 switch (val) {
@@ -357,6 +354,8 @@
 
                         requestAnimationFrame(fn);
                     }
+
+					this.tipMsg = this.$t(val ? "tip.useRestore" : "tip.unUseRestore");
                 },
                 immediate: true
             }
