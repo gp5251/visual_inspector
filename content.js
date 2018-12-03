@@ -144,7 +144,7 @@ const app = function () {
 			if (!uiCreated) {
 				vm = new Vue({
 					data: {src, restoredData},
-					template: `<App :class="lang" :src = "src" :restoredData="restoredData" />`,
+					template: `<App :class="lang" :src = "src" :restoredData="restoredData"/>`,
 					computed: {
 						lang() {
 							return 'vi_lang_' + this.$i18n.locale

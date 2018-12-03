@@ -26,8 +26,20 @@
     "reset": "重置",
     "naturalWidth": "原图大小",
     "naturalWidth/2": "原图大小/2",
-	"fullScreen": "窗口大小",
-	"fullPage": "页面大小",
+	"fullScreen": "窗口宽度",
+	"fullPage": "页面宽度",
     "centerInScreen": "窗口居中"
+  },
+  "tip": {
+    "freeze": "冻结：开启",
+    "unFreeze": "冻结：关闭",
+    "showMockup": "设计稿：显示",
+    "hideMockup": "设计稿：隐藏",
+    "showPanel": "工具栏：显示",
+    "hidePanel": "工具栏：隐藏",
+    "showRuler": "测量：开启",
+    "hideRuler": "测量：关闭",
+    "useRestore": "实时：开启",
+    "unUseRestore": "实时：关闭"
   }
 }

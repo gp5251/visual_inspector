@@ -29,5 +29,18 @@
     "fullScreen": "Full Screen",
     "fullPage": "Full Page",
     "centerInScreen": "Center In Screen"
+  },
+  "tip": {
+	"freeze": "Freeze: Enabled",
+	"unFreeze": "Freeze: Disabled",
+	"showMockup": "Mockup: Shown",
+	"hideMockup": "Mockup: Hidden",
+	"showPanel": "Toolbar: Shown",
+	"hidePanel": "Toolbar: Hidden",
+	"showRuler": "Measure: Enabled",
+	"hideRuler": "Measure: Disabled",
+	"useRestore": "Realtime: Enabled",
+	"unUseRestore": "Realtime: Disabled"
   }
+
 }

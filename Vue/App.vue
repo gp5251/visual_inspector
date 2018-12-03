@@ -146,6 +146,8 @@
 
         <Ruler v-if="showRuler" />
 
+        <Tip :tip="tipMsg"/>
+
         <div class="vi_controllers" v-if="showPanel">
             <h3>Visual Inspector</h3>
 
@@ -204,26 +206,24 @@
     import {throttle} from "../utils";
     import '../iview/iview.css';
 	import Ruler from "./Ruler";
-
-
+	import Tip from "./Tip";
 
 	export default {
         name: "App",
         components: {
-            Checkbox, Slider, Dropdown, DropdownMenu, DropdownItem, Mockup, Ruler
+            Checkbox, Slider, Dropdown, DropdownMenu, DropdownItem, Mockup, Ruler, Tip
         },
         props: {
             src : {
                 type: String,
-                default: function () {
+                default() {
                     return ''
                 }
             },
             restoredData: {
                 type: Object,
-                default: function () {
-                    return {
-                    }
+                default() {
+                    return { }
                 }
             }
         },
@@ -231,6 +231,7 @@
             return Object.assign({
                 showPanel: true,
                 showMockup: true,
+				showRuler: false,
                 opacity: 1,
                 freeze: 0,
                 blendMode: 'normal',
@@ -247,7 +248,7 @@
                     src: ''
                 },
                 useRestore: false,
-                showRuler: false,
+				tipMsg:''
             }, this.restoredData);
         },
 		computed: {
@@ -282,6 +283,21 @@
             }
         },
         watch: {
+        	showMockup(val) {
+        		this.tipMsg = this.$t(val ? "tip.showMockup" : "tip.hideMockup");
+            },
+			showPanel(val) {
+				this.tipMsg = this.$t(val ? "tip.showPanel" : "tip.hidePanel");
+			},
+			showRuler(val) {
+				this.tipMsg = this.$t(val ? "tip.showRuler" : "tip.hideRuler");
+			},
+			freeze(val) {
+				this.tipMsg = this.$t(val ? "tip.freeze" : "tip.unFreeze");
+			},
+			useRestore(val) {
+				this.tipMsg = this.$t(val ? "tip.useRestore" : "tip.unUseRestore");
+			},
             wType(val) {
                 let mockup = this.mockup;
                 switch (val) {
@@ -384,10 +400,11 @@
 
             fastToggle(e) {
                 if (e.target.tagName.toLowerCase() !== 'body') return;
-                if (e.key === 'h') this.showMockup = !this.showMockup;
-                if (e.key === 'f') this.showPanel = !this.showPanel;
-                if (e.key === 'd') this.freeze = !this.freeze;
-				if (e.key === 'm') this.showRuler = !this.showRuler;
+                if (e.key === 'h' || e.which === 72) this.showMockup = !this.showMockup;
+                if (e.key === 'f' || e.which === 70) this.showPanel = !this.showPanel;
+                if (e.key === 'd' || e.which === 68) this.freeze = !this.freeze;
+				if (e.key === 'm' || e.which === 77) this.showRuler = !this.showRuler;
+				// if (e.key === 'Backspace' || e.which === 8) this.$emit('quit');
             },
 
             fastOpacity(e) {

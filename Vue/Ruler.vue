@@ -5,7 +5,7 @@
 		right: 0;
 		top: 0;
 		bottom: 0;
-		background-color: rgba(0,0,0,.05);
+		background: rgba(0,0,0,.05);
         z-index: 99991;
 		cursor: crosshair;
 
@@ -50,7 +50,6 @@
 		 @mousemove="draw"
 		 @touchend="stopDrawing"
 		 @mouseup="stopDrawing">
-
 		<div class="vi_rulerItem"
 			 v-for="(item, index) in items"
 			 :style="{width: item.w + 'px', height: item.h + 'px', left: item.x + 'px', top: item.y + 'px'}">

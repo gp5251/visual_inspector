@@ -6,7 +6,7 @@
         position: absolute;
         left: 0;
         top: 0;
-        background: rgba(0, 0, 0, .5) url() no-repeat center ~"0 / 100%" auto;
+        background: rgba(0, 0, 0, .2) url() no-repeat center ~"0 / 100%" auto;
         box-shadow: 0 0 1px 0 #ccc;
         touch-action: none;
         will-change: translate, width, height;
@@ -28,15 +28,15 @@
             left: -3px;
             top: -3px;
             box-sizing: content-box;
-            background: radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat left top,
-            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat left bottom,
-            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right top,
-            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right bottom,
-            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat left 50%,
-            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat 50% top,
-            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat 50% bottom,
-            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right top,
-            radial-gradient(transparent 0%, transparent 60%, gray 61%) no-repeat right 50%;
+            background: radial-gradient(transparent 0%, transparent 60%, #333 61%) no-repeat left top,
+            radial-gradient(transparent 0%, transparent 60%, #333 61%) no-repeat left bottom,
+            radial-gradient(transparent 0%, transparent 60%, #333 61%) no-repeat right top,
+            radial-gradient(transparent 0%, transparent 60%, #333 61%) no-repeat right bottom,
+            radial-gradient(transparent 0%, transparent 60%, #333 61%) no-repeat left 50%,
+            radial-gradient(transparent 0%, transparent 60%, #333 61%) no-repeat 50% top,
+            radial-gradient(transparent 0%, transparent 60%, #333 61%) no-repeat 50% bottom,
+            radial-gradient(transparent 0%, transparent 60%, #333 61%) no-repeat right top,
+            radial-gradient(transparent 0%, transparent 60%, #333 61%) no-repeat right 50%;
             background-size: 6px 6px;
         }
     }
