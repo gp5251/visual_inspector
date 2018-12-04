@@ -3,6 +3,7 @@
   "show": "ShowMockup",
   "realtime": "Realtime",
   "ruler": "Measure",
+  "opacity": "opacity",
   "modes": {
     "normal": "normal",
     "multiply": "multiply",

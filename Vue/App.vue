@@ -295,6 +295,9 @@
 			freeze(val) {
 				this.tipMsg = this.$t(val ? "tip.freeze" : "tip.unFreeze");
 			},
+			opacity(val) {
+				this.tipMsg = this.$t("opacity") + ": " + val * 100 + "%";
+            },
             wType(val) {
                 let mockup = this.mockup;
                 switch (val) {
