@@ -45,6 +45,12 @@
 - m: enable or disable measurement
 - Number keys (0-9): Quickly set the mockup transparency. For example, if you press 5 twice in 1 second, the transparency of the mockup will be set at 55%. If only the number key is pressed once in 1 second, such as 5, it will automatically fill 0 after one second, that is, set the mockup transparency to 50%.
 - Arrow keys: Move the mockup and move 1px at a time. If you press the Shift key at the same time, you will move 10px at a time.
+- Quick adaptation:
+	- alt + 0: Reset
+	- alt + 1: Original image size
+	- alt + 2: Original size /2
+	- alt + 3: Original size *2
+	- alt + 4: Window Width
 
 ### Tips:
 If the shortcut does not work, please check if the current page's focus is inside other form controls (such as input, textarea...)? The easiest way, click on the mockup and to try again :)
