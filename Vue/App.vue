@@ -275,8 +275,8 @@
 			wTypes(){
 				return [
 					this.$t("quickMatch.naturalWidth"),
-					this.$t("quickMatch.naturalWidth/2"),
 					this.$t("quickMatch.naturalWidth*2"),
+					this.$t("quickMatch.naturalWidth/2"),
 					this.$t("quickMatch.windowWidth"),
 					this.$t("quickMatch.centerInScreen")
 				]
@@ -303,29 +303,34 @@
                             width: this.img.width,
                             height: this.img.height
                         });
+						this.tipMsg = this.$t("quickMatch.naturalWidth");
                         break;
-                    case 1: // 原图一半大小
-                        this.moveAndResize({
-                            width: this.img.width / 2,
-                            height: this.img.height / 2
-                        });
-                        break;
-					case 2: // 原图两倍
+					case 1: // 原图两倍
 						this.moveAndResize({
 							width: this.img.width * 2,
 							height: this.img.height * 2
 						});
+						this.tipMsg = this.$t("quickMatch.naturalWidth*2");
+						break;
+					case 2: // 原图一半大小
+						this.moveAndResize({
+							width: this.img.width / 2,
+							height: this.img.height / 2
+						});
+						this.tipMsg = this.$t("quickMatch.naturalWidth/2");
 						break;
                     case 3: // 窗口宽度
 						let width = window.innerWidth,
 							height = this.img.height / (this.img.width / width);
 						this.moveAndResize({left: 0, top: 0, width, height});
+						this.tipMsg = this.$t("quickMatch.windowWidth");
                         break;
                     case 4: // 窗口居中
                         this.moveAndResize({
                             left: Math.max(0, (window.innerWidth - mockup.width) / 2),
                             top: Math.max(0, (window.innerHeight - mockup.height) / 2 + Math.max(document.documentElement.scrollTop, document.body.scrollTop))
                         });
+						this.tipMsg = this.$t("quickMatch.centerInScreen");
                 }
             },
             src: {
@@ -452,6 +457,7 @@
 				}
 
 				this.moveAndResize({left: 0, top: 0, width, height});
+				this.tipMsg = this.$t("quickMatch.reset");
             },
 
             moveAndResize(rect) {

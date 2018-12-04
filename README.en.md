@@ -48,8 +48,8 @@
 - Quick adaptation:
 	- alt + 0: Reset
 	- alt + 1: Original image size
-	- alt + 2: Original size /2
-	- alt + 3: Original size *2
+	- alt + 2: Original size *2
+	- alt + 3: Original size /2
 	- alt + 4: Window Width
 
 ### Tips:
