@@ -7,12 +7,12 @@
 
 > At the same time, front-end engineers can quickly find differences between pages and design mockups during the develpment phase. 
 
-### The basic steps:
+### basic steps:
 - Click on the plugin icon to show up the plugin menu. Click the Insert button to insert the mockup into the current page. 
 - There is a help toolbar at the bottom of the page, which can adjust the transparency of the design, quickly display or hide the design draft, switch the blending mode, as well as some shortcuts to set the size and position, and provides a custom size and Positioning tool.
 - To quit, simply refresh the page, or click on the plugin icon, click quit-button on the popup page. Simply refreshing the page without turning on the real-time feature is fine.
 
-### Explanation of key concepts:
+### key concepts:
 
 - Freeze: (Not enabled by default)
     
@@ -37,7 +37,7 @@
 	- Window Width. The width of the mockup is the width of the window
 	- centered in window. Centers the mockup at the current window position.
 
-### This plugin also supports shortcut key operations:
+###  shortcut keys:
 
 - h: show or hide mockup
 - f: show or hide the bottom toolbar

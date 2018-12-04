@@ -44,6 +44,7 @@
 
 <template>
     <div class="vi_ruler"
+		 @click.stop
 		 @touchstart="addItem"
 		 @mousedown="addItem"
 		 @touchmove.prevent="draw"

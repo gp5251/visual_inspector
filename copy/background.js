@@ -30,7 +30,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 			chrome.browserAction.getPopup({tabId}, function (re){
 				if (~re.indexOf('popup_loading.html')) setAppState(tabId, false);
 			});
-		}, 300);
+		}, 500);
 
     	send({
 			type: 'getAppStateFromBg'

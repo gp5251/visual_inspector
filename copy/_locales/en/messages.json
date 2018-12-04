@@ -1,3 +1,6 @@
 {
-  "pluginDesc": {"message": "A helper tool for fast front-end development and visual inspection."}
+  "pluginDesc": {"message": "A helper tool for fast front-end development and visual inspection."},
+  "connecting": {"message": "Connecting..."},
+  "connectSucc": {"message": "Connect success~"},
+  "connectFail": {"message": "Failed to connect the page :("}
 }

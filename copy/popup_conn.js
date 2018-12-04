@@ -1,4 +1,23 @@
 const $tip = document.getElementById('tip');
+if ($tip.innerHTML === 'connectFail') {
+	$tip.innerHTML = chrome.i18n.getMessage("connectFail");
+} else {
+	$tip.innerHTML = chrome.i18n.getMessage("connecting");
+
+	sendToContent({
+		type: 'getAppStateFromPopup'
+	})
+		.then(([response, tabId]) => {
+			if (response && response.type === 'getAppStateFromPopup') {
+				$tip.innerHTML = chrome.i18n.getMessage("connectSucc");
+				return sendToBg({
+					type: 'pageConnected',
+					data: { tabId }
+				})
+			}
+		});
+
+}
 
 function sendToBg(data) {
 	return new Promise(function (resolve){
@@ -17,17 +36,4 @@ function sendToContent(data) {
 		});
 	})
 }
-
-sendToContent({
-		type: 'getAppStateFromPopup'
-	})
-	.then(([response, tabId]) => {
-		if (response && response.type === 'getAppStateFromPopup') {
-			$tip.innerHTML = 'Connected success!';
-			return sendToBg({
-				type: 'pageConnected',
-				data: { tabId }
-			})
-		}
-	});
 
