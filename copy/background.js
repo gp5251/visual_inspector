@@ -3,6 +3,7 @@ function setAppState(tabId, state) {
         tabId: tabId,
         popup: state ? 'popup.html': 'popup_loading_failed.html'
     });
+
 	chrome.browserAction.setIcon({
 		tabId: tabId,
 		path: state ? 'icon.png': 'icon_gray.png'
@@ -19,21 +20,22 @@ function send(data, cb) {
 }
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    if(tab.url.indexOf ("http") !== 0) {
-        setAppState(tabId, false);
-        return;
-    }
+    // if(tab.url.indexOf ("http") !== 0) {
+    //     setAppState(tabId, false);
+    //     return;
+    // }
 
     if (changeInfo.status === 'complete') {
-    	let _tid = setTimeout(()=>{
-			setAppState(tabId, false);
-		}, 200);
+    	setTimeout(()=>{
+			chrome.browserAction.getPopup({tabId}, function (re){
+				if (~re.indexOf('popup_loading.html')) setAppState(tabId, false);
+			});
+		}, 300);
 
     	send({
 			type: 'getAppStateFromBg'
 		}, response => {
     		if (response && response.type === 'getAppStateFromBg') {
-    			clearTimeout(_tid);
     			setAppState(tabId, true)
 			}
 		})
@@ -41,8 +43,9 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 });
 
 chrome.runtime.onMessage.addListener((request, sender) => {
-	console.log('get request', request);
 	if (request.type === 'appLoaded' && sender.tab) {
 		setAppState(sender.tab.id, true);
+	} else if (request.type === 'pageConnected') {
+		setAppState(request.data.tabId, true);
 	}
 });

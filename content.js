@@ -28,6 +28,9 @@ const app = function () {
 					case 'getAppStateFromBg':
 						cb({type, state: true});
 						break;
+					case 'getAppStateFromPopup':
+						cb({type, state: true});
+						break;
                     case 'appState':
                     	if (data.lang) setupLang(data.lang);
                         cb({type, data: {state: appState}});
