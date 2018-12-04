@@ -403,7 +403,7 @@
                 if (e.key === 'd' || e.which === 68) this.freeze = !this.freeze;
 				if (e.key === 'm' || e.which === 77) this.showRuler = !this.showRuler;
 
-				if (e.ctrlKey) {
+				if (e.altKey) {
 					if (e.key === '0' || e.which === 48) this.reset();
 					if (e.key === '1' || e.which === 49) this.wType = 0;
 					if (e.key === '2' || e.which === 50) this.wType = 1;
