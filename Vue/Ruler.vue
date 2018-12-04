@@ -53,7 +53,7 @@
 		<div class="vi_rulerItem"
 			 v-for="(item, index) in items"
 			 :style="{width: item.w + 'px', height: item.h + 'px', left: item.x + 'px', top: item.y + 'px'}">
-			<span class="close" @touchstart.prevent="remove(index)" @mousedown.prevent="remove(index)">X</span>
+			<span class="close" @touchstart.stop="remove(index)" @mousedown.stop="remove(index)">X</span>
 			<span class="txt">{{ item.w | toInt }}px {{ item.h | toInt }}px</span>
 		</div>
     </div>
@@ -118,7 +118,7 @@
 			stopDrawing() {
         		this.startDraw = false;
 				const item = this.items[this.items.length - 1];
-				if (item.w === 0 && item.h === 0) this.items.pop();
+				if (item && item.w === 0 && item.h === 0) this.items.pop();
 			},
 			remove(index) {
         		this.items.splice(index, 1);
@@ -128,10 +128,7 @@
         	toInt(n) {
         		return parseInt(n)
 			}
-		},
-        mounted() {
-        	//
-        }
+		}
     }
 </script>
 
