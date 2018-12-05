@@ -10,9 +10,11 @@
         box-shadow: 0 0 1px 0 #ccc;
         touch-action: none;
         will-change: translate, width, height;
+        outline: 1px dashed #666;
 
         &.static{
             background-color: transparent;
+            outline: none;
 
             &::after{
                 display: none;
