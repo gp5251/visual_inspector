@@ -11,9 +11,9 @@
 
 		.vi_rulerItem{
 			position: absolute;
-			box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.5);
+			/*box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.5);*/
 			/*outline: 1px solid rgba(0, 0, 0, 0.5);*/
-			background-color: rgba(0, 0, 0, 0.1);
+			background-color: rgba(0, 0, 0, 0.15);
 			/*z-index: 99993;*/
 
 			.txt{
@@ -68,20 +68,22 @@
 
 		.vi_rulerCrossX{
 			position: absolute;
+			top: 0;
 			left: 0;
 			right: 0;
 			height: 1px;
-			margin-top: -.5px;
-			background-color: rgba(0,0,0,.5);
+			/*transform: scale(1, .2) translateY(-.5px);*/
+			background-color: #333;
 			pointer-events: none;
 		}
 		.vi_rulerCrossY{
 			position: absolute;
+			left: 0;
 			top: 0;
 			bottom: 0;
 			width: 1px;
-			margin-left: -.5px;
-			background-color: rgba(0,0,0,.5);
+			/*transform: scale(.2, 1) translateX(-.5px);;*/
+			background-color: #333;
 			pointer-events: none;
 		}
     }
@@ -105,8 +107,8 @@
 			<span class="txt">{{ item.w | toInt }}px {{ item.h | toInt }}px</span>
 		</div>
 
-		<span class="vi_rulerCrossX" :style="{top: top + 'px'}"></span>
-		<span class="vi_rulerCrossY" :style="{left: left + 'px'}"></span>
+		<span class="vi_rulerCrossX" :style="{transform: 'translateY(' + (top - 0.5) + 'px) scale(1, .2)'}"></span>
+		<span class="vi_rulerCrossY" :style="{transform: 'translateX(' + (left - 0.5) + 'px) scale(.2, 1)'}"></span>
     </div>
 </template>
 

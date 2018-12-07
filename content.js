@@ -131,9 +131,8 @@ const app = function () {
             if (vm) {
                 vm.src = src;
 			} else {
-                let rootEl = document.createElement('div');
-                document.body.appendChild(rootEl);
-                this.createUI(src, data).$mount(rootEl);
+                this.createUI(src, data);
+                document.body.appendChild(vm.$el);
 			}
 
             chrome.storage.local.set({_viDataUrl: dataUrl, _url: location.href})
@@ -147,6 +146,7 @@ const app = function () {
 			if (!uiCreated) {
 				vm = new Vue({
 					data: {src, restoredData},
+					el: document.createElement('div'),
 					template: `<App :class="lang" :src = "src" :restoredData="restoredData"/>`,
 					computed: {
 						lang() {

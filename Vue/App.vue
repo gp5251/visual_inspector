@@ -379,12 +379,9 @@
                 if (!this.freeze && 37 <= e.which && e.which <= 40) {
                     e.preventDefault();
 
-                    let x = this.mockup.left,
-                        y = this.mockup.top,
+                    let x = +this.mockup.left,
+                        y = +this.mockup.top,
                         count = e.shiftKey ? 10 : 1;
-
-                    x = +x;
-                    y = +y;
 
                     switch (e.which) {
                         case 37:
@@ -405,7 +402,7 @@
             },
 
             fastToggle(e) {
-                if (e.target.tagName.toLowerCase() !== 'body') return;
+                if (e.target !== e.currentTarget) return;
                 if (e.key === 'h' || e.which === 72) this.showMockup = !this.showMockup;
                 if (e.key === 'f' || e.which === 70) this.showPanel = !this.showPanel;
                 if (e.key === 'd' || e.which === 68) this.freeze = !this.freeze;
@@ -421,7 +418,7 @@
             },
 
             fastOpacity(e) {
-                if (e.target.tagName.toLowerCase() !== 'body' || e.ctrlKey || e.shiftKey) return;
+				if (e.target !== e.currentTarget || e.ctrlKey || e.shiftKey || e.altKey) return;
                 if (+e.key >= 0) {
                     if (this._tid) clearTimeout(this._tid);
                     if (!this._fastOpacity) this._fastOpacity = [];
