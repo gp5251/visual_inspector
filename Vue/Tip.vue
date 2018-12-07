@@ -49,15 +49,14 @@
         		this.tipMsg = val;
         		this.hide = false;
 
-        		if (this.tid) clearTimeout(this.tid);
-        		this.tid = setTimeout(()=>{
+        		if (this._tid) clearTimeout(this._tid);
+        		this._tid = setTimeout(()=>{
         			this.hide = true
         		}, this.delay);
 			}
 		},
         data() {
         	return {
-        		tid: 0,
         		tipMsg: '',
 				hide: false,
 				delay: 3000
