@@ -53,4 +53,5 @@
 	- alt + 4: Window Width
 
 ### Tips:
-If the shortcut does not work, please check if the current page's focus is inside other form controls (such as input, textarea...)? The easiest way, click on the mockup, or on the blank area in the page and to try again :)
+- In measurement mode, double-click the page to pause the guide line to follow the mouse, and then double-click to resume the follow.
+- If the shortcut does not work, please check if the current page's focus is inside other form controls (such as input, textarea...)? The easiest way, click on the mockup, or on the blank area in the page and to try again :)
