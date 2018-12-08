@@ -4,8 +4,8 @@ export default {
 	install(Vue) {
 		let $tip;
 		Vue.$tip = Vue.prototype.$tip = function(tip){
-			let $TipPlugin = Vue.extend(Tip);
 			if (!$tip) {
+				let $TipPlugin = Vue.extend(Tip);
 				$tip = new $TipPlugin({
 					el: document.createElement('div')
 				});

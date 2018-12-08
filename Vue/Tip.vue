@@ -4,8 +4,11 @@
 		background-color: #2d8cf0;
 		color: white;
 		pointer-events: none;
-
-		position: fixed; right: 5px; top: 5px; z-index: 99992;
+		position: fixed;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		z-index: 99992;
 		border-radius: 3px;
 		opacity: 1;
 		font-size: 14px;
