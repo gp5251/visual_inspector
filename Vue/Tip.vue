@@ -6,13 +6,14 @@
 		pointer-events: none;
 		position: fixed;
 		left: 50%;
-		top: 50%;
-		transform: translate(-50%, -50%);
+		top: 80%;
+		transform: translate(-50%, 0);
 		z-index: 99992;
 		border-radius: 3px;
 		opacity: 1;
 		font-size: 14px;
 		padding: 6px 12px;
+		line-height: 1;
 
 		&.vi_hide{
 			animation: vi_fadeout ease-out .5s forwards;
