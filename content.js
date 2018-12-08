@@ -1,6 +1,9 @@
 import Vue from 'vue';
 import App from './Vue/App';
+import Tip from "./Vue/Tip.plugin";
 import i18n, {setupLang} from "./locales";
+
+Vue.use(Tip);
 
 const app = function () {
 	let vm, 

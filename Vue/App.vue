@@ -146,7 +146,7 @@
 
         <Ruler v-if="showRuler" />
 
-        <Tip :tip="tipMsg"/>
+        <!--<Tip :tip="tipMsg"/>-->
 
         <div class="vi_controllers" v-if="showPanel">
             <h3>Visual Inspector</h3>
@@ -206,12 +206,12 @@
     import {throttle} from "../utils";
     import '../iview/iview.css';
 	import Ruler from "./Ruler";
-	import Tip from "./Tip";
+	// import Tip from "./Tip";
 
 	export default {
         name: "App",
         components: {
-            Checkbox, Slider, Dropdown, DropdownMenu, DropdownItem, Mockup, Ruler, Tip
+            Checkbox, Slider, Dropdown, DropdownMenu, DropdownItem, Mockup, Ruler
         },
         props: {
             src : {
@@ -366,6 +366,9 @@
 					this.tipMsg = this.$t(val ? "tip.useRestore" : "tip.unUseRestore");
                 },
                 immediate: true
+            },
+			tipMsg(val) {
+        		this.$tip(val);
             }
         },
         methods: {

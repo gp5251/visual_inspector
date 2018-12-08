@@ -9,10 +9,7 @@
 		border-radius: 3px;
 		opacity: 1;
 		font-size: 14px;
-
-		&.vi_show{
-			padding: 6px 12px;
-		}
+		padding: 6px 12px;
 
 		&.vi_hide{
 			animation: vi_fadeout ease-out .5s forwards;
@@ -30,7 +27,7 @@
 </style>
 
 <template>
-	<div class="vi_tip vi_show" :class="{vi_hide: this.hide}" v-if="tipMsg.length">{{ tipMsg }}</div>
+	<div class="vi_tip" :class="{vi_hide: this.hide}" v-if="tipMsg.length" @animationend="tipMsg = ''">{{ tipMsg }}</div>
 </template>
 
 <script>
