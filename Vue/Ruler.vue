@@ -73,7 +73,7 @@
 			right: 0;
 			height: 1px;
 			/*transform: scale(1, .2) translateY(-.5px);*/
-			background-color: #333;
+			background-color: black;
 			pointer-events: none;
 		}
 		.vi_rulerCrossY{
@@ -83,7 +83,7 @@
 			bottom: 0;
 			width: 1px;
 			/*transform: scale(.2, 1) translateX(-.5px);;*/
-			background-color: #333;
+			background-color: black;
 			pointer-events: none;
 		}
     }
