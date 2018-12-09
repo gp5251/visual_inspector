@@ -20,15 +20,10 @@ function send(data, cb) {
 }
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    // if(tab.url.indexOf ("http") !== 0) {
-    //     setAppState(tabId, false);
-    //     return;
-    // }
-
     if (changeInfo.status === 'complete') {
     	setTimeout(()=>{
 			chrome.browserAction.getPopup({tabId}, function (re){
-				if (~re.indexOf('popup_loading.html')) setAppState(tabId, false);
+				if (re && ~re.indexOf('popup_loading.html')) setAppState(tabId, false);
 			});
 		}, 500);
 

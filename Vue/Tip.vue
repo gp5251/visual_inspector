@@ -4,6 +4,9 @@
 		background-color: #2d8cf0;
 		color: white;
 		pointer-events: none;
+		padding: 0;
+		margin: 0;
+		line-height: 1;
 
 		position: fixed; right: 5px; top: 5px; z-index: 99992;
 		border-radius: 3px;
