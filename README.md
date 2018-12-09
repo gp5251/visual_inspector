@@ -1,4 +1,6 @@
 ## Visual Inspector
+[ENGLISH](https://github.com/gp5251/visual_inspector/blob/master/README.en.md)
+
 > 这是一款chrome插件，可以高效的帮助前端工程师重构和设计师UI走查，亦可方便前端工程师UI自查。
 
 > 你可以插入设计稿到当前页面，可以随意改变设计稿大小，位置，透明度，混合模式等，方便各种设计风格的UI对比。如果你在做页面重构，建议打开实时和冻结，方便页面刷新后恢复到之前的图片状态，同时不影响页面交互。
