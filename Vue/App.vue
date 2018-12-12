@@ -352,8 +352,8 @@
                     if (val) {
                         let fn = throttle(()=>{
                             if (this.useRestore) {
-                                let {opacity, freeze, blendMode, wType, mockup, img, useRestore} = this.$data;
-                                chrome.storage.local.set({_viData: JSON.stringify({opacity, freeze, blendMode, wType, mockup, img, useRestore})})
+                                let {opacity, freeze, blendMode, wType, mockup, img, useRestore, showPanel} = this.$data;
+                                chrome.storage.local.set({_viData: JSON.stringify({opacity,freeze, blendMode, wType, mockup, img, useRestore,  showPanel})})
                                 requestAnimationFrame(fn);
                             } else {
                             	chrome.storage.local.remove('_viData');

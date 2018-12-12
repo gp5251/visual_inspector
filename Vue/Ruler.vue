@@ -108,8 +108,8 @@
 			<span class="txt">{{ item.w | toInt }}px {{ item.h | toInt }}px</span>
 		</div>
 
-		<span class="vi_rulerCrossX" :style="{transform: 'translateY(' + (top - 0.5) + 'px) scale(1, .2)'}"></span>
-		<span class="vi_rulerCrossY" :style="{transform: 'translateX(' + (left - 0.5) + 'px) scale(.2, 1)'}"></span>
+		<span class="vi_rulerCrossX" :style="{transform: 'translateY(' + (top - 0.5) + 'px) scale(1, .3)'}"></span>
+		<span class="vi_rulerCrossY" :style="{transform: 'translateX(' + (left - 0.5) + 'px) scale(.3, 1)'}"></span>
     </div>
 </template>
 
