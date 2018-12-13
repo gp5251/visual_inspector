@@ -21,8 +21,6 @@
             text-shadow: 1px 1px 0 white;
             border-top: 1px solid #ddd;
 
-            // background: linear-gradient(to bottom, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%)
-            // background: linear-gradient(to bottom, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);
             background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
 
             h3{
@@ -123,13 +121,6 @@
 
 <template>
     <div class="Visual_Inspector">
-        <!--<FloatingBar-->
-            <!--:showPanel="showPanel"-->
-            <!--:showMockup="showMockup"-->
-            <!--@togglePanel="showPanel = !showPanel"-->
-            <!--@toggleMockup="showMockup = !showMockup"-->
-            <!--@quit="$emit('quit')"/>-->
-
         <Mockup
             :opacity="opacity"
             :blendMode="blendMode"
@@ -146,15 +137,13 @@
 
         <Ruler v-if="showRuler" />
 
-        <!--<Tip :tip="tipMsg"/>-->
-
         <div class="vi_controllers" v-if="showPanel">
             <h3>Visual Inspector</h3>
 
 			<ImagePicker @getImgSrc="updateImg" class="vi_formLine" />
 
             <div class="vi_formLine vi_opacity">
-                <Slider class="vi_slider" v-model="opacity"  :step="0.01"  :min="0" :max="1"></Slider>
+                <Slider class="vi_slider" v-model="opacity" :step="0.01" :min="0" :max="1"></Slider>
             </div>
 
             <div class="vi_formLine">
@@ -198,7 +187,6 @@
 </template>
 
 <script>
-    // import FloatingBar from './FloatingBar';
     import Mockup from './Mockup';
     import Checkbox from '../iview/components/checkbox';
     import Slider from '../iview/components/slider';
@@ -209,7 +197,6 @@
     import '../iview/iview.css';
 	import Ruler from "./Ruler";
 	import ImagePicker from "./ImagePicker";
-	// import Tip from "./Tip";
 
 	export default {
         name: "App",
@@ -217,12 +204,6 @@
             Checkbox, Slider, Dropdown, DropdownMenu, DropdownItem, Mockup, Ruler, ImagePicker
         },
         props: {
-            src : {
-                type: String,
-                default() {
-                    return ''
-                }
-            },
             restoredData: {
                 type: Object,
                 default() {
@@ -460,33 +441,13 @@
                 this.wType = -1;
             },
 
-			insertImg(e) {
-				let [file] = e.target.files;
-				this.readFileAsDataUrl(file)
-					.then(dataUrl => {
-						this.send({type: 'insertImg', data: {dataUrl}}, ({type, state}) => {
-							if (type === 'insertImg') {
-								this.appIsRunning = !!state;
-								this.newInputKey = Math.random();
-							}
-						});
-					})
-			},
-
-			readFileAsDataUrl(file) {
-				return new Promise(resolve => {
-					const reader = new FileReader();
-					reader.onload = function(e) {resolve(e.target.result)};
-					reader.readAsDataURL(file);
-				})
-			},
-
-            updateImg(val) {
+            updateImg(val, dataUrl) {
 				this.getImg(val).then(({width, height, src}) => {
 					this.img = {
 						width, height, src
 					};
 					if (!this.useRestore) this.reset();
+					chrome.storage.local.set({_viDataUrl: dataUrl, _url: location.href})
 				}, err => console.error('failed to get img', err));
             },
 
@@ -551,7 +512,9 @@
             }
         },
         created() {
-            window.scrollTo(0, 0);
+        	document.body.scrollTop = 0;
+			document.documentElement.scrollTop = 0;
+
             this.bindEvs();
             this.insertCss();
         },

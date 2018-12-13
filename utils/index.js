@@ -76,4 +76,58 @@ export function debounce(func, wait, immediate) {
 
         return result;
     };
-};
+}
+
+let _cspBlockedBlob;
+
+export function dataURLtoBlob(dataUrl) {
+	let arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+		bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+	while (n--) u8arr[n] = bstr.charCodeAt(n);
+	return new Blob([u8arr], {type: mime});
+}
+
+export function checkCSPForGlob(dataUrl) {
+	return new Promise((resolve, reject) => {
+		let handleCspOnce = function (e) {
+			if (e.blockedURI === 'blob' && e.violatedDirective === 'img-src') reject();
+			document.removeEventListener("securitypolicyviolation", handleCspOnce);
+			div.remove();
+		};
+		let blobObj = dataURLtoBlob(dataUrl);
+		let url = window.URL.createObjectURL(blobObj);
+		let div = document.createElement('div');
+		div.style.cssText = `
+						display:none;
+						width: 100px;
+						height: 100px;
+						background: url(${url});
+					`;
+		document.body.appendChild(div);
+		document.addEventListener("securitypolicyviolation", handleCspOnce);
+		setTimeout(function () {
+			div.remove();
+			resolve(url)
+		}, 200);
+	})
+}
+
+export async function getImgSrcFromDataUrl(dataUrl) {
+	_cspBlockedBlob = document.documentElement._cspBlockedBlob;
+	if (_cspBlockedBlob) return dataUrl;
+	else if (_cspBlockedBlob === 0) {
+		let blobObj = dataURLtoBlob(dataUrl);
+		return window.URL.createObjectURL(blobObj);
+	}
+
+	try {
+		let d = await checkCSPForGlob(dataUrl);
+		document.documentElement._cspBlockedBlob = 0;
+		_cspBlockedBlob = 0;
+		return d;
+	} catch (err) {
+		document.documentElement._cspBlockedBlob = true;
+		_cspBlockedBlob = true;
+		return dataUrl;
+	}
+}

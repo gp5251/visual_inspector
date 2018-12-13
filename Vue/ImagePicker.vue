@@ -26,26 +26,20 @@
 			left: 0;
 			top: 0;
 		}
-
-		button {
-			margin-top: 5px;
-			width: 100%;
-			height: 30px;
-			border-radius: 3px;
-			background-color: #808695;
-			color: white;
-		}
 	}
 </style>
 
 <template>
 	<div class="imagePicker">
 		<span class="tit">{{ $t("insert") }}</span>
-		<input type="file" @change="insertImg" :key="newInputKey" accept="image/*" />
+		<input type="file" @change="insertImg" :key="newInputKey" accept="image/*"/>
 	</div>
 </template>
 
 <script>
+	import { getImgSrcFromDataUrl } from "../utils";
+
+
 	export default {
 		name: "ImageBtn",
 		props: {
@@ -57,20 +51,28 @@
 			}
 		},
 		watch: {
-			tip(val) { }
+			src(val, oldVal) {
+				if (oldVal) {
+					console.log('oldSrc', oldVal);
+
+					chrome.storage.local.remove(['_viData', '_viDataUrl', '_url']);
+					if (!document.documentElement._cspBlockedBlob) window.URL.revokeObjectURL(oldVal);
+				}
+			}
 		},
 		data() {
 			return {
-				newInputKey : 0
+				src: '',
+				newInputKey: 0
 			}
 		},
 		methods: {
 			insertImg(e) {
 				let [file] = e.target.files;
 				this.readFileAsDataUrl(file)
-					.then(async (dataUrl)=>{
-						let src = await this.getImgSrc(dataUrl)
-						this.$emit('getImgSrc', src);
+					.then(async (dataUrl) => {
+						this.src = await getImgSrcFromDataUrl(dataUrl);
+						this.$emit('getImgSrc', this.src, dataUrl);
 
 						this.newInputKey = Math.random();
 					})
@@ -86,54 +88,7 @@
 					};
 					reader.readAsDataURL(file);
 				})
-			},
-			dataURLtoBlob(dataUrl) {
-				let arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-					bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-				while (n--) u8arr[n] = bstr.charCodeAt(n);
-				return new Blob([u8arr], {type: mime});
-			},
-			async getImgSrc(dataUrl) {
-				let cspBlockedBlob = document.documentElement._cspBlockedBlob;
-				if (cspBlockedBlob === 1) return dataUrl;
-				else if (cspBlockedBlob === 0) {
-					let blobObj = this.dataURLtoBlob(dataUrl);
-					return window.URL.createObjectURL(blobObj);
-				}
-
-				try {
-					let d = await this.checkCSPForGlob(dataUrl);
-					document.documentElement._cspBlockedBlob = 0;
-					return d;
-				} catch (err) {
-					document.documentElement._cspBlockedBlob = 1;
-					return dataUrl;
-				}
-			},
-			checkCSPForGlob(dataUrl) {
-				return new Promise((resolve, reject) => {
-					let handleCspOnce = function(e) {
-						if (e.blockedURI === 'blob' && e.violatedDirective === 'img-src') reject();
-						document.removeEventListener("securitypolicyviolation", handleCspOnce);
-						div.remove();
-					};
-					let blobObj = this.dataURLtoBlob(dataUrl);
-					let url = window.URL.createObjectURL(blobObj);
-					let div = document.createElement('div');
-					div.style.cssText=`
-					display:none;
-					width: 100px;
-					height: 100px;
-					background: url(${url});
-				`;
-					document.body.appendChild(div);
-					document.addEventListener("securitypolicyviolation", handleCspOnce);
-					setTimeout(function (){
-						div.remove();
-						resolve(url)
-					}, 200);
-				})
-			},
+			}
 		}
 	}
 </script>

@@ -11,7 +11,7 @@ const isProd                = process.env.NODE_ENV === 'production';
 let config = {
     entry: {
         // popup: './popup.js',
-        content: './content.js'
+        index: './index.js'
     },
 
     output: {
