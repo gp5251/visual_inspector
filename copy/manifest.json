@@ -6,27 +6,15 @@
   "default_locale": "zh_CN",
   "author":"paul",
   "description": "__MSG_pluginDesc__",
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
   "icons": {
     "128": "icon.png"
   },
   "browser_action": {
     "default_icon": "icon_gray.png",
-    "default_title": "Visual Inspector",
-    "default_popup": "popup_loading.html"
+    "default_title": "Visual Inspector"
   },
   "permissions": [
-    "unlimitedStorage", "storage", "tabs", "http://*/*", "https://*/*"
-  ],
-  "content_scripts": [
-    {
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ],
-      "js": ["content.js"],
-      "run_at": "document_end"
-    }
+    "unlimitedStorage", "storage", "tabs", "activeTab"
   ],
   "background":{
     "scripts":["background.js"],

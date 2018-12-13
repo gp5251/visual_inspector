@@ -151,6 +151,8 @@
         <div class="vi_controllers" v-if="showPanel">
             <h3>Visual Inspector</h3>
 
+			<ImagePicker @getImgSrc="updateImg" class="vi_formLine" />
+
             <div class="vi_formLine vi_opacity">
                 <Slider class="vi_slider" v-model="opacity"  :step="0.01"  :min="0" :max="1"></Slider>
             </div>
@@ -206,12 +208,13 @@
     import {throttle} from "../utils";
     import '../iview/iview.css';
 	import Ruler from "./Ruler";
+	import ImagePicker from "./ImagePicker";
 	// import Tip from "./Tip";
 
 	export default {
         name: "App",
         components: {
-            Checkbox, Slider, Dropdown, DropdownMenu, DropdownItem, Mockup, Ruler
+            Checkbox, Slider, Dropdown, DropdownMenu, DropdownItem, Mockup, Ruler, ImagePicker
         },
         props: {
             src : {
@@ -336,17 +339,6 @@
 						this.tipMsg = this.$t("quickMatch.centerInScreen");
                 }
             },
-            src: {
-                handler(val) {
-                    this.getImg(val).then(({width, height, src}) => {
-                        this.img = {
-                            width, height, src
-                        };
-                        if (!this.useRestore) this.reset();
-                    }, err => console.error('failed to get img', err));
-                },
-                immediate: true
-            },
             useRestore: {
                 handler(val) {
                     if (val) {
@@ -466,6 +458,36 @@
             moveAndResize(rect) {
                 Object.assign(this.mockup, rect);
                 this.wType = -1;
+            },
+
+			insertImg(e) {
+				let [file] = e.target.files;
+				this.readFileAsDataUrl(file)
+					.then(dataUrl => {
+						this.send({type: 'insertImg', data: {dataUrl}}, ({type, state}) => {
+							if (type === 'insertImg') {
+								this.appIsRunning = !!state;
+								this.newInputKey = Math.random();
+							}
+						});
+					})
+			},
+
+			readFileAsDataUrl(file) {
+				return new Promise(resolve => {
+					const reader = new FileReader();
+					reader.onload = function(e) {resolve(e.target.result)};
+					reader.readAsDataURL(file);
+				})
+			},
+
+            updateImg(val) {
+				this.getImg(val).then(({width, height, src}) => {
+					this.img = {
+						width, height, src
+					};
+					if (!this.useRestore) this.reset();
+				}, err => console.error('failed to get img', err));
             },
 
             getImg(url) {

@@ -1,13 +1,19 @@
 function setAppState(tabId, state) {
-    chrome.browserAction.setPopup({
-        tabId: tabId,
-        popup: state ? 'popup.html': 'popup_loading_failed.html'
-    });
-
-	chrome.browserAction.setIcon({
-		tabId: tabId,
-		path: state ? 'icon.png': 'icon_gray.png'
-	});
+	if (state) {
+		send({type: 'start'}, ()=>{
+			chrome.browserAction.setIcon({
+				tabId: tabId,
+				path: 'icon.png'
+			});
+		})
+	} else {
+		send({type: 'quit'}, ()=>{
+			chrome.browserAction.setIcon({
+				tabId: tabId,
+				path: 'icon_gray.png'
+			});
+		})
+	}
 }
 
 function send(data, cb) {
@@ -19,28 +25,15 @@ function send(data, cb) {
 	});
 }
 
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    if (changeInfo.status === 'complete') {
-    	setTimeout(()=>{
-			chrome.browserAction.getPopup({tabId}, function (re){
-				if (re && ~re.indexOf('popup_loading.html')) setAppState(tabId, false);
-			});
-		}, 500);
-
-    	send({
-			type: 'getAppStateFromBg'
-		}, response => {
-    		if (response && response.type === 'getAppStateFromBg') {
-    			setAppState(tabId, true)
+chrome.browserAction.onClicked.addListener(() => {
+	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+		let tabId = tabs[0].id;
+		chrome.browserAction.getPopup({tabId}, function (re){
+			if (re && ~re.indexOf('popup_loading.html')) {
+				setAppState(tabId, true);
+			} else {
+				setAppState(tabId, false);
 			}
-		})
-    }
-});
-
-chrome.runtime.onMessage.addListener((request, sender) => {
-	if (request.type === 'appLoaded' && sender.tab) {
-		setAppState(sender.tab.id, true);
-	} else if (request.type === 'pageConnected') {
-		setAppState(request.data.tabId, true);
-	}
+		});
+	});
 });

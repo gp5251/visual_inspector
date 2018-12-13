@@ -28,16 +28,6 @@ const app = function () {
                         this.quit();
                         cb({type, state: false});
                         break;
-					case 'getAppStateFromBg':
-						cb({type, state: true});
-						break;
-					case 'getAppStateFromPopup':
-						cb({type, state: true});
-						break;
-                    case 'appState':
-                    	if (data.lang) setupLang(data.lang);
-                        cb({type, data: {state: appState}});
-                        break;
 					case 'changeLang':
 						setupLang(data.lang);
 						cb({type, data: {lang: data.lang}});
@@ -45,8 +35,6 @@ const app = function () {
 
 			    return true;
 		    });
-
-			this.send({type: 'appLoaded'});
 
 			chrome.storage.local.get(['_viData', '_viDataUrl', '_url'], ({_viData, _viDataUrl, _url}) => {
 				if (_url === location.href && _viData && _viDataUrl) {
@@ -128,27 +116,19 @@ const app = function () {
             return new Blob([u8arr], {type: mime});
         },
 
-		async run({dataUrl, ...data}) {
-			let src = await this.getImgSrc(dataUrl);
-
-            if (vm) {
-                vm.src = src;
-			} else {
-                this.createUI(src, data);
-                document.body.appendChild(vm.$el);
-			}
-
-            chrome.storage.local.set({_viDataUrl: dataUrl, _url: location.href})
+		async run(data) {
+			this.createUI(data);
+			document.body.appendChild(vm.$el);
 		},
 
 		quit() {
 			if (appState === 'running') vm.destroy();
 		},
 
-		createUI(src, restoredData = {}) {
+		createUI(restoredData = {}) {
 			if (!uiCreated) {
 				vm = new Vue({
-					data: {src, restoredData},
+					data: {restoredData},
 					el: document.createElement('div'),
 					template: `<App :class="lang" :src = "src" :restoredData="restoredData"/>`,
 					computed: {
