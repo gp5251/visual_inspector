@@ -11,6 +11,7 @@
 - Click on the plugin icon to show up the plugin menu. Click the Insert button to insert the mockup into the current page. 
 - There is a help toolbar at the bottom of the page, which can adjust the transparency of the design, quickly display or hide the design draft, switch the blending mode, as well as some shortcuts to set the size and position, and provides a custom size and Positioning tool.
 - To quit, simply refresh the page, or click on the plugin icon, click quit-button on the popup page. Simply refreshing the page without turning on the real-time feature is fine.
+- Some times the color of the icon may be gray, then reload the page and try again:)
 
 ### key concepts:
 

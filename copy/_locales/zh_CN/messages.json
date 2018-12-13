@@ -1,6 +1,6 @@
 {
   "pluginDesc": {"message": "前端重构和视觉走查的辅助工具。"},
-  "connecting": {"message": "正在连接..."},
+  "connecting": {"message": "请刷新页面重试 :)"},
   "connectSucc": {"message": "页面连接成功～"},
-  "connectFail": {"message": "页面连接失败:("}
+  "connectFail": {"message": "页面连接失败，请刷新页面重试 ：）"}
 }
