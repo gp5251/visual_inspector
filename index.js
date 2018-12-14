@@ -18,9 +18,10 @@ const app = function () {
 			})
 		},
 
-		run({dataUrl, viData}) {
+		run(data = {}) {
 			if (isRunning) return;
 
+			let {dataUrl, viData} = data;
 			vm = new Vue({
 				el: document.createElement('div'),
 				computed: {

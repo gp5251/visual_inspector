@@ -338,9 +338,9 @@
                                 chrome.storage.local.set({_viData: JSON.stringify({opacity,freeze, blendMode, wType, mockup, img, useRestore,  showPanel})})
                                 requestAnimationFrame(fn);
                             } else {
-                            	chrome.storage.local.remove('_viData');
+                            	chrome.storage.local.remove(['_viData', '_url', '_viDataUrl']);
                             }
-                        }, 500);
+                        }, 1000);
 
                         requestAnimationFrame(fn);
                     }
@@ -350,9 +350,9 @@
                 immediate: true
             },
 			dataUrl: {
-			    handler(val){
+			    async handler(val){
 			    	if (val) {
-						let src = getImgSrcFromDataUrl(val);
+						let src = await getImgSrcFromDataUrl(val);
 						this.updateImg(src, val);
                     }
 			    },
@@ -505,7 +505,7 @@
             insertCss() {
                 this._link = document.createElement('link');
                 this._link.rel = "stylesheet";
-                this._link.href = chrome.extension.getURL('content.css');
+                this._link.href = chrome.extension.getURL('index.css');
                 (document.head||document.documentElement).appendChild(this._link);
             },
 
@@ -530,9 +530,6 @@
             }
         },
         created() {
-        	document.body.scrollTop = 0;
-			document.documentElement.scrollTop = 0;
-
             this.bindEvs();
             this.insertCss();
         },

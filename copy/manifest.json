@@ -11,7 +11,7 @@
   },
   "browser_action": {
     "default_icon": "icon_gray.png",
-    "default_title": "Visual Inspector"
+    "default_title": "Visual Inspector is off"
   },
   "permissions": [
     "unlimitedStorage", "storage", "tabs", "activeTab"

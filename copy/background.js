@@ -4,12 +4,14 @@ const bgApp = function (){
 			chrome.browserAction.onClicked.addListener(() => {
 				getCurTab().then(tab => {
 					let tabId = tab.id;
-					chrome.browserAction.getPopup({tabId}, re => {
-						if (re && ~re.indexOf('popup_loading.html')) {
+					chrome.browserAction.getTitle({tabId}, re => {
+						if (re === 'Visual Inspector is off') {
 							setAppState(tabId, true);
 						} else {
 							setAppState(tabId, false);
 						}
+
+						chrome.tabs.executeScript(null, {file: 'index.js'});
 					});
 				})
 			});
@@ -17,10 +19,10 @@ const bgApp = function (){
 			chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 				if (changeInfo.status === 'complete') {
 					chrome.storage.local.get(['_viData', '_viDataUrl', '_url'], ({_viData, _viDataUrl, _url}) => {
-						console.log(_url, tab.url);
-
 						if (_url === tab.url && _viData && _viDataUrl) {
 							chrome.tabs.executeScript(null, {file: 'index.js'});
+						// } else {
+							// chrome.storage.local.remove(['_viData', '_url', '_viDataUrl']);
 						}
 					});
 				}
@@ -30,21 +32,23 @@ const bgApp = function (){
 
 	function setAppState(tabId, state) {
 		if (state) {
-			send({type: 'run'}, response => {
-				if (response && response.type === 'run' && response.data)
-					chrome.browserAction.setIcon({
-						tabId: tabId,
-						path: 'icon.png'
-					});
-			})
+			chrome.browserAction.setIcon({
+				tabId: tabId,
+				path: 'icon.png'
+			});
+			chrome.browserAction.setTitle({
+				tabId: tabId,
+				title: 'Visual Inspector is on'
+			});
 		} else {
-			send({type: 'quit'}, response => {
-				if (response && response.type === 'quit' && response.data)
-					chrome.browserAction.setIcon({
-						tabId: tabId,
-						path: 'icon_gray.png'
-					});
-			})
+			chrome.browserAction.setIcon({
+				tabId: tabId,
+				path: 'icon_gray.png'
+			});
+			chrome.browserAction.setTitle({
+				tabId: tabId,
+				title: 'Visual Inspector is off'
+			});
 		}
 	}
 
