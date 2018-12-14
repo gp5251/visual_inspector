@@ -7,28 +7,18 @@ Vue.use(Tip);
 
 const app = function () {
 	let vm,
-		isRunning = !!document.documentElement._Visual_Inspector;
+		isRunning = !!window._Visual_Inspector;
 
 	return {
 		getLang() {
 			return new Promise(resolve => {
-				chrome.storage.local.get({lang: 'cn'}, data=>{
+				chrome.storage.local.get({lang: 'cn'}, data => {
 					resolve(data.lang);
 				});
 			})
 		},
 
-		run(dataUrl, viData) {
-			this.createUI(dataUrl, viData);
-			document.documentElement._Visual_Inspector = app;
-		},
-
-		quit() {
-			vm.destroy();
-			delete document.documentElement._Visual_Inspector;
-		},
-
-		createUI(dataUrl = '', restoredData = {}) {
+		run({dataUrl, viData}) {
 			if (isRunning) return;
 
 			vm = new Vue({
@@ -42,7 +32,7 @@ const app = function () {
 					return h(App, {
 						props: {
 							['class']: this.lang,
-							restoredData,
+							restoredData: viData,
 							dataUrl
 						}
 					})
@@ -50,7 +40,6 @@ const app = function () {
 				i18n,
 				beforeDestroy() {
 					isRunning = false;
-					// cspBlockedBlob === 0 && window.URL.revokeObjectURL(vm.src);
 					vm.$el.remove();
 				},
 				created() {
@@ -65,6 +54,13 @@ const app = function () {
 			});
 
 			document.body.appendChild(vm.$el);
+
+			window._Visual_Inspector = app;
+		},
+
+		quit() {
+			vm.destroy();
+			delete window._Visual_Inspector;
 		},
 
 		checkRealtime() {
@@ -84,11 +80,11 @@ const app = function () {
 }();
 
 app.checkRealtime()
-	.then(result =>{
+	.then(result => {
 		app.run(result)
-	}, ()=>{
-		if (document.documentElement._Visual_Inspector) {
-			document.documentElement._Visual_Inspector.quit();
+	}, () => {
+		if (window._Visual_Inspector) {
+			window._Visual_Inspector.quit();
 		} else {
 			app.run();
 		}

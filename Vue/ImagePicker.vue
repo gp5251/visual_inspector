@@ -39,7 +39,6 @@
 <script>
 	import { getImgSrcFromDataUrl } from "../utils";
 
-
 	export default {
 		name: "ImageBtn",
 		props: {

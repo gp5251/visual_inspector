@@ -15,13 +15,6 @@ chrome.runtime.onMessage.addListener((request, sender, cb) => {
 	}
 });
 
-chrome.storage.local.get(['_viData', '_viDataUrl', '_url'], ({_viData, _viDataUrl, _url}) => {
-	if (_url === location.href && _viData && _viDataUrl) {
-		// for realtime
-		loadPlugin();
-	}
-});
-
 function loadPlugin() {
 	let script = document.createElement('script');
 	script.onload = function (){

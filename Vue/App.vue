@@ -197,6 +197,7 @@
     import '../iview/iview.css';
 	import Ruler from "./Ruler";
 	import ImagePicker from "./ImagePicker";
+	import { getImgSrcFromDataUrl } from "../utils";
 
 	export default {
         name: "App",
@@ -209,7 +210,15 @@
                 default() {
                     return { }
                 }
-            }
+            },
+            props: {
+                dataUrl: {
+                    type: String,
+                    default(){
+                        return ''
+                    }
+                }
+            },
         },
         data() {
             return Object.assign({
@@ -340,6 +349,15 @@
                 },
                 immediate: true
             },
+			dataUrl: {
+			    handler(val){
+			    	if (val) {
+						let src = getImgSrcFromDataUrl(val);
+						this.updateImg(src, val);
+                    }
+			    },
+			    immediate: true
+			},
 			tipMsg(val) {
         		this.$tip(val);
             }
