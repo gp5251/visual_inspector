@@ -2,18 +2,11 @@ const bgApp = function (){
 	return {
 		run() {
 			chrome.browserAction.onClicked.addListener(() => {
-				getCurTab().then(tab => {
-					let tabId = tab.id;
-					chrome.browserAction.getTitle({tabId}, re => {
-						if (re === 'Visual Inspector is off') {
-							setAppState(tabId, true);
-						} else {
-							setAppState(tabId, false);
-						}
-
+				getBAState()
+					.then(({tabId, state}) => {
+						state ? setAppState(tabId, false) : setAppState(tabId, true);
 						chrome.tabs.executeScript(null, {file: 'index.js'});
 					});
-				})
 			});
 
 			chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
@@ -21,12 +14,17 @@ const bgApp = function (){
 					chrome.storage.local.get(['_viData', '_viDataUrl', '_url'], ({_viData, _viDataUrl, _url}) => {
 						if (_url === tab.url && _viData && _viDataUrl) {
 							chrome.tabs.executeScript(null, {file: 'index.js'});
-						// } else {
-							// chrome.storage.local.remove(['_viData', '_url', '_viDataUrl']);
 						}
 					});
 				}
 			});
+
+			chrome.runtime.onMessage.addListener((request, sender) => {
+				console.log('request', request);
+				if (request.type == 'restored' && sender.tab) {
+					setAppState(sender.tab.id, true)
+				}
+			})
 		}
 	};
 
@@ -65,6 +63,17 @@ const bgApp = function (){
 		return new Promise(resolve => {
 			chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 				resolve(tabs[0])
+			});
+		})
+	}
+
+	function getBAState() {
+		return getCurTab().then(tab => {
+			return new Promise(resolve => {
+				let tabId = tab.id;
+				chrome.browserAction.getTitle({tabId}, re => {
+					resolve({tabId, state: re === 'Visual Inspector is on'});
+				});
 			});
 		})
 	}

@@ -84,16 +84,7 @@ let config = {
 if (isProd) {
     config.mode = 'production';
     config.plugins.push(new ZipPlugin({ path: '../', filename: 'VisualInspector.zip' }));
-    config.optimization = {
-        minimizer:[
-            new UglifyJsPlugin({
-                cache: true,
-                parallel: true,
-                sourceMap: false
-            }),
-            new OptimizeCSSAssetsPlugin()
-        ]
-    }
+	config.devtool = 'cheap-eval-source-map';
 } else {
     config.mode = 'development';
     config.devtool = 'cheap-eval-source-map';

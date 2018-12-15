@@ -4,6 +4,7 @@
   "realtime": "Realtime",
   "ruler": "Measure",
   "opacity": "opacity",
+  "insert": "Upload Mockup",
   "modes": {
     "normal": "normal",
     "multiply": "multiply",
@@ -41,7 +42,8 @@
 	"showRuler": "Measure: Enabled",
 	"hideRuler": "Measure: Disabled",
 	"useRestore": "Realtime: Enabled",
-	"unUseRestore": "Realtime: Disabled"
+	"unUseRestore": "Realtime: Disabled",
+    "useRestoreUnAvailable": "Please insert mockup first"
   }
 
 }

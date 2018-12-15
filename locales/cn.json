@@ -4,6 +4,7 @@
   "realtime": "实时",
   "ruler": "测量",
   "opacity": "透明度",
+  "insert": "上传设计稿",
   "modes": {
     "normal": "正常",
     "multiply": "正片叠底",
@@ -41,6 +42,7 @@
     "showRuler": "测量：开启",
     "hideRuler": "测量：关闭",
     "useRestore": "实时：开启",
-    "unUseRestore": "实时：关闭"
+    "unUseRestore": "实时：关闭",
+    "useRestoreUnAvailable": "请先插入视觉稿"
   }
 }

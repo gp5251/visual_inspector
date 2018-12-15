@@ -147,9 +147,9 @@
             </div>
 
             <div class="vi_formLine">
-                <Checkbox v-model="freeze" class="vi_freeze">{{ this.$t("freeze") }}</Checkbox>
-                <Checkbox v-model="showMockup">{{ this.$t("show") }}</Checkbox>
-                <Checkbox v-model="useRestore">{{ this.$t("realtime") }}</Checkbox>
+                <Checkbox v-model="freeze" class="vi_freeze" :disabled="!img.src">{{ this.$t("freeze") }}</Checkbox>
+                <Checkbox v-model="showMockup" :disabled="!img.src">{{ this.$t("show") }}</Checkbox>
+                <Checkbox v-model="useRestore" :disabled="!img.src">{{ this.$t("realtime") }}</Checkbox>
 				<Checkbox v-model="showRuler">{{ this.$t("ruler") }}</Checkbox>
             </div>
 
@@ -211,14 +211,12 @@
                     return { }
                 }
             },
-            props: {
-                dataUrl: {
-                    type: String,
-                    default(){
-                        return ''
-                    }
-                }
-            },
+			dataUrl: {
+				type: String,
+				default(){
+					return ''
+				}
+			}
         },
         data() {
             return Object.assign({
@@ -335,12 +333,14 @@
                         let fn = throttle(()=>{
                             if (this.useRestore) {
                                 let {opacity, freeze, blendMode, wType, mockup, img, useRestore, showPanel} = this.$data;
+                                img = JSON.parse(JSON.stringify(img));
+                                delete img.src;
                                 chrome.storage.local.set({_viData: JSON.stringify({opacity,freeze, blendMode, wType, mockup, img, useRestore,  showPanel})})
                                 requestAnimationFrame(fn);
                             } else {
                             	chrome.storage.local.remove(['_viData', '_url', '_viDataUrl']);
                             }
-                        }, 1000);
+                        }, 500);
 
                         requestAnimationFrame(fn);
                     }
@@ -354,6 +354,7 @@
 			    	if (val) {
 						let src = await getImgSrcFromDataUrl(val);
 						this.updateImg(src, val);
+						this.send({type: 'restored'})
                     }
 			    },
 			    immediate: true
@@ -464,8 +465,8 @@
 					this.img = {
 						width, height, src
 					};
+					chrome.storage.local.set({_viDataUrl: dataUrl, _url: location.href});
 					if (!this.useRestore) this.reset();
-					chrome.storage.local.set({_viDataUrl: dataUrl, _url: location.href})
 				}, err => console.error('failed to get img', err));
             },
 
@@ -483,11 +484,9 @@
             },
 
             send(data, cb) {
-                chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                    chrome.tabs.sendMessage( tabs[0].id, data, function(response) {
-                        cb && cb(response);
-                    })
-                })
+				chrome.runtime.sendMessage(data, function(response) {
+					cb && cb(response);
+				})
             },
 
             bindEvs() {

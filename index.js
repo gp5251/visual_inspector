@@ -41,27 +41,25 @@ const app = function () {
 				i18n,
 				beforeDestroy() {
 					isRunning = false;
+					delete vm.$el._app;
+					delete window._Visual_Inspector;
 					vm.$el.remove();
+
+					console.log('beforeDestroy');
 				},
-				created() {
+				mounted() {
 					isRunning = true;
-				},
-				methods: {
-					destroy() {
-						this.$destroy();
-						vm = null;
-					}
+					window._Visual_Inspector = app;
+					this.$el._app = app; // todo
 				}
 			});
 
 			document.body.appendChild(vm.$el);
-
-			window._Visual_Inspector = app;
 		},
 
 		quit() {
-			vm.destroy();
-			delete window._Visual_Inspector;
+			vm.$destroy();
+			vm = null;
 		},
 
 		checkRealtime() {
@@ -76,20 +74,26 @@ const app = function () {
 					}
 				});
 			})
+		},
+
+		handleConfictWhenUpdate() {
+			let oldApp = document.querySelector('.Visual_Inspector');
+			if (oldApp) oldApp.remove();
 		}
 	}
 }();
 
-app.checkRealtime()
-	.then(result => {
-		app.run(result)
-	}, () => {
-		if (window._Visual_Inspector) {
-			window._Visual_Inspector.quit();
-		} else {
+if (window._Visual_Inspector) {
+	window._Visual_Inspector.quit();
+} else {
+	app.handleConfictWhenUpdate();
+	app.checkRealtime()
+		.then(result => {
+			app.run(result)
+		}, () => {
 			app.run();
-		}
-	});
+		});
+}
 
 
 

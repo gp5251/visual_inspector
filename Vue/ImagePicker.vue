@@ -3,16 +3,17 @@
 		padding-top: 5px;
 		position: relative;
 		white-space: nowrap;
-		min-width: 150px;
+		min-width: 100px;
+		text-shadow: none;
 
-		.tit {
+		.vi_tit {
 			display: inline-block;
 			width: 100%;
 			background-color: #2d8cf0;
 			text-align: center;
-			line-height: 30px;
+			line-height: 20px;
 			color: white;
-			padding: 5px 10px;
+			padding: 3px 5px;
 			border-radius: 3px;
 			font-size: 12px;
 			box-sizing: border-box;
@@ -30,8 +31,8 @@
 </style>
 
 <template>
-	<div class="imagePicker">
-		<span class="tit">{{ $t("insert") }}</span>
+	<div class="vi_imagePicker">
+		<span class="vi_tit">{{ $t("insert") }}</span>
 		<input type="file" @change="insertImg" :key="newInputKey" accept="image/*"/>
 	</div>
 </template>
@@ -41,16 +42,9 @@
 
 	export default {
 		name: "ImageBtn",
-		props: {
-			tip: {
-				type: String,
-				default() {
-					return ''
-				}
-			}
-		},
 		watch: {
 			src(val, oldVal) {
+				console.log('src', val, oldVal)
 				if (oldVal) {
 					console.log('oldSrc', oldVal);
 

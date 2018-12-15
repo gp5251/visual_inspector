@@ -4,7 +4,7 @@
   "version": "1.5.0",
   "manifest_version": 2,
   "default_locale": "zh_CN",
-  "author":"paul",
+  "author": "paul",
   "description": "__MSG_pluginDesc__",
   "icons": {
     "128": "icon.png"
@@ -14,13 +14,19 @@
     "default_title": "Visual Inspector is off"
   },
   "permissions": [
-    "unlimitedStorage", "storage", "tabs", "activeTab"
+    "unlimitedStorage",
+    "storage",
+    "tabs",
+    "https://*/*",
+    "http://*/*"
   ],
-  "background":{
-    "scripts":["background.js"],
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
     "persistent": false
   },
   "web_accessible_resources": [
-	"index.css"
+    "index.css"
   ]
 }
