@@ -9,32 +9,6 @@
 
 > Preset shortcuts for frequently used commands for easier operation and comparison
 
-
-### key concepts:
-
-- Freeze: (Not enabled by default)
-    
-     When this is enabled, the mockup will not respond to mouse events, that is, you cannot move or resize the mockup.
-    
-- Realtime: (default is not enabled)
-
-    The state(size, position, opacity, blend mode) is saved in real time, and will be restored when you refresh your page.
-
-- Layer blend mode: (default normal mode)
-    
-    Similar to photoshop blend mode, which is convenient for quick comparison of different styles of design drafts.
-
-- Quick adaptation:
-
-	Quickly manipulate the size and location. Currently 6 ways are predefined
-
-	- Reset, which is also the default way to show the mockup. When the mockup is inserted into the page, if the original size of the mockup exceeds the width of the page, the image is scaled. If the original size of the mockup is smaller than the page width, the original size is displayed.
-	- Original image size. The mockup is displayed in its original size at the current location.
-	- Original size /2. The mockup is reduced to half of the original mockup at the current position.
-	- Original size *2. The mockup is stretched to double of the original mockup at the current position.
-	- Window Width. The width of the mockup is the width of the window
-	- centered in window. Centers the mockup at the current window position.
-
 ###  shortcut keys:
 
 - h: show or hide mockup
