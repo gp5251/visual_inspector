@@ -1,17 +1,14 @@
 ## Visual Inspector
 > This is a chrome plugin to help front-end engineers and designers to quickly locate differences between design mockups and web pages. as well as front-end engineers UI self-examination.
 
-> You can insert the design draft into the current page, drag or resize the design, change the transparency, blend mode, etc. at will, to facilitate UI comparison of various design styles. 
+> You can modify the design manuscript size, `position`, `transparency`, `mix mode`, etc. at will, to facilitate UI comparison of various design styles.
 
-> If you are a front-end engineer and you are developing web page to a design mockup, it is recommended to turn the real-time and freeze on, then the mockup won't react to your mouse events,  and the state(size, position, opacity,) will be restored when you refresh your page.
+> If you are doing page refactoring, the real-time function can be easily restored to the state before the page is refreshed after the page is refreshed (such as the size, position, transparency, etc. of the design draft).
 
-> At the same time, front-end engineers can quickly find differences between pages and design mockups during the develpment phase. 
+> At the same time, if you do not need to move the stretch design, it is recommended to open the freeze function, so that the design will no longer respond to mouse events, can not stretch and drag, and will not affect the interactive function of the page itself.
 
-### basic steps:
-- Click on the plugin icon to show up the plugin menu. Click the Insert button to insert the mockup into the current page. 
-- There is a help toolbar at the bottom of the page, which can adjust the transparency of the design, quickly display or hide the design draft, switch the blending mode, as well as some shortcuts to set the size and position, and provides a custom size and Positioning tool.
-- To quit, simply refresh the page, or click on the plugin icon, click quit-button on the popup page. Simply refreshing the page without turning on the real-time feature is fine.
-- Some times the color of the icon may be gray, then reload the page and try again:)
+> Preset shortcuts for frequently used commands for easier operation and comparison
+
 
 ### key concepts:
 

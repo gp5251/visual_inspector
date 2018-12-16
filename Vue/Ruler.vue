@@ -11,13 +11,9 @@
 
 		.vi_rulerItem{
 			position: absolute;
-			/*box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.5);*/
-			/*outline: 1px solid rgba(0, 0, 0, 0.5);*/
-			/*background-color: rgba(51, 136, 255, 0.2);*/
 			background-color: rgba(255, 153, 0, 0.3);
-			/*z-index: 99993;*/
 
-			.txt{
+			.vi_txt{
 				white-space: nowrap;
 				position: absolute;
 				left: 50%;
@@ -30,7 +26,7 @@
 				line-height: 1;
 			}
 
-			.close{
+			.vi_close{
 				line-height: 1;
 				position: absolute;
 				right: 2px;
@@ -73,7 +69,6 @@
 			left: 0;
 			right: 0;
 			height: 1px;
-			/*transform: scale(1, .2) translateY(-.5px);*/
 			background-color: black;
 			pointer-events: none;
 		}
@@ -83,7 +78,6 @@
 			top: 0;
 			bottom: 0;
 			width: 1px;
-			/*transform: scale(.2, 1) translateX(-.5px);;*/
 			background-color: black;
 			pointer-events: none;
 		}
@@ -104,12 +98,12 @@
 			 @click.stop
 			 v-for="(item, index) in items"
 			 :style="{width: item.w + 'px', height: item.h + 'px', left: item.x + 'px', top: item.y + 'px'}">
-			<span class="close" @touchstart.stop="remove(index)" @mousedown.stop="remove(index)">X</span>
-			<span class="txt">{{ item.w | toInt }}px {{ item.h | toInt }}px</span>
+			<span class="vi_close" @touchstart.stop="remove(index)" @mousedown.stop="remove(index)">X</span>
+			<span class="vi_txt">{{ item.w | toInt }}px {{ item.h | toInt }}px</span>
 		</div>
 
-		<span class="vi_rulerCrossX" :style="{transform: 'translateY(' + (top - 0.5) + 'px) scale(1, .3)'}"></span>
-		<span class="vi_rulerCrossY" :style="{transform: 'translateX(' + (left - 0.5) + 'px) scale(.3, 1)'}"></span>
+		<span class="vi_rulerCrossX" :style="{transform: 'translateY(' + (top - 0.15) + 'px) scale(1, .3)'}"></span>
+		<span class="vi_rulerCrossY" :style="{transform: 'translateX(' + (left - 0.15) + 'px) scale(.3, 1)'}"></span>
     </div>
 </template>
 
