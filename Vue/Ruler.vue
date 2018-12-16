@@ -17,7 +17,7 @@
 			background-color: rgba(255, 153, 0, 0.3);
 			/*z-index: 99993;*/
 
-			.txt{
+			.vi_txt{
 				white-space: nowrap;
 				position: absolute;
 				left: 50%;
@@ -30,7 +30,7 @@
 				line-height: 1;
 			}
 
-			.close{
+			.vi_close{
 				line-height: 1;
 				position: absolute;
 				right: 2px;
@@ -104,8 +104,8 @@
 			 @click.stop
 			 v-for="(item, index) in items"
 			 :style="{width: item.w + 'px', height: item.h + 'px', left: item.x + 'px', top: item.y + 'px'}">
-			<span class="close" @touchstart.stop="remove(index)" @mousedown.stop="remove(index)">X</span>
-			<span class="txt">{{ item.w | toInt }}px {{ item.h | toInt }}px</span>
+			<span class="vi_close" @touchstart.stop="remove(index)" @mousedown.stop="remove(index)">X</span>
+			<span class="vi_txt">{{ item.w | toInt }}px {{ item.h | toInt }}px</span>
 		</div>
 
 		<span class="vi_rulerCrossX" :style="{transform: 'translateY(' + (top - 0.5) + 'px) scale(1, .5)'}"></span>
