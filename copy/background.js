@@ -3,7 +3,8 @@ const bgApp = function (){
 		run() {
 			chrome.browserAction.onClicked.addListener(() => {
 				getBAState()
-					.then(({tabId, state}) => {
+					.then(({tabId, state, url}) => {
+						if (url.indexOf('http')!== 0) return;
 						state ? setAppState(tabId, false) : setAppState(tabId, true);
 						chrome.tabs.executeScript(null, {file: 'index.js'});
 					});
@@ -72,7 +73,7 @@ const bgApp = function (){
 			return new Promise(resolve => {
 				let tabId = tab.id;
 				chrome.browserAction.getTitle({tabId}, re => {
-					resolve({tabId, state: re === 'Visual Inspector is on'});
+					resolve({tabId, state: re === 'Visual Inspector is on', url: tab.url});
 				});
 			});
 		})
