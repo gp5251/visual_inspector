@@ -39,8 +39,7 @@ let config = {
         new MiniCssExtractPlugin({
             filename:'[name].css'
         }),
-        new CopyWebpackPlugin(['./copy']),
-	    new OptimizeCSSAssetsPlugin
+        new CopyWebpackPlugin(['./copy'])
     ],
 
     module: {
@@ -84,7 +83,10 @@ let config = {
 
 if (isProd) {
     config.mode = 'production';
-    config.plugins.push(new ZipPlugin({ path: '../', filename: 'VisualInspector.zip' }));
+    config.plugins.push(
+        new ZipPlugin({ path: '../', filename: 'VisualInspector.zip' }),
+	    new OptimizeCSSAssetsPlugin
+	);
 } else {
     config.mode = 'development';
     config.devtool = 'cheap-eval-source-map';
