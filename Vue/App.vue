@@ -146,8 +146,6 @@
 
         <Ruler v-if="showRuler" />
 
-        <!--<Tip :tip="tipMsg"/>-->
-
         <div class="vi_controllers" v-if="showPanel">
             <h3>Visual Inspector</h3>
 
@@ -296,7 +294,7 @@
 				this.tipMsg = this.$t(val ? "tip.freeze" : "tip.unFreeze");
 			},
 			opacity(val) {
-				this.tipMsg = this.$t("opacity") + ": " + val * 100 + "%";
+				this.tipMsg = this.$t("opacity") + ": " + +(val * 100).toFixed(2) + "%";
             },
             wType(val) {
                 let mockup = this.mockup;
@@ -529,7 +527,6 @@
             }
         },
         created() {
-            window.scrollTo(0, 0);
             this.bindEvs();
             this.insertCss();
         },
