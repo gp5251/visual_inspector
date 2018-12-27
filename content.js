@@ -135,7 +135,7 @@ const app = function () {
                 vm.src = src;
 			} else {
                 this.createUI(src, data);
-                document.body.appendChild(vm.$el);
+                document.documentElement.appendChild(vm.$el);
 			}
 
             chrome.storage.local.set({_viDataUrl: dataUrl, _url: location.href})
