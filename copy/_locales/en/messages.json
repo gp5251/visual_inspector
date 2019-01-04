@@ -1,6 +1,6 @@
 {
   "pluginDesc": {"message": "A helper tool for fast front-end development and visual inspection."},
-  "connecting": {"message": "Please reload the page and try again :)"},
-  "connectSucc": {"message": "Connect success~"},
-  "connectFail": {"message": "Failed to connect, Please reload the page and try again :)"}
+  "connecting": {"message": "Connecting, if it takes too long, please reload the page and try again :)"},
+  "connectSucc": {"message": "Connected success~"},
+  "connectFail": {"message": "Failed to connect, please reload the page and try again :)"}
 }
