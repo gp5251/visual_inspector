@@ -12,13 +12,18 @@
         will-change: translate, width, height;
         outline: 1px dashed #666;
 
-        &.static{
+        &.vi_static{
             background-color: transparent;
             outline: none;
 
             &::after{
                 display: none;
             }
+        }
+
+        &.vi_isFF{
+            outline: none;
+            box-shadow: 0 0 1px 1px #999;
         }
 
         &::after{
@@ -46,15 +51,20 @@
 </style>
 
 <template>
-    <div class="vi_mockup" :class="{static: freeze || showRuler}" :style="mockupStyle"></div>
+    <div class="vi_mockup" :class="{vi_static: freeze || showRuler, vi_isFF: isFF}" :style="mockupStyle"></div>
 </template>
 
 <script>
     import interact from 'interactjs';
-    import {throttle} from "../utils";
+    import {throttle, isFF} from "../utils";
 
     export default {
         name: "Mockup",
+        data(){
+        	return {
+        		isFF
+            }
+        },
         props: ['src', 'opacity', 'freeze', 'showRuler', 'blendMode', 'w', 'h', 'x', 'y'],
         watch: {
             x(val) {

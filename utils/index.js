@@ -131,3 +131,5 @@ export async function getImgSrcFromDataUrl(dataUrl) {
 		return dataUrl;
 	}
 }
+
+export const isFF = /Firefox/i.test(navigator.userAgent);
