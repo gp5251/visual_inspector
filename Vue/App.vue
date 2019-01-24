@@ -111,6 +111,7 @@
                 background-color: white;
                 box-sizing: border-box;
                 display: inline-block;
+                outline: none;
             }
         }
     }
@@ -126,7 +127,6 @@
             :opacity="opacity"
             :blendMode="blendMode"
             :freeze="freeze"
-            :showRuler="showRuler"
             :src="img.src"
             :w="mockup.width"
             :h="mockup.height"
@@ -135,8 +135,6 @@
             @moveAndResize="moveAndResize"
             v-if="img.src"
             v-show="showMockup"/>
-
-        <Ruler v-if="showRuler" />
 
         <div class="vi_controllers" v-if="showPanel">
             <h3>Visual Inspector</h3>
@@ -151,7 +149,6 @@
                 <Checkbox v-model="freeze" class="vi_freeze" :disabled="!img.src">{{ this.$t("freeze") }}</Checkbox>
                 <Checkbox v-model="showMockup" :disabled="!img.src">{{ this.$t("show") }}</Checkbox>
                 <Checkbox v-model="useRestore" :disabled="!img.src">{{ this.$t("realtime") }}</Checkbox>
-				<Checkbox v-model="showRuler">{{ this.$t("ruler") }}</Checkbox>
             </div>
 
             <div class="vi_formLine vi_blender">
@@ -177,11 +174,11 @@
                 </Dropdown>
             </div>
 
-            <div class="vi_customSize vi_formLine" @keydown.stop @keyup.stop>
-                <input title="width" placeholder="width" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.width" @keypress="handleCustomSizeInput"/>
-                <input title="height" placeholder="height" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.height" @keypress="handleCustomSizeInput"/>
-                <input title="left" placeholder="left" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.left" @keypress="handleCustomSizeInput"/>
-                <input title="top" placeholder="top" v-autoSelect type="text" class="vi_input" v-model.lazy="mockup.top" @keypress="handleCustomSizeInput"/>
+            <div class="vi_customSize vi_formLine">
+                <input title="width" placeholder="width" type="text" class="vi_input" v-model.lazy="mockup.width" @keypress="handleCustomSizeInput"/>
+                <input title="height" placeholder="height" type="text" class="vi_input" v-model.lazy="mockup.height" @keypress="handleCustomSizeInput"/>
+                <input title="left" placeholder="left" type="text" class="vi_input" v-model.lazy="mockup.left" @keypress="handleCustomSizeInput"/>
+                <input title="top" placeholder="top" type="text" class="vi_input" v-model.lazy="mockup.top" @keypress="handleCustomSizeInput"/>
             </div>
         </div>
     </div>
@@ -196,14 +193,13 @@
     import DropdownItem from '../iview/components/dropdown-item';
     import {throttle} from "../utils";
     import '../iview/iview.css';
-	import Ruler from "./Ruler";
 	import ImagePicker from "./ImagePicker";
 	import { getImgSrcFromDataUrl } from "../utils";
 
 	export default {
         name: "App",
         components: {
-            Checkbox, Slider, Dropdown, DropdownMenu, DropdownItem, Mockup, Ruler, ImagePicker
+            Checkbox, Slider, Dropdown, DropdownMenu, DropdownItem, Mockup, ImagePicker
         },
         props: {
             restoredData: {
@@ -223,7 +219,6 @@
             return Object.assign({
                 showPanel: true,
                 showMockup: true,
-				showRuler: false,
                 opacity: 1,
                 freeze: 0,
                 blendMode: 'normal',
@@ -280,9 +275,6 @@
             },
 			showPanel(val) {
 				this.tipMsg = this.$t(val ? "tip.showPanel" : "tip.hidePanel");
-			},
-			showRuler(val) {
-				this.tipMsg = this.$t(val ? "tip.showRuler" : "tip.hideRuler");
 			},
 			freeze(val) {
 				this.tipMsg = this.$t(val ? "tip.freeze" : "tip.unFreeze");
@@ -402,7 +394,6 @@
                 if (e.key === 'h' || e.which === 72) this.showMockup = !this.showMockup;
                 if (e.key === 'f' || e.which === 70) this.showPanel = !this.showPanel;
                 if (e.key === 'd' || e.which === 68) this.freeze = !this.freeze;
-				if (e.key === 'm' || e.which === 77) this.showRuler = !this.showRuler;
 
 				if (e.altKey) {
 					if (e.key === '0' || e.which === 48) this.reset();
@@ -511,22 +502,6 @@
 
             removeCss() {
                 this._link.remove();
-            }
-        },
-        directives: {
-            autoSelect: {
-                bind(el) {
-                    // fix popup context menu bug
-                    el._select = function() {
-                        if (el._tid) clearTimeout(el._tid);
-                        el._tid = setTimeout(el.select.bind(el), 20)
-                    };
-
-                    el.addEventListener('focus', el._select)
-                },
-                unbind(el) {
-                    el.removeEventListener('focus', el._select)
-                }
             }
         },
         created() {

@@ -7,13 +7,7 @@
 
 > At the same time, front-end engineers can quickly find differences between pages and design mockups during the develpment phase. 
 
-### basic steps:
-- Click on the plugin icon to show up the plugin menu. Click the Insert button to insert the mockup into the current page. 
-- There is a help toolbar at the bottom of the page, which can adjust the transparency of the design, quickly display or hide the design draft, switch the blending mode, as well as some shortcuts to set the size and position, and provides a custom size and Positioning tool.
-- To quit, simply refresh the page, or click on the plugin icon, click quit-button on the popup page. Simply refreshing the page without turning on the real-time feature is fine.
-
 ### key concepts:
-
 - Freeze: (Not enabled by default)
     
      When this is enabled, the mockup will not respond to mouse events, that is, you cannot move or resize the mockup.
@@ -42,7 +36,6 @@
 - h: show or hide mockup
 - f: show or hide the bottom toolbar
 - d: freeze or unfreeze mockup
-- m: enable or disable measurement
 - Number keys (0-9): Quickly set the mockup transparency. For example, if you press 5 twice in 1 second, the transparency of the mockup will be set at 55%. If only the number key is pressed once in 1 second, such as 5, it will automatically fill 0 after one second, that is, set the mockup transparency to 50%.
 - Arrow keys: Move the mockup and move 1px at a time. If you press the Shift key at the same time, you will move 10px at a time.
 - Quick adaptation:
