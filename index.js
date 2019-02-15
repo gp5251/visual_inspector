@@ -44,8 +44,6 @@ const app = function () {
 					delete vm.$el._app;
 					delete window._Visual_Inspector;
 					vm.$el.remove();
-
-					console.log('beforeDestroy');
 				},
 				mounted() {
 					isRunning = true;

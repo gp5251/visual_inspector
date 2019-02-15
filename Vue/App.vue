@@ -264,8 +264,7 @@
 					this.$t("quickMatch.naturalWidth"),
 					this.$t("quickMatch.naturalWidth*2"),
 					this.$t("quickMatch.naturalWidth/2"),
-					this.$t("quickMatch.windowWidth"),
-					this.$t("quickMatch.centerInScreen")
+					this.$t("quickMatch.windowWidth")
 				]
             }
         },
