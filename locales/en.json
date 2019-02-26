@@ -40,8 +40,8 @@
 	"hidePanel": "Toolbar: Hidden",
 	"showRuler": "Measure: Enabled",
 	"hideRuler": "Measure: Disabled",
-	"useRestore": "Realtime: Enabled",
-	"unUseRestore": "Realtime: Disabled"
+	"useRestore": "Realtime: Enabled. Refreshing page will restore page state",
+	"unUseRestore": "Realtime: Disabled. Refreshing page will lost page state"
   }
 
 }

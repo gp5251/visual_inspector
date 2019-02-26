@@ -26,21 +26,19 @@
     "quickMatch": "快速匹配",
     "reset": "重置",
     "naturalWidth": "原图",
-    "naturalWidth/2": "原图/2",
-    "naturalWidth*2": "原图x2",
+    "naturalWidth/2": "原图 / 2",
+    "naturalWidth*2": "原图 X 2",
 	"windowWidth": "窗口宽度",
     "centerInScreen": "窗口居中"
   },
   "tip": {
-    "freeze": "冻结：开启",
-    "unFreeze": "冻结：关闭",
+    "freeze": "冻结：开启，设计稿不可选中",
+    "unFreeze": "冻结：关闭，设计稿可选中",
     "showMockup": "设计稿：显示",
     "hideMockup": "设计稿：隐藏",
     "showPanel": "工具栏：显示",
     "hidePanel": "工具栏：隐藏",
-    "showRuler": "测量：开启",
-    "hideRuler": "测量：关闭",
-    "useRestore": "实时：开启",
-    "unUseRestore": "实时：关闭"
+    "useRestore": "实时：开启，刷新页面将保留状态",
+    "unUseRestore": "实时：关闭，刷新页面将丢失状态"
   }
 }
