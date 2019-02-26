@@ -11,6 +11,8 @@
 
 > 预置了常用命令的快捷键，更加方便的操作和比对
 
+### 新版(1.3.9+)去掉了测量功能，如果需要请安装测量插件，如：[better ruler](https://chrome.google.com/webstore/detail/better-ruler/ilcnadaaninblgbekoaihdhoiecaflie),支持吸附测量。
+
 ### 快捷键:
 
 - h 键: 快速显示和隐藏图片

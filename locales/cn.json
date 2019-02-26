@@ -25,9 +25,9 @@
   "quickMatch": {
     "quickMatch": "快速匹配",
     "reset": "重置",
-    "naturalWidth": "原图大小",
-    "naturalWidth/2": "原图一半",
-    "naturalWidth*2": "原图两倍",
+    "naturalWidth": "原图",
+    "naturalWidth/2": "原图/2",
+    "naturalWidth*2": "原图x2",
 	"windowWidth": "窗口宽度",
     "centerInScreen": "窗口居中"
   },
