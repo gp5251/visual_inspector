@@ -139,8 +139,6 @@
             v-if="img.src"
             v-show="showMockup"/>
 
-        <!--<Ruler v-if="showRuler" />-->
-
         <div class="vi_controllers" v-if="showPanel">
             <h3>Visual Inspector</h3>
 
@@ -152,7 +150,6 @@
                 <Checkbox v-model="freeze" class="vi_freeze">{{ this.$t("freeze") }}</Checkbox>
                 <Checkbox v-model="showMockup">{{ this.$t("show") }}</Checkbox>
                 <Checkbox v-model="useRestore">{{ this.$t("realtime") }}</Checkbox>
-				<!--<Checkbox v-model="showRuler">{{ this.$t("ruler") }}</Checkbox>-->
             </div>
 
             <div class="vi_formLine vi_blender">
@@ -221,7 +218,6 @@
             return Object.assign({
                 showPanel: true,
                 showMockup: true,
-				// showRuler: false,
                 opacity: 1,
                 freeze: 0,
                 blendMode: 'normal',
@@ -279,9 +275,6 @@
 			showPanel(val) {
 				this.tipMsg = this.$t(val ? "tip.showPanel" : "tip.hidePanel");
 			},
-			// showRuler(val) {
-			// 	this.tipMsg = this.$t(val ? "tip.showRuler" : "tip.hideRuler");
-			// },
 			freeze(val) {
 				this.tipMsg = this.$t(val ? "tip.freeze" : "tip.unFreeze");
 			},
@@ -368,7 +361,6 @@
             },
 
             handlePreventScroll(e) {
-                // if (e.target.tagName.toLowerCase() !== 'body') return;
 	            if (e.target !== e.currentTarget) return;
                 if (!this.freeze && 37 <= e.which && e.which <= 40) {
                     e.preventDefault();
@@ -400,7 +392,6 @@
                 if (e.key === 'h' || e.which === 72) this.showMockup = !this.showMockup;
                 if (e.key === 'f' || e.which === 70) this.showPanel = !this.showPanel;
                 if (e.key === 'd' || e.which === 68) this.freeze = !this.freeze;
-				// if (e.key === 'm' || e.which === 77) this.showRuler = !this.showRuler;
 
 				if (e.altKey) {
 					if (e.key === '0' || e.which === 48) this.reset();
@@ -496,7 +487,9 @@
                 this._link = document.createElement('link');
                 this._link.rel = "stylesheet";
                 this._link.href = chrome.extension.getURL('content.css');
-                (document.head||document.documentElement).appendChild(this._link);
+
+                window.appRoot.shadowRoot.appendChild(this._link)
+                // (document.head||document.documentElement).appendChild(this._link);
             },
 
             removeCss() {

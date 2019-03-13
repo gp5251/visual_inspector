@@ -9,7 +9,7 @@ export default {
 				$tip = new $TipPlugin({
 					el: document.createElement('div')
 				});
-				document.documentElement.appendChild($tip.$el);
+				window.appRoot.shadowRoot.appendChild($tip.$el);
 			}
 
 			$tip.tip = tip;

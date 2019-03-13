@@ -6,7 +6,7 @@ import i18n, {setupLang} from "./locales";
 Vue.use(Tip);
 
 const app = function () {
-	let vm, 
+	let vm,
 		uiCreated = false,
 		appState = 'stopped',
 		cspBlockedBlob = -1;
@@ -134,15 +134,24 @@ const app = function () {
             if (vm) {
                 vm.src = src;
 			} else {
-                this.createUI(src, data);
-                document.documentElement.appendChild(vm.$el);
+                window.appRoot = document.createElement('div');
+                let appShadow = window.appRoot.attachShadow({mode: 'open'});
+
+	            this.createUI(src, data);
+
+	            appShadow.appendChild(vm.$el);
+	            document.body.appendChild(window.appRoot);
 			}
 
             chrome.storage.local.set({_viDataUrl: dataUrl, _url: location.href})
 		},
 
 		quit() {
-			if (appState === 'running') vm.destroy();
+			if (appState === 'running') {
+				vm.destroy();
+				window.appRoot.remove();
+				delete window.appRoot;
+			}
 		},
 
 		createUI(src, restoredData = {}) {
