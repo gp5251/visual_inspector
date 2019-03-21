@@ -489,7 +489,6 @@
                 this._link.href = chrome.extension.getURL('content.css');
 
                 window.appRoot.shadowRoot.appendChild(this._link)
-                // (document.head||document.documentElement).appendChild(this._link);
             },
 
             removeCss() {
