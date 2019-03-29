@@ -1,6 +1,8 @@
 ## Visual Inspector
 [ENGLISH](https://github.com/gp5251/visual_inspector/blob/master/README.en.md)
 
+[插件地址](https://chrome.google.com/webstore/detail/visual-inspector%E5%89%8D%E7%AB%AF%E9%87%8D%E6%9E%84%20%E8%A7%86%E8%A7%89%E8%B5%B0%E6%9F%A5/jgimcbonbekgeahallgcmiibdidjeeim)
+
 > 这款插件可以高效的帮助前端工程师重构和设计师UI走查，也可方便前端工程师UI自查。前端工程师在重构阶段就能快速发现页面和视觉稿的差异，减少后期和设计师的UI走查时间:)
 
 > 可以随意修改设计稿`大小`，`位置`，`透明度`，`混合模式`等，方便各种设计风格的UI对比。
