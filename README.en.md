@@ -1,5 +1,5 @@
 ## Visual Inspector
-> This is a chrome plugin to help front-end engineers and designers to quickly locate differences between design mockups and web pages. as well as front-end engineers UI self-examination.
+> This is a chrome plugin to help front-end engineers and designers to quickly locate differences between design mockups and web pages. as well as front-end engineers UI self-examination, reducing the cost of communication with designers.
 
 > You can modify the `size`, `position`, `transparency`, `mix mode` of the design manuscript at will, to facilitate UI comparison of various design styles.
 
