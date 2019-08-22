@@ -10,7 +10,12 @@
         box-shadow: 0 0 1px 0 #ccc;
         touch-action: none;
         will-change: translate, width, height;
-        outline: 1px dashed #666;
+        outline: 9999px solid rgba(0, 0, 0, .5);
+
+        >div{
+            width: 100%;
+            height: 100%;
+        }
 
         &.static{
             background-color: transparent;
@@ -46,7 +51,9 @@
 </style>
 
 <template>
-    <div class="vi_mockup" :class="{static: freeze || showRuler}" :style="mockupStyle"></div>
+    <div class="vi_mockup" :class="{static: freeze || showRuler}" :style="mockupStyle">
+        <div :style="{opacity, backgroundImage: `url(${src})`}"></div>
+    </div>
 </template>
 
 <script>
@@ -67,12 +74,10 @@
         computed: {
             mockupStyle() {
                 let style = {
-                    opacity: this.opacity,
                     'mix-blend-mode': this.blendMode,
                     width: this.w + 'px',
                     height: this.h + 'px',
                     transform: `translate(${this.x}px, ${this.y}px)`,
-                    backgroundImage: `url(${this.src})`
                 };
                 if (this.freeze) style.pointerEvents = 'none';
                 return style;

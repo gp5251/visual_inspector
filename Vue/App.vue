@@ -498,6 +498,7 @@
         created() {
             this.bindEvs();
             this.insertCss();
+            document.body.scrollTop = 0;
         },
         beforeDestroy() {
             this.unBindEvs();
