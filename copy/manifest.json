@@ -1,7 +1,7 @@
 {
   "name": "Visual Inspector(前端重构+视觉走查辅助工具)",
   "short_name": "VI",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "manifest_version": 2,
   "default_locale": "zh_CN",
   "author":"paul",
@@ -17,6 +17,16 @@
   },
   "permissions": [
     "unlimitedStorage", "storage", "tabs", "activeTab"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
   ],
   "background":{
     "scripts":["background.js"],

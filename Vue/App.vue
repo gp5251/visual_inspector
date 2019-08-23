@@ -1,4 +1,4 @@
-<style scoped lang="less">
+<style lang="less">
     .Visual_Inspector{
         user-select: none;
         font-size: 12px;
@@ -131,11 +131,6 @@
             :blendMode="blendMode"
             :freeze="freeze"
             :src="img.src"
-            :w="mockup.width"
-            :h="mockup.height"
-            :x="mockup.left"
-            :y="mockup.top"
-            @moveAndResize="moveAndResize"
             v-if="img.src"
             v-show="showMockup"/>
 
@@ -441,7 +436,12 @@
                 	height = this.img.height;
 				}
 
-				this.moveAndResize({left: 0, top: 0, width, height});
+                this.moveAndResize({
+                    width, height, 
+                    left: Math.max(0, (window.innerWidth - width) / 2),
+                    top: Math.max(0, (window.innerHeight - height) / 2 + Math.max(document.documentElement.scrollTop, document.body.scrollTop))
+                });
+
 				this.tipMsg = this.$t("quickMatch.reset");
             },
 
@@ -493,12 +493,32 @@
 
             removeCss() {
                 this._link.remove();
+            },
+
+            showHelperMsg() {
+                let msg = [
+                    ['- h 键: 显示和隐藏图片', '- h: show or hide mockup'],
+                    ['- f 键: 显示和隐藏底部工具栏', '- f: show or hide the bottom toolbar'],
+                    ['- d 键: 冻结和解冻图片', '- d: freeze or unfreeze mockup'],
+                    ['- 数字键（0-9）：`设置图片透明度`。如：1秒内快速按下两次5，将设置图片55%的透明度。如果1秒内只按下了一次数字键，如5，一秒后将自动补0，即设置图片透明度为50%。', '- Number keys (0-9): Quickly set the mockup transparency. For example, if you press 5 twice in 1 second, the transparency of the mockup will be set at 55%. If only the number key is pressed once in 1 second, such as 5, it will automatically fill 0 after one second, that is, set the mockup transparency to 50%.'],
+                    ['- 方向键：移动图片，一次移动1px。如果同时按下Shift键，将一次移动10px。', '- Arrow keys: Move the mockup and move 1px at a time. If you press the Shift key at the same time, you will move 10px at a time.'],
+                    ['- 快速匹配', '- Quick adaptation:'],
+                    ['\t- alt + 0 : 重置', '\t- alt + 0: Reset'],
+                    ['\t- alt + 1 : 原图大小', '\t- alt + 1: Original image size'],
+                    ['\t- alt + 2 : 原图两倍', '\t- alt + 2: Original size *2'],
+                    ['\t- alt + 3 : 原图一半', '\t- alt + 3: Original size /2'],
+                    ['\t- alt + 4 : 窗口宽度', '\t- alt + 4: Window Width'],
+                ]
+                .map(msg => msg[this.$i18n.locale === 'cn' ? 0 : 1])
+                .join('\n');
+
+                console.log('%c' + msg, 'color: yellow');
             }
         },
         created() {
             this.bindEvs();
             this.insertCss();
-            document.body.scrollTop = 0;
+            this.showHelperMsg();
         },
         beforeDestroy() {
             this.unBindEvs();

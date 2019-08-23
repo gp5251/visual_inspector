@@ -1,4 +1,4 @@
-<style scoped lang="less">
+<style lang="less">
     .vi_mockup {
         width: 100%;
         height: 100%;
@@ -6,20 +6,21 @@
         position: absolute;
         left: 0;
         top: 0;
-        background: rgba(0, 0, 0, .2) url() no-repeat center ~"0 / 100%" auto;
+        background-color: rgba(0, 0, 0, .2);
         box-shadow: 0 0 1px 0 #ccc;
         touch-action: none;
         will-change: translate, width, height;
-        outline: 9999px solid rgba(0, 0, 0, .5);
+        outline: 9999px dashed rgba(0, 0, 0, .5);
 
         >div{
             width: 100%;
             height: 100%;
+            background:  url() no-repeat center top / 100% auto;
         }
 
         &.static{
             background-color: transparent;
-            outline: none;
+            // outline: none;
 
             &::after{
                 display: none;
@@ -51,8 +52,8 @@
 </style>
 
 <template>
-    <div class="vi_mockup" :class="{static: freeze || showRuler}" :style="mockupStyle">
-        <div :style="{opacity, backgroundImage: `url(${src})`}"></div>
+    <div class="vi_mockup" :class="{static: freeze || showRuler}" :style="mockupStyle" :data-x="rect.x" :data-y="rect.y">
+        <div :style="{backgroundImage: `url(${src})`, opacity}"></div>
     </div>
 </template>
 
@@ -62,25 +63,30 @@
 
     export default {
         name: "Mockup",
-        props: ['src', 'opacity', 'freeze', 'showRuler', 'blendMode', 'w', 'h', 'x', 'y'],
-        watch: {
-            x(val) {
-                this.$el.setAttribute('data-x', val);
-            },
-            y(val) {
-                this.$el.setAttribute('data-y', val);
-            }
-        },
+        props: ['src', 'opacity', 'freeze', 'showRuler', 'blendMode'],
         computed: {
             mockupStyle() {
+                let {width, height, left, top} = this.$parent.mockup;
+
                 let style = {
                     'mix-blend-mode': this.blendMode,
-                    width: this.w + 'px',
-                    height: this.h + 'px',
-                    transform: `translate(${this.x}px, ${this.y}px)`,
+                    width: width + 'px',
+                    height: height + 'px',
+                    transform: `translate(${left}px, ${top}px)`,
                 };
+
                 if (this.freeze) style.pointerEvents = 'none';
                 return style;
+            },
+            rect() {
+                let {width, height, left, top} = this.$parent.mockup;
+
+                return {
+                    w: width, 
+                    h: height,
+                    x: left,
+                    y: top
+                }
             }
         },
         methods: {
@@ -92,10 +98,12 @@
                                 x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
                                 y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 
-                            x = x.toFixed(1);
-                            y = y.toFixed(1);
+                            // x = x.toFixed(1);
+                            // y = y.toFixed(1);
 
-                            this.$emit('moveAndResize', {left: x, top: y})
+                            // this.$emit('moveAndResize', {left: x, top: y})
+                            this.$parent.mockup.left = x.toFixed(1);
+                            this.$parent.mockup.top = y.toFixed(1);
                         }, 12)
                     })
                     .resizable({
@@ -113,21 +121,25 @@
                             x += event.deltaRect.left;
                             y += event.deltaRect.top;
 
-                            this.$emit('moveAndResize', {
+                            // this.$emit('moveAndResize', {
+                            //     width: event.rect.width.toFixed(1),
+                            //     height: event.rect.height.toFixed(1),
+                            //     left: x.toFixed(1),
+                            //     top: y.toFixed(1)
+                            // })
+
+                            Object.assign(this.$parent.mockup, {
                                 width: event.rect.width.toFixed(1),
                                 height: event.rect.height.toFixed(1),
                                 left: x.toFixed(1),
                                 top: y.toFixed(1)
-                            })
+                            });
                         }, 16)
                     );
             },
         },
         mounted() {
             this.initMockup();
-
-            this.$el.setAttribute('data-x', this.x);
-            this.$el.setAttribute('data-y', this.y);
         }
     }
 </script>
