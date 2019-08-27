@@ -21,9 +21,6 @@
             padding: 5px;
             text-shadow: 1px 1px 0 white;
             border-top: 1px solid #ddd;
-
-            // background: linear-gradient(to bottom, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%)
-            // background: linear-gradient(to bottom, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%);
             background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
 
             h3{
@@ -96,7 +93,7 @@
 
             }
 
-            .vi_slider /deep/ .vi-ivu-slider-button-wrap{
+            .vi_slider .vi-ivu-slider-button-wrap{
                 top: -6px;
             }
         }

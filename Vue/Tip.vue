@@ -1,4 +1,4 @@
-<style scoped lang="less">
+<style lang="less">
 	.vi_tip{
 		white-space: nowrap;
 		background-color: #2d8cf0;
