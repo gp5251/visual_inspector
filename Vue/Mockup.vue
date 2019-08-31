@@ -7,10 +7,10 @@
         left: 0;
         top: 0;
         background-color: rgba(0, 0, 0, .2);
-        box-shadow: 0 0 1px 0 #ccc;
+        // box-shadow: 0 0 1px 0 #ccc;
         touch-action: none;
         will-change: translate, width, height;
-        outline: 9999px dashed rgba(0, 0, 0, .5);
+        // outline: 9999px dashed rgba(0, 0, 0, .5);
 
         >div{
             width: 100%;

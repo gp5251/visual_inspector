@@ -6,6 +6,14 @@
         font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
         text-align: center;
 
+        &::after{
+            content: '';
+            position: fixed;
+            left: 0;right: 0;top: 0;bottom: 0;
+            background-color: rgba(0, 0, 0, .5);
+            z-index:99989;
+        }
+
         *{
             padding: 0;
             margin: 0;

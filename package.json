@@ -1,6 +1,6 @@
 {
   "name": "Visual_Inspector",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "A helper tool for fast web page development, visual inspection and restoration.",
   "main": "content.js",
   "scripts": {
