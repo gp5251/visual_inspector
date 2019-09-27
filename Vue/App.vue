@@ -15,6 +15,10 @@
             pointer-events: none;
         }
 
+        &.hide::after{
+            display:none;
+        }
+
         *{
             padding: 0;
             margin: 0;
@@ -131,7 +135,7 @@
 </style>
 
 <template>
-    <div class="Visual_Inspector">
+    <div class="Visual_Inspector" :class="{hide: !this.showMockup}">
         <Mockup
             :opacity="opacity"
             :blendMode="blendMode"
