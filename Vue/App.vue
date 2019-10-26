@@ -522,7 +522,7 @@
                 .map(msg => msg[this.$i18n.locale === 'cn' ? 0 : 1])
                 .join('\n');
 
-                console.log('%c' + msg, 'color: yellow');
+                console.log('%c' + msg, 'color: #bdc6cf');
             }
         },
         created() {
