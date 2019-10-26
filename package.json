@@ -1,17 +1,26 @@
 {
   "name": "Visual_Inspector",
-  "version": "1.6.5",
+  "version": "1.6.6",
   "description": "A helper tool for fast web page development, visual inspection and restoration.",
   "main": "content.js",
   "scripts": {
     "start": "webpack --watch",
-    "build": "NODE_ENV=production webpack"
+    "build": "cross-env NODE_ENV=production webpack"
   },
-  "keywords": ["visual", "inspector", "front-end", "fe", "vi"],
+  "keywords": [
+    "visual",
+    "inspector",
+    "front-end",
+    "fe",
+    "vi"
+  ],
   "author": "paul",
   "license": "MIT",
-  "browserslist" : ["chrome > 60"],
+  "browserslist": [
+    "chrome > 60"
+  ],
   "dependencies": {
+    "cross-env": "^6.0.3",
     "interactjs": "^1.3.4",
     "iview": "^3.1.4",
     "vue": "^2.5.17",

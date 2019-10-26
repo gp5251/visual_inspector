@@ -32,7 +32,7 @@ new Vue({
                 <input type="file" @change="insertImg" :key="newInputKey" accept="image/*" />
             </div>
             <button @click="quit" v-if="appIsRunning"> {{ $t("quit") }} </button>
-			<div class="lang">
+            <div class="lang">
 				<span @click="changeLang('cn')" :class="{on: $i18n.locale == 'cn'}">中文</span>
 				<span @click="changeLang('en')" :class="{on: $i18n.locale == 'en'}">English</span>
 			</div>
@@ -93,7 +93,7 @@ new Vue({
 
         getLang() {
         	return new Promise(resolve => {
-				chrome.storage.local.get({lang: 'cn'}, data=>{
+				chrome.storage.local.get({lang: chrome.i18n.getMessage("locales")}, data=>{
 					resolve(data.lang);
 				});
         	})
