@@ -10,7 +10,7 @@
         touch-action: none;
         will-change: translate, width, height;
 
-        &.static{
+        &.freeze{
             background-color: transparent;
 
             &::after{
@@ -22,10 +22,10 @@
             content: '';
             width: 100%;
             height: 100%;
-            padding: 3px;
+            // padding: 3px;
             position: absolute;
-            left: -3px;
-            top: -3px;
+            left: 0;
+            top: 0;
             box-sizing: content-box;
             background: radial-gradient(transparent 0%, transparent 60%, #333 61%) no-repeat left top,
             radial-gradient(transparent 0%, transparent 60%, #333 61%) no-repeat left bottom,
@@ -43,7 +43,7 @@
 </style>
 
 <template>
-    <div class="vi_mockup" :class="{static: freeze || showRuler}" :style="mockupStyle" :data-x="rect.x" :data-y="rect.y">
+    <div class="vi_mockup" :class="{freeze}" :style="mockupStyle" :data-x="rect.x" :data-y="rect.y">
     </div>
 </template>
 
@@ -53,7 +53,7 @@
 
     export default {
         name: "Mockup",
-        props: ['src', 'opacity', 'freeze', 'showRuler', 'blendMode'],
+        props: ['src', 'opacity', 'freeze', 'blendMode'],
         computed: {
             mockupStyle() {
                 let {width, height, left, top} = this.$parent.mockup;

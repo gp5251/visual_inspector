@@ -142,7 +142,7 @@
             :freeze="freeze"
             :src="img.src"
             v-if="img.src"
-            v-show="showMockup"/>
+            :style="{visibility: showMockup ? 'visible' : 'hidden'}"/>
 
         <div class="vi_controllers" v-if="showPanel">
             <h3>Visual Inspector</h3>
