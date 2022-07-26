@@ -6,7 +6,7 @@
         position: absolute;
         left: 0;
         top: 0;
-        background: rgba(0, 0, 0, .2) url() no-repeat center top / 100% auto;
+        background: rgba(0, 0, 0, .2) no-repeat center top / 100% auto;
         touch-action: none;
         will-change: translate, width, height;
 

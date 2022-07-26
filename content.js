@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import App from './Vue/App';
 import Tip from "./Vue/Tip.plugin";
-import i18n, {setupLang} from "./locales";
+import i18n, { setupLang } from "./locales";
 
 Vue.use(Tip);
 
@@ -14,47 +14,47 @@ const app = function () {
 	return {
 		init() {
 			chrome.runtime.onMessage.addListener((request, sender, cb) => {
-				let {type, data} = request;
+				let { type, data } = request;
 
 				switch (type) {
 					case 'insertImg':
 						chrome.storage.local.remove(['_viData', '_viDataUrl', '_url']);
-                        if (vm && vm.src && cspBlockedBlob === 0) window.URL.revokeObjectURL(vm.src);
+						if (vm && vm.src && cspBlockedBlob === 0) window.URL.revokeObjectURL(vm.src);
 
-                        this.run(data);
-                        cb({type, state: true});
-                        break;
-                    case 'quit':
-                        this.quit();
-                        cb({type, state: false});
-                        break;
+						this.run(data);
+						cb({ type, state: true });
+						break;
+					case 'quit':
+						this.quit();
+						cb({ type, state: false });
+						break;
 					case 'getAppStateFromBg':
-						cb({type, state: true});
+						cb({ type, state: true });
 						break;
 					case 'getAppStateFromPopup':
-						cb({type, state: true});
+						cb({ type, state: true });
 						break;
-                    case 'appState':
-                    	if (data.lang) setupLang(data.lang);
-                        cb({type, data: {state: appState}});
-                        break;
+					case 'appState':
+						if (data.lang) setupLang(data.lang);
+						cb({ type, data: { state: appState } });
+						break;
 					case 'changeLang':
 						setupLang(data.lang);
-						cb({type, data: {lang: data.lang}});
-                }
+						cb({ type, data: { lang: data.lang } });
+				}
 
-			    return true;
-		    });
+				return true;
+			});
 
-			this.send({type: 'appLoaded'});
+			this.send({ type: 'appLoaded' });
 
-			chrome.storage.local.get(['_viData', '_viDataUrl', '_url'], ({_viData, _viDataUrl, _url}) => {
+			chrome.storage.local.get(['_viData', '_viDataUrl', '_url'], ({ _viData, _viDataUrl, _url }) => {
 				if (_url === location.href && _viData && _viDataUrl) {
 					let viData = JSON.parse(_viData);
 					let dataUrl = _viDataUrl;
 					this.getLang().then(lang => {
 						setupLang(lang);
-						this.run({dataUrl, ...viData});
+						this.run({ dataUrl, ...viData });
 					})
 				}
 			});
@@ -69,11 +69,21 @@ const app = function () {
 			// 		console.log('blocked')
 			// 		cspBlockedBlob = true;
 			// 	})
-        },
+		},
+
+		checkScale() {
+			const metaEl = document.querySelector('meta[name="viewport"]');
+			let scale = 1;
+			if (metaEl) {
+				var match = metaEl.getAttribute('content').match(/initial\-scale=([\d\.]+)/);
+				if (match) scale = parseFloat(match[1]);
+			}
+			return scale
+		},
 
 		getLang() {
 			return new Promise(resolve => {
-				chrome.storage.local.get({lang: 'cn'}, data=>{
+				chrome.storage.local.get({ lang: 'cn' }, data => {
 					resolve(data.lang);
 				});
 			})
@@ -98,7 +108,7 @@ const app = function () {
 
 		checkCSPForGlob(dataUrl) {
 			return new Promise((resolve, reject) => {
-				let handleCspOnce = function(e) {
+				let handleCspOnce = function (e) {
 					if (e.blockedURI === 'blob' && e.violatedDirective === 'img-src') reject();
 					document.removeEventListener("securitypolicyviolation", handleCspOnce);
 					div.remove();
@@ -106,7 +116,7 @@ const app = function () {
 				let blobObj = this.dataURLtoBlob(dataUrl);
 				let url = window.URL.createObjectURL(blobObj);
 				let div = document.createElement('div');
-				div.style.cssText=`
+				div.style.cssText = `
 					display:none;
 					width: 100px;
 					height: 100px;
@@ -114,36 +124,38 @@ const app = function () {
 				`;
 				document.body.appendChild(div);
 				document.addEventListener("securitypolicyviolation", handleCspOnce);
-				setTimeout(function (){
+				setTimeout(function () {
 					div.remove();
-				    resolve(url)
+					resolve(url)
 				}, 200);
 			})
 		},
 
-        dataURLtoBlob(dataUrl) {
-            let arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-                bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-            while (n--) u8arr[n] = bstr.charCodeAt(n);
-            return new Blob([u8arr], {type: mime});
-        },
+		dataURLtoBlob(dataUrl) {
+			let arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+				bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+			while (n--) u8arr[n] = bstr.charCodeAt(n);
+			return new Blob([u8arr], { type: mime });
+		},
 
-		async run({dataUrl, ...data}) {
+		async run({ dataUrl, ...data }) {
 			let src = await this.getImgSrc(dataUrl);
 
-            if (vm) {
-                vm.src = src;
+			if (vm) {
+				vm.src = src;
 			} else {
-                window.appRoot = document.createElement('div');
-                let appShadow = window.appRoot.attachShadow({mode: 'open'});
+				window.appRoot = document.createElement('div');
+				let appShadow = window.appRoot.attachShadow({ mode: 'open' });
 
-	            this.createUI(src, data);
+				this.createUI(src, data);
 
-	            appShadow.appendChild(vm.$el);
-	            document.body.appendChild(window.appRoot);
+				appShadow.appendChild(vm.$el);
+				document.body.appendChild(window.appRoot);
 			}
 
-            chrome.storage.local.set({_viDataUrl: dataUrl, _url: location.href})
+			vm.$el.style.zoom = this.checkScale();
+
+			chrome.storage.local.set({ _viDataUrl: dataUrl, _url: location.href })
 		},
 
 		quit() {
@@ -157,7 +169,7 @@ const app = function () {
 		createUI(src, restoredData = {}) {
 			if (!uiCreated) {
 				vm = new Vue({
-					data: {src, restoredData},
+					data: { src, restoredData },
 					el: document.createElement('div'),
 					template: `<App :class="lang" :src = "src" :restoredData="restoredData"/>`,
 					computed: {
@@ -166,23 +178,23 @@ const app = function () {
 						}
 					},
 					i18n,
-				    beforeDestroy() {
-				    	uiCreated = false;
+					beforeDestroy() {
+						uiCreated = false;
 						appState = 'stopped';
 						cspBlockedBlob === 0 && window.URL.revokeObjectURL(vm.src);
 						vm.$el.remove();
-				    },
-				    created() {
-				    	uiCreated = true;
+					},
+					created() {
+						uiCreated = true;
 						appState = 'running';
-				    },
-                    methods: {
+					},
+					methods: {
 						destroy() {
 							this.$destroy();
 							vm = null;
 						}
 					},
-					components: {App}
+					components: { App }
 				});
 			}
 
@@ -197,3 +209,11 @@ const app = function () {
 
 app.init();
 
+
+// chrome.webRequest.onBeforeRequest.addListener(
+// 	function (details) {
+// 		console.log('details', details);
+// 		return true
+// 	},
+// 	{ urls: ["<all_urls>"] },
+// 	["blocking"]);
