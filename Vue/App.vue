@@ -6,19 +6,6 @@
         font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
         text-align: center;
 
-        // &::after{
-        //     content: '';
-        //     position: fixed;
-        //     left: 0;right: 0;top: 0;bottom: 0;
-        //     background-color: rgba(0, 0, 0, .5);
-        //     z-index:99989;
-        //     pointer-events: none;
-        // }
-
-        // &.hide::after{
-        //     display:none;
-        // }
-
         *{
             padding: 0;
             margin: 0;
@@ -27,22 +14,34 @@
 
         .vi_controllers {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            right: auto;
+            width: max-content;
+            max-width: 95vw;
             z-index: 99999;
-            padding: 5px;
-            text-shadow: 1px 1px 0 white;
-            border-top: 1px solid #ddd;
-            background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+            padding: 8px 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
 
             h3{
-                padding-bottom: 5px;
+                padding: 0;
+                margin: 0;
                 display: inline-block;
-                margin-right: 10px;
-                text-shadow: 1px 1px 0 white;
                 color: #2d8cf0;
                 font-size: 14px;
+                font-weight: 600;
+                white-space: nowrap;
+                margin-right: 4px;
             }
         }
         .vi_reset{
@@ -51,59 +50,75 @@
         }
 
         .vi_formLine{
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 5px;
-            padding: 3px 0;
+            display: inline-flex;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            white-space: nowrap;
 
             &::before{
-                transform-origin: 0 center;
-                display: inline-block;
-                color: #17233d;
-                margin-right: 5px;
-                text-shadow: 1px 1px 0 white;
+                display: none;
             }
         }
 
         .vi_freeze{
-            margin-right: 5px;
+            margin-right: 10px;
         }
 
         .vi_blender {
             .tit{
-                background-color: white;
-                border: 1px solid #ddd;
-                border-radius: 3px;
+                background-color: #f8f8f9;
+                border: 1px solid #dcdee2;
+                border-radius: 4px;
                 padding: 4px 12px;
+                cursor: pointer;
+                transition: all 0.2s;
+
+                &:hover {
+                    color: #2d8cf0;
+                    border-color: #2d8cf0;
+                    background: white;
+                }
 
                 .ico{
                     vertical-align: middle;
                     font-weight: bold;
+                    font-size: 10px;
+                    margin-left: 4px;
                 }
             }
         }
 
         .vi_quickMatch{
             .tit{
-                background-color: white;
-                border: 1px solid #ddd;
-                border-radius: 3px;
+                background-color: #f8f8f9;
+                border: 1px solid #dcdee2;
+                border-radius: 4px;
                 padding: 4px 12px;
+                cursor: pointer;
+                transition: all 0.2s;
+
+                &:hover {
+                    color: #2d8cf0;
+                    border-color: #2d8cf0;
+                    background: white;
+                }
 
                 .ico{
                     vertical-align: middle;
                     font-weight: bold;
+                    font-size: 10px;
+                    margin-left: 4px;
                 }
             }
         }
         .vi_opacity{
-            min-width: 15%;
-            padding-right: 12px;
+            min-width: 120px;
+            padding-right: 10px;
 
             .vi_slider{
                 width: 100%;
                 vertical-align: middle;
-
             }
 
             .vi_slider .vi-ivu-slider-button-wrap{
@@ -112,19 +127,32 @@
         }
 
         .vi_customSize{
+            display: flex;
+            align-items: center;
+
             .vi_input{
-                height: 24px;
-                padding: 2px;
-                width: 42px;
+                height: 26px;
+                padding: 0 4px;
+                width: 46px;
                 font-size: 12px;
-                border: 1px solid #ddd;
-                border-radius: 3px;
-                margin-right: -5px;
+                border: 1px solid #dcdee2;
+                border-radius: 4px;
+                margin-right: 4px;
                 background-color: white;
                 box-sizing: border-box;
                 display: inline-block;
-
                 outline: none;
+                text-align: center;
+                transition: all 0.2s;
+
+                &:focus {
+                    border-color: #2d8cf0;
+                    box-shadow: 0 0 0 2px rgba(45, 140, 240, 0.2);
+                }
+                
+                &:last-child {
+                    margin-right: 0;
+                }
             }
         }
     }
