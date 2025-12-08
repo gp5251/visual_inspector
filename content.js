@@ -13,52 +13,55 @@ const app = function () {
 
 	return {
 		init() {
-			chrome.runtime.onMessage.addListener((request, sender, cb) => {
-				let { type, data } = request;
+            try {
+                chrome.runtime.onMessage.addListener((request, sender, cb) => {
+                    let { type, data } = request;
 
-				switch (type) {
-					case 'insertImg':
-						chrome.storage.local.remove(['_viData', '_viDataUrl', '_url']);
-						if (vm && vm.src && cspBlockedBlob === 0) window.URL.revokeObjectURL(vm.src);
+                    switch (type) {
+                        case 'insertImg':
+                            chrome.storage.local.remove(['_viData', '_viDataUrl', '_url']);
+                            if (vm && vm.src && cspBlockedBlob === 0) window.URL.revokeObjectURL(vm.src);
 
-						this.run(data);
-						cb({ type, state: true });
-						break;
-					case 'quit':
-						this.quit();
-						cb({ type, state: false });
-						break;
-					case 'getAppStateFromBg':
-						cb({ type, state: true });
-						break;
-					case 'getAppStateFromPopup':
-						cb({ type, state: true });
-						break;
-					case 'appState':
-						if (data.lang) setupLang(data.lang);
-						cb({ type, data: { state: appState } });
-						break;
-					case 'changeLang':
-						setupLang(data.lang);
-						cb({ type, data: { lang: data.lang } });
-				}
+                            this.run(data);
+                            cb({ type, state: true });
+                            break;
+                        case 'quit':
+                            this.quit();
+                            cb({ type, state: false });
+                            break;
+                        case 'getAppStateFromBg':
+                            cb({ type, state: true });
+                            break;
+                        case 'getAppStateFromPopup':
+                            cb({ type, state: true });
+                            break;
+                        case 'appState':
+                            if (data.lang) setupLang(data.lang);
+                            cb({ type, data: { state: appState } });
+                            break;
+                        case 'changeLang':
+                            setupLang(data.lang);
+                            cb({ type, data: { lang: data.lang } });
+                    }
 
-				return true;
-			});
+                    return true;
+                });
 
-			this.send({ type: 'appLoaded' });
+                this.send({ type: 'appLoaded' });
 
-			chrome.storage.local.get(['_viData', '_viDataUrl', '_url'], ({ _viData, _viDataUrl, _url }) => {
-				if (_url === location.href && _viData && _viDataUrl) {
-					let viData = JSON.parse(_viData);
-					let dataUrl = _viDataUrl;
-					this.getLang().then(lang => {
-						setupLang(lang);
-						this.run({ dataUrl, ...viData });
-					})
-				}
-			});
-
+                chrome.storage.local.get(['_viData', '_viDataUrl', '_url'], ({ _viData, _viDataUrl, _url }) => {
+                    if (_url === location.href && _viData && _viDataUrl) {
+                        let viData = JSON.parse(_viData);
+                        let dataUrl = _viDataUrl;
+                        this.getLang().then(lang => {
+                            setupLang(lang);
+                            this.run({ dataUrl, ...viData });
+                        })
+                    }
+                });
+            } catch (e) {
+                console.error('Visual Inspector Init Error:', e);
+            }
 
 			// can not detect first ???
 			// this.checkCSPForGlob()
@@ -171,7 +174,15 @@ const app = function () {
 				vm = new Vue({
 					data: { src, restoredData },
 					el: document.createElement('div'),
-					template: `<App :class="lang" :src = "src" :restoredData="restoredData"/>`,
+                    render(h) {
+                        return h(App, {
+                            class: this.lang,
+                            props: {
+                                src: this.src,
+                                restoredData: this.restoredData
+                            }
+                        });
+                    },
 					computed: {
 						lang() {
 							return 'vi_lang_' + this.$i18n.locale
@@ -193,8 +204,7 @@ const app = function () {
 							this.$destroy();
 							vm = null;
 						}
-					},
-					components: { App }
+					}
 				});
 			}
 

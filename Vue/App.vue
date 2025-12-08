@@ -496,7 +496,7 @@
             insertCss() {
                 this._link = document.createElement('link');
                 this._link.rel = "stylesheet";
-                this._link.href = chrome.extension.getURL('content.css');
+                this._link.href = chrome.runtime.getURL('content.css');
 
                 window.appRoot.shadowRoot.appendChild(this._link)
             },

@@ -1,22 +1,23 @@
 {
   "name": "Visual Inspector(前端重构+视觉走查辅助工具)",
   "short_name": "VI",
-  "version": "1.6.8",
-  "manifest_version": 2,
+  "version": "2.0.0",
+  "manifest_version": 3,
   "default_locale": "zh_CN",
-  "author":"paul",
+  "author": "paul",
   "description": "__MSG_pluginDesc__",
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
   "icons": {
     "128": "icon.png"
   },
-  "browser_action": {
+  "action": {
     "default_icon": "icon_gray.png",
     "default_title": "Visual Inspector",
     "default_popup": "popup_loading.html"
   },
   "permissions": [
-    "unlimitedStorage", "storage", "activeTab"
+    "unlimitedStorage",
+    "storage",
+    "activeTab"
   ],
   "content_scripts": [
     {
@@ -24,15 +25,23 @@
         "http://*/*",
         "https://*/*"
       ],
-      "js": ["content.js"],
+      "js": [
+        "content.js"
+      ],
       "run_at": "document_end"
     }
   ],
-  "background":{
-    "scripts":["background.js"],
-    "persistent": false
+  "background": {
+    "service_worker": "background.js"
   },
   "web_accessible_resources": [
-    "content.css"
+    {
+      "resources": [
+        "content.css"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
   ]
 }

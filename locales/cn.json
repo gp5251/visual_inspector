@@ -1,7 +1,7 @@
 {
   "freeze": "冻结",
   "show": "显示",
-  "realtime": "实时",
+  "realtime": "自动还原",
   "ruler": "测量",
   "opacity": "透明度",
   "modes": {
@@ -38,7 +38,7 @@
     "hideMockup": "设计稿：隐藏",
     "showPanel": "工具栏：显示",
     "hidePanel": "工具栏：隐藏",
-    "useRestore": "实时：开启，刷新页面将保留状态",
-    "unUseRestore": "实时：关闭，刷新页面将丢失状态"
+    "useRestore": "自动还原：开启，刷新页面将保留状态",
+    "unUseRestore": "自动还原：关闭，刷新页面将丢失状态"
   }
 }

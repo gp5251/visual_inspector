@@ -22,7 +22,7 @@ let config = {
     resolve: {
         extensions: ['.js', '.vue', '.json'],
         alias: {
-            vue: `vue/dist/vue${isProd ? '.min' : ''}.js`
+            vue: 'vue/dist/vue.runtime.esm.js'
         }
     },
 

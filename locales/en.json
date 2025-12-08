@@ -1,7 +1,7 @@
 {
   "freeze": "Freeze",
   "show": "ShowMockup",
-  "realtime": "Realtime",
+  "realtime": "Auto Restore",
   "ruler": "Measure",
   "opacity": "opacity",
   "modes": {
@@ -40,8 +40,8 @@
 	"hidePanel": "Toolbar: Hidden",
 	"showRuler": "Measure: Enabled",
 	"hideRuler": "Measure: Disabled",
-	"useRestore": "Realtime: Enabled. Refreshing page will restore page state",
-	"unUseRestore": "Realtime: Disabled. Refreshing page will lost page state"
+	"useRestore": "Auto Restore: Enabled. Refreshing page will restore page state",
+	"unUseRestore": "Auto Restore: Disabled. Refreshing page will lost page state"
   }
 
 }

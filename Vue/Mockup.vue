@@ -85,14 +85,14 @@
             initMockup() {
                 interact(this.$el)
                     .draggable({
-                        onmove: throttle(event => {
+                        onmove: event => {
                             let target = event.target,
                                 x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
                                 y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 
                             this.$parent.mockup.left = x.toFixed(1);
                             this.$parent.mockup.top = y.toFixed(1);
-                        }, 12)
+                        }
                     })
                     .resizable({
                         edges: {left: true, right: true, bottom: true, top: true},
@@ -101,7 +101,7 @@
                         },
                         inertia: true,
                     })
-                    .on('resizemove', throttle(event => {
+                    .on('resizemove', event => {
                             let target = event.target,
                                 x = (parseFloat(target.getAttribute('data-x')) || 0),
                                 y = (parseFloat(target.getAttribute('data-y')) || 0);
@@ -115,7 +115,7 @@
                                 left: x.toFixed(1),
                                 top: y.toFixed(1)
                             });
-                        }, 16)
+                        }
                     );
             },
         },

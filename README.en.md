@@ -3,7 +3,7 @@
 
 > You can modify the `size`, `position`, `transparency`, `mix mode` of the design manuscript at will, to facilitate UI comparison of various design styles.
 
-> If you are doing page refactoring, the real-time function can be easily restored to the state before the page is refreshed after the page is refreshed (such as the size, position, transparency, etc. of the design draft).
+> If you are doing page refactoring, the [auto-restore] function can be easily restored to the state before the page is refreshed after the page is refreshed (such as the size, position, transparency, etc. of the design draft).
 
 > At the same time, if you do not need to move the stretch design, it is recommended to open the freeze function, so that the design will no longer respond to mouse events, can not stretch and drag, and will not affect the interactive function of the page itself.
 
