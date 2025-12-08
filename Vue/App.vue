@@ -42,6 +42,8 @@
                 font-weight: 600;
                 white-space: nowrap;
                 margin-right: 4px;
+                cursor: move;
+                user-select: none;
             }
         }
         .vi_reset{
@@ -172,7 +174,7 @@
             v-if="img.src"
             :style="{visibility: showMockup ? 'visible' : 'hidden'}"/>
 
-        <div class="vi_controllers" v-if="showPanel">
+        <div class="vi_controllers" v-if="showPanel" :style="{ transform: `translate(calc(-50% + ${toolbarPos.x}px), ${toolbarPos.y}px)` }">
             <h3>Visual Inspector</h3>
 
             <div class="vi_formLine vi_opacity">
@@ -227,6 +229,7 @@
     import DropdownItem from '../iview/components/dropdown-item';
     import {throttle} from "../utils";
     import '../iview/iview.css';
+    import interact from 'interactjs';
 
 	export default {
         name: "App",
@@ -267,7 +270,8 @@
                     src: ''
                 },
                 useRestore: false,
-				tipMsg:''
+				tipMsg:'',
+                toolbarPos: { x: 0, y: 0 }
             }, this.restoredData);
         },
 		computed: {
@@ -551,12 +555,27 @@
                 .join('\n');
 
                 console.log('%c' + msg, 'color: #bdc6cf');
+            },
+
+            initDrag() {
+                interact('.vi_controllers').draggable({
+                    allowFrom: 'h3',
+                    listeners: {
+                        move: (event) => {
+                            this.toolbarPos.x += event.dx;
+                            this.toolbarPos.y += event.dy;
+                        }
+                    }
+                });
             }
         },
         created() {
             this.bindEvs();
             this.insertCss();
             this.showHelperMsg();
+        },
+        mounted() {
+            this.initDrag();
         },
         beforeDestroy() {
             this.unBindEvs();
