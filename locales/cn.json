@@ -1,7 +1,8 @@
 {
+  "opacityHelp": "提示：按数字键(1-9)设置透明度为该数字×10%。1秒内按两位数字可精确设置百分比（如55=55%）。",
   "freeze": "冻结",
   "show": "显示",
-  "realtime": "自动还原",
+  "realtime": "保持状态",
   "ruler": "测量",
   "opacity": "透明度",
   "modes": {
@@ -38,7 +39,8 @@
     "hideMockup": "设计稿：隐藏",
     "showPanel": "工具栏：显示",
     "hidePanel": "工具栏：隐藏",
-    "useRestore": "自动还原：开启，刷新页面将保留状态",
-    "unUseRestore": "自动还原：关闭，刷新页面将丢失状态"
+    "useRestore": "保持状态：开启，刷新页面将保留状态",
+    "unUseRestore": "保持状态：关闭，刷新页面将丢失状态",
+    "imgLoadError": "图片加载失败，请检查文件。"
   }
 }

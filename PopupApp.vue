@@ -10,6 +10,43 @@
       <span @click="changeLang('cn')" :class="{ on: $i18n.locale == 'cn' }">中文</span>
       <span @click="changeLang('en')" :class="{ on: $i18n.locale == 'en' }">English</span>
     </div>
+    <div class="shortcuts">
+      <h4>{{ $t("shortcuts.title") }}</h4>
+      <div class="shortcut-grid">
+        <div class="shortcut-item">
+          <kbd>H</kbd>
+          <span>{{ $t("shortcuts.toggleMockup") }}</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>F</kbd>
+          <span>{{ $t("shortcuts.toggleToolbar") }}</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>D</kbd>
+          <span>{{ $t("shortcuts.toggleFreeze") }}</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>0-9</kbd>
+          <span>{{ $t("shortcuts.opacity") }}</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>←↑→↓</kbd>
+          <span>{{ $t("shortcuts.move") }}</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>Shift + ↑↓←→</kbd>
+          <span>{{ $t("shortcuts.moveFast") }}</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>Alt + 0</kbd>
+          <span>{{ $t("shortcuts.reset") }}</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>Alt + 1~4</kbd>
+          <span>{{ $t("shortcuts.quickMatch") }}</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -109,8 +146,52 @@ export default {
 </script>
 
 <style>
-/* Add any styles from popup.html or global styles if needed, 
-   but currently styles seem to be handled elsewhere or inline. 
-   Assuming iview.css covers most things or external css. */
+.shortcuts {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #f0f0f0;
+    text-align: left;
+}
+.shortcuts h4 {
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    letter-spacing: 0.5px;
+}
+.shortcut-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 12px;
+}
+.shortcut-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+}
+.shortcut-item kbd {
+    display: inline-block;
+    min-width: 28px;
+    text-align: center;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-family: -apple-system, "SF Mono", "Monaco", "Menlo", monospace;
+    color: #444;
+    background: linear-gradient(180deg, #fafafa 0%, #f0f0f0 100%);
+    border: 1px solid #d4d4d4;
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+    white-space: nowrap;
+    line-height: 1.4;
+}
+.shortcut-item span {
+    font-size: 11px;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 </style>
 

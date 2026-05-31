@@ -53,17 +53,26 @@
 
     export default {
         name: "Mockup",
-        props: ['src', 'opacity', 'freeze', 'blendMode'],
+        props: {
+            src: String,
+            opacity: Number,
+            freeze: [Boolean, Number],
+            blendMode: String,
+            mockup: {
+                type: Object,
+                required: true
+            }
+        },
         computed: {
             mockupStyle() {
-                let {width, height, left, top} = this.$parent.mockup;
+                let {width, height, left, top} = this.mockup;
 
                 let style = {
                     'mix-blend-mode': this.blendMode,
                     width: width + 'px',
                     height: height + 'px',
                     transform: `translate(${left}px, ${top}px)`,
-                    backgroundImage: `url(${this.src})`, 
+                    backgroundImage: `url(${this.src})`,
                     opacity: this.opacity
                 };
 
@@ -71,10 +80,10 @@
                 return style;
             },
             rect() {
-                let {width, height, left, top} = this.$parent.mockup;
+                let {width, height, left, top} = this.mockup;
 
                 return {
-                    w: width, 
+                    w: width,
                     h: height,
                     x: left,
                     y: top
@@ -90,8 +99,7 @@
                                 x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
                                 y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 
-                            this.$parent.mockup.left = x.toFixed(1);
-                            this.$parent.mockup.top = y.toFixed(1);
+                            this.$emit('move', { left: x.toFixed(1), top: y.toFixed(1) });
                         }
                     })
                     .resizable({
@@ -109,7 +117,7 @@
                             x += event.deltaRect.left;
                             y += event.deltaRect.top;
 
-                            Object.assign(this.$parent.mockup, {
+                            this.$emit('resize', {
                                 width: event.rect.width.toFixed(1),
                                 height: event.rect.height.toFixed(1),
                                 left: x.toFixed(1),

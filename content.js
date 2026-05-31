@@ -111,26 +111,43 @@ const app = function () {
 
 		checkCSPForGlob(dataUrl) {
 			return new Promise((resolve, reject) => {
-				let handleCspOnce = function (e) {
-					if (e.blockedURI === 'blob' && e.violatedDirective === 'img-src') reject();
-					document.removeEventListener("securitypolicyviolation", handleCspOnce);
-					div.remove();
+				let resolved = false;
+
+				const handleCspOnce = (e) => {
+					if (e.blockedURI === 'blob' && e.violatedDirective === 'img-src') {
+						resolved = true;
+						document.removeEventListener("securitypolicyviolation", handleCspOnce);
+						div.remove();
+						reject();
+					}
 				};
+
 				let blobObj = this.dataURLtoBlob(dataUrl);
 				let url = window.URL.createObjectURL(blobObj);
 				let div = document.createElement('div');
 				div.style.cssText = `
-					display:none;
+					display: none;
 					width: 100px;
 					height: 100px;
 					background: url(${url});
 				`;
-				document.body.appendChild(div);
+
+				try {
+					document.body.appendChild(div);
+				} catch (e) {
+					resolve(dataUrl);
+					return;
+				}
+
 				document.addEventListener("securitypolicyviolation", handleCspOnce);
-				setTimeout(function () {
-					div.remove();
-					resolve(url)
-				}, 200);
+
+				setTimeout(() => {
+					if (!resolved) {
+						document.removeEventListener("securitypolicyviolation", handleCspOnce);
+						div.remove();
+						resolve(url);
+					}
+				}, 1000);
 			})
 		},
 

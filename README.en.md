@@ -1,30 +1,43 @@
-## Visual Inspector
-> This is a chrome plugin to help front-end engineers and designers to quickly locate differences between design mockups and web pages. as well as front-end engineers UI self-examination, reducing the cost of communication with designers.
+## Visual Inspector (v2.1)
 
-> You can modify the `size`, `position`, `transparency`, `mix mode` of the design manuscript at will, to facilitate UI comparison of various design styles.
+> A Chrome extension that helps front-end engineers and designers quickly locate differences between design mockups and web pages. Reduces communication costs by enabling visual QA during the development phase.
 
-> If you are doing page refactoring, the [auto-restore] function can be easily restored to the state before the page is refreshed after the page is refreshed (such as the size, position, transparency, etc. of the design draft).
+> Freely adjust the mockup's `size`, `position`, `opacity`, and `blend mode` to compare against various design styles.
 
-> At the same time, if you do not need to move the stretch design, it is recommended to open the freeze function, so that the design will no longer respond to mouse events, can not stretch and drag, and will not affect the interactive function of the page itself.
+> The [Auto Restore] feature preserves the mockup state (size, position, opacity, etc.) across page refreshes — ideal for iterative page reconstruction.
 
-> Preset shortcuts for frequently used commands for easier operation and comparison
+> When you no longer need to move or resize the mockup, enable Freeze mode. The mockup will stop responding to mouse events, leaving the page's own interactions unaffected.
 
-### New version(1.3.9+) removed ruler. for those who need this functionality, please install a ruler such as [better ruler](https://chrome.google.com/webstore/detail/better-ruler/ilcnadaaninblgbekoaihdhoiecaflie), which supports snapping elements.
+> Keyboard shortcuts are provided for all common operations.
 
-###  shortcut keys:
+### Features
 
-- h: show or hide mockup
-- f: show or hide the bottom toolbar
-- d: freeze or unfreeze mockup
-- Number keys (0-9): Quickly set the mockup transparency. For example, if you press 5 twice in 1 second, the transparency of the mockup will be set at 55%. If only the number key is pressed once in 1 second, such as 5, it will automatically fill 0 after one second, that is, set the mockup transparency to 50%.
-- Arrow keys: Move the mockup and move 1px at a time. If you press the Shift key at the same time, you will move 10px at a time.
-- Quick adaptation:
-	- alt + 0: Reset
-	- alt + 1: Original image size
-	- alt + 2: Original size *2
-	- alt + 3: Original size /2
-	- alt + 4: Window Width
+- Overlay design mockups on any web page with drag and resize
+- 16 CSS blend modes for flexible visual comparison
+- Auto Restore: persist mockup state across page refreshes
+- Freeze mode: lock the mockup so it doesn't interfere with page interactions
+- Draggable toolbar that won't block page content
+- Quick match: instantly fit to natural size, window width, and more
+- Bilingual support (Chinese / English)
+- Shortcuts are automatically suppressed when form elements are focused
 
-### Tips:
-- In measurement mode, double-click the page to pause the guide line to follow the mouse, and then double-click to resume the follow.
-- If the shortcut does not work, please check if the current page's focus is inside other form controls (such as input, textarea...)? The easiest way, click on the mockup, or on the blank area in the page and to try again :)
+### Keyboard Shortcuts
+
+- `H` — Show/hide mockup
+- `F` — Show/hide toolbar
+- `D` — Freeze/unfreeze mockup
+- `0-9` — Set opacity. Press two digits within 1 second for an exact percentage (e.g. 55 = 55%). A single digit auto-fills with 0 after 1 second (e.g. 5 = 50%).
+- `Arrow keys` — Move mockup by 1px
+- `Shift + Arrow keys` — Move mockup by 10px
+- Quick match:
+    - `Alt + 0` — Reset
+    - `Alt + 1` — Natural size
+    - `Alt + 2` — Natural size × 2
+    - `Alt + 3` — Natural size ÷ 2
+    - `Alt + 4` — Window width
+
+### Tips
+
+- Shortcuts are automatically disabled when focus is inside input, textarea, or contenteditable elements.
+- A notification appears in the top-right corner if an image fails to load.
+- Hover over the opacity slider to see a tooltip explaining the number-key shortcut.

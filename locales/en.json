@@ -1,4 +1,5 @@
 {
+  "opacityHelp": "Tip: Press a number key (1-9) to set opacity to that digit ×10%. Press two digits within 1s for exact percentage (e.g. 55 = 55%).",
   "freeze": "Freeze",
   "show": "ShowMockup",
   "realtime": "Auto Restore",
@@ -41,7 +42,8 @@
 	"showRuler": "Measure: Enabled",
 	"hideRuler": "Measure: Disabled",
 	"useRestore": "Auto Restore: Enabled. Refreshing page will restore page state",
-	"unUseRestore": "Auto Restore: Disabled. Refreshing page will lost page state"
+	"unUseRestore": "Auto Restore: Disabled. Refreshing page will lost page state",
+	"imgLoadError": "Image failed to load. Please check the file."
   }
 
 }

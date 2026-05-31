@@ -81,13 +81,6 @@
                     border-color: #2d8cf0;
                     background: white;
                 }
-
-                .ico{
-                    vertical-align: middle;
-                    font-weight: bold;
-                    font-size: 10px;
-                    margin-left: 4px;
-                }
             }
         }
 
@@ -105,15 +98,15 @@
                     border-color: #2d8cf0;
                     background: white;
                 }
-
-                .ico{
-                    vertical-align: middle;
-                    font-weight: bold;
-                    font-size: 10px;
-                    margin-left: 4px;
-                }
             }
         }
+
+        .vi_chevron_icon {
+            vertical-align: middle;
+            margin-left: 4px;
+            transition: transform 0.2s;
+        }
+
         .vi_opacity{
             min-width: 120px;
             padding-right: 10px;
@@ -171,13 +164,26 @@
             :blendMode="blendMode"
             :freeze="freeze"
             :src="img.src"
+            :mockup="mockup"
             v-if="img.src"
-            :style="{visibility: showMockup ? 'visible' : 'hidden'}"/>
+            :style="{visibility: showMockup ? 'visible' : 'hidden'}"
+            @move="onMockupMove"
+            @resize="onMockupResize"/>
 
         <div class="vi_controllers" v-if="showPanel" :style="{ transform: `translate(calc(-50% + ${toolbarPos.x}px), ${toolbarPos.y}px)` }">
-            <h3>Visual Inspector</h3>
+            <h3>
+                <svg class="vi_grip_icon" width="8" height="14" viewBox="0 0 8 14" fill="currentColor" aria-hidden="true">
+                    <circle cx="2" cy="2" r="1.5"/>
+                    <circle cx="6" cy="2" r="1.5"/>
+                    <circle cx="2" cy="7" r="1.5"/>
+                    <circle cx="6" cy="7" r="1.5"/>
+                    <circle cx="2" cy="12" r="1.5"/>
+                    <circle cx="6" cy="12" r="1.5"/>
+                </svg>
+                Visual Inspector
+            </h3>
 
-            <div class="vi_formLine vi_opacity">
+            <div class="vi_formLine vi_opacity" :title="$t('opacityHelp')">
                 <Slider class="vi_slider" v-model="opacity"  :step="0.01"  :min="0" :max="1"></Slider>
             </div>
 
@@ -189,7 +195,7 @@
 
             <div class="vi_formLine vi_blender">
                 <Dropdown trigger="click">
-                    <span class="tit">{{ modes[blendMode] }} <span class="ico">^</span></span>
+                    <span class="tit">{{ modes[blendMode] }} <svg class="vi_chevron_icon" width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1 L5 5 L9 1"/></svg></span>
                     <DropdownMenu slot="list">
                         <DropdownItem
                                 :selected="key === blendMode"
@@ -202,7 +208,7 @@
 
             <div class="vi_formLine vi_quickMatch">
                 <Dropdown trigger="click">
-                    <span class="tit">{{ this.$t("quickMatch.quickMatch") }} <span class="ico">^</span></span>
+                    <span class="tit">{{ this.$t("quickMatch.quickMatch") }} <svg class="vi_chevron_icon" width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1 L5 5 L9 1"/></svg></span>
                     <DropdownMenu slot="list">
                         <DropdownItem @click.native="reset">{{ this.$t("quickMatch.reset") }}</DropdownItem>
                         <DropdownItem :key="index" v-for="(item, index) in wTypes" @click.native="wType = index">{{ item }}</DropdownItem>
@@ -211,10 +217,10 @@
             </div>
 
             <div class="vi_customSize vi_formLine" @keydown.stop @keyup.stop>
-                <input title="width" placeholder="width" type="text" class="vi_input" v-model.lazy="mockup.width" @keypress="handleCustomSizeInput"/>
-                <input title="height" placeholder="height" type="text" class="vi_input" v-model.lazy="mockup.height" @keypress="handleCustomSizeInput"/>
-                <input title="left" placeholder="left" type="text" class="vi_input" v-model.lazy="mockup.left" @keypress="handleCustomSizeInput"/>
-                <input title="top" placeholder="top" type="text" class="vi_input" v-model.lazy="mockup.top" @keypress="handleCustomSizeInput"/>
+                <input title="width" aria-label="width" placeholder="width" type="text" class="vi_input" v-model.lazy="mockup.width" @keypress="e => handleCustomSizeInput(e, 'dimension')"/>
+                <input title="height" aria-label="height" placeholder="height" type="text" class="vi_input" v-model.lazy="mockup.height" @keypress="e => handleCustomSizeInput(e, 'dimension')"/>
+                <input title="left" aria-label="left" placeholder="left" type="text" class="vi_input" v-model.lazy="mockup.left" @keypress="e => handleCustomSizeInput(e, 'position')"/>
+                <input title="top" aria-label="top" placeholder="top" type="text" class="vi_input" v-model.lazy="mockup.top" @keypress="e => handleCustomSizeInput(e, 'position')"/>
             </div>
         </div>
     </div>
@@ -319,6 +325,8 @@
 				this.tipMsg = this.$t("opacity") + ": " + +(val * 100).toFixed(2) + "%";
             },
             wType(val) {
+                if (val === -1) return;
+
                 let mockup = this.mockup;
                 switch (val) {
                     case 0: // 原图大小
@@ -363,27 +371,41 @@
                             width, height, src
                         };
                         if (!this.useRestore) this.reset();
-                    }, err => console.error('failed to get img', err));
+                    }, err => {
+                        console.error('failed to get img', err);
+                        this.tipMsg = this.$t("tip.imgLoadError");
+                    });
                 },
                 immediate: true
             },
             useRestore: {
                 handler(val) {
                     if (val) {
-                        let fn = throttle(()=>{
+                        const fn = throttle(() => {
                             if (this.useRestore) {
                                 let {opacity, freeze, blendMode, wType, mockup, img, useRestore, showPanel} = this.$data;
-                                chrome.storage.local.set({_viData: JSON.stringify({opacity,freeze, blendMode, wType, mockup, img, useRestore,  showPanel})})
-                                requestAnimationFrame(fn);
+                                chrome.storage.local.set({_viData: JSON.stringify({opacity, freeze, blendMode, wType, mockup, img, useRestore, showPanel})});
+                                this._rafId = requestAnimationFrame(fn);
                             } else {
-                            	chrome.storage.local.remove('_viData');
+                                chrome.storage.local.remove('_viData');
                             }
                         }, 500);
 
-                        requestAnimationFrame(fn);
+                        // Cancel any existing loop before starting a new one
+                        if (this._rafId) {
+                            cancelAnimationFrame(this._rafId);
+                        }
+                        this._rafId = requestAnimationFrame(fn);
+                    } else {
+                        // Cancel the active rAF loop
+                        if (this._rafId) {
+                            cancelAnimationFrame(this._rafId);
+                            this._rafId = null;
+                        }
+                        chrome.storage.local.remove('_viData');
                     }
 
-					this.tipMsg = this.$t(val ? "tip.useRestore" : "tip.unUseRestore");
+                    this.tipMsg = this.$t(val ? "tip.useRestore" : "tip.unUseRestore");
                 },
                 immediate: true
             },
@@ -392,9 +414,39 @@
             }
         },
         methods: {
-            handleCustomSizeInput(e) {
-                if (e.which >57 || e.which < 48) e.preventDefault();
-                if (e.which === 13) e.target.blur();
+            isFormElement(el) {
+                if (!el) return false;
+                const tag = el.tagName && el.tagName.toLowerCase();
+                if (tag === 'input' || tag === 'textarea') return true;
+                if (el.getAttribute && el.getAttribute('contenteditable') === 'true') return true;
+                return false;
+            },
+
+            handleCustomSizeInput(e, inputType) {
+                const key = e.key || String.fromCharCode(e.which);
+                const isDigit = key >= '0' && key <= '9';
+                const isPeriod = key === '.';
+                const isMinus = key === '-';
+                const isEnter = key === 'Enter' || e.which === 13;
+
+                if (isEnter) {
+                    e.target.blur();
+                    return;
+                }
+
+                // Allow: digits always, period always, minus only for position inputs
+                if (isDigit || isPeriod) return;
+                if (isMinus && inputType === 'position') return;
+
+                e.preventDefault();
+            },
+
+            onMockupMove({ left, top }) {
+                this.mockup.left = left;
+                this.mockup.top = top;
+            },
+            onMockupResize({ width, height, left, top }) {
+                Object.assign(this.mockup, { width, height, left, top });
             },
 
             handlePreventScroll(e) {
@@ -425,6 +477,10 @@
             },
 
             fastToggle(e) {
+                const activeEl = (window.appRoot && window.appRoot.shadowRoot)
+                    ? window.appRoot.shadowRoot.activeElement
+                    : document.activeElement;
+                if (this.isFormElement(activeEl)) return;
                 if (e.target !== e.currentTarget) return;
                 if (e.key === 'h' || e.which === 72) this.showMockup = !this.showMockup;
                 if (e.key === 'f' || e.which === 70) this.showPanel = !this.showPanel;
@@ -440,6 +496,10 @@
             },
 
             fastOpacity(e) {
+                const activeEl = (window.appRoot && window.appRoot.shadowRoot)
+                    ? window.appRoot.shadowRoot.activeElement
+                    : document.activeElement;
+                if (this.isFormElement(activeEl)) return;
 				if (e.target !== e.currentTarget || e.ctrlKey || e.shiftKey || e.altKey) return;
                 if (+e.key >= 0) {
                     if (this._tid) clearTimeout(this._tid);
@@ -502,14 +562,6 @@
                         src: url
                     });
                     img.onerror = reject;
-                })
-            },
-
-            send(data, cb) {
-                chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                    chrome.tabs.sendMessage( tabs[0].id, data, function(response) {
-                        cb && cb(response);
-                    })
                 })
             },
 
@@ -580,6 +632,10 @@
         beforeDestroy() {
             this.unBindEvs();
             this.removeCss();
+            if (this._rafId) {
+                cancelAnimationFrame(this._rafId);
+                this._rafId = null;
+            }
             this.useRestore = false;
         }
     }

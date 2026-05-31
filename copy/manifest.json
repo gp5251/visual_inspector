@@ -1,7 +1,7 @@
 {
   "name": "Visual Inspector(前端重构+视觉走查辅助工具)",
   "short_name": "VI",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "manifest_version": 3,
   "default_locale": "zh_CN",
   "author": "paul",
